@@ -1,6 +1,6 @@
 {
-  "name": "react-essentials-start",
-  "version": "0.0.0",
+  "name": "praecantatio-idle",
+  "version": "0.0.1",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -15,5 +15,16 @@
     "vite": "^4.3.9"
   },
   "keywords": [],
-  "description": ""
+  "description": "**Praecantatio Idle** é um jogo Idle que utiliza inteligência artificial para gerar jogabilidade infinita.",
+  "main": "vite.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RenanOSX/Praecantatio-Idle.git"
+  },
+  "author": "Renan Oliveira da Silva",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RenanOSX/Praecantatio-Idle/issues"
+  },
+  "homepage": "https://github.com/RenanOSX/Praecantatio-Idle#readme"
 }
