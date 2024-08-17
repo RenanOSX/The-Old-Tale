@@ -1,11 +1,126 @@
+import React, { useState, useEffect } from 'react';
 import monsterImg from "../assets/monster.png";
 
-export default function Monster({name, image=monsterImg, health, maxhealth}) {
-    return(
-    <span>
-        <center><h1>{name}</h1></center>
-        <center><img src={image} alt="Alt Text"></img></center>
-        <center><h1>{health} / {maxhealth} HP</h1></center>
-    </span>
+const names = ["Goblin", "Orc", "Troll", "Dragon", "Wyvern", "Giant", "Golem", "Elemental", "Demon", "Angel", "Fairy", "Imp", "Dwarf", "Elf", "Human", "Vampire", "Werewolf", "Zombie", "Skeleton", "Ghost", "Wraith", "Specter", "Lich", "Necromancer", "Warlock", "Wizard", "Sorcerer", "Mage", "Enchanter", "Summoner", "Conjurer", "Illusionist", "Diviner", "Alchemist", "Bard", "Druid", "Shaman", "Cleric", "Priest", "Paladin", "Monk", "Barbarian"];
+
+const rarityList = {
+    1: "Common", 
+    2: "Uncommon", 
+    3: "Rare", 
+    4: "Epic", 
+    5: "Legendary",
+    6: "Mythic",
+    7: "Cosmic",
+    8: "Divine",
+    9: "Eternal",
+    10: "Godly",
+    11: "Glitched",
+    12: "???",
+    13: "Admin"
+};
+
+const rarityWeights = {
+    1: 1000,    // Common (most common)
+    2: 500,     // Uncommon
+    3: 200,     // Rare
+    4: 80,      // Epic
+    5: 30,      // Legendary
+    6: 15,      // Mythic
+    7: 7,       // Cosmic
+    8: 3,       // Divine
+    9: 1,       // Eternal
+    10: 0.5,    // Godly
+    11: 0.2,    // Glitched
+    12: 0.05,   // ???
+    13: 0.01,   // Admin
+    14: 0       // Debug Monster    
+};
+
+const healthMultipliers = {
+    1: 1,      // Common (base health)
+    2: 1.1,    // Uncommon
+    3: 1.2,    // Rare
+    4: 1.5,    // Epic
+    5: 2,      // Legendary
+    6: 3,      // Mythic
+    7: 10,     // Cosmic
+    8: 25,     // Divine
+    9: 50,     // Eternal
+    10: 100,   // Godly
+    11: 200,   // Glitched
+    12: 500,   // ???
+    13: 1000,   // Admin
+    14: 1  // Debug Monster
+};
+
+// Function to get a random rarity key
+function getRandomRarity(rarityWeights) {
+    const totalWeight = Object.values(rarityWeights).reduce((sum, weight) => sum + weight, 0);
+    let randomWeight = Math.random() * totalWeight;
+
+    for (let key in rarityWeights) {
+        if (randomWeight < rarityWeights[key]) {
+            return parseInt(key);  // Return numeric key
+        }
+        randomWeight -= rarityWeights[key];
+    }
+}
+
+// Function to calculate health based on level and rarity
+function calculateHealth(baseHealth, monsterLevel) {
+    const selectedRarityKey = getRandomRarity(rarityWeights);
+    const rarityHealthMultiplier = healthMultipliers[selectedRarityKey];
+    
+    if (rarityHealthMultiplier === undefined) {
+        return {
+            rarity: 'Unknown',
+            health: NaN,
+            maxHealth: NaN
+        };
+    }
+
+    // Scale health based on level
+    const levelMultiplier = 1 + (monsterLevel / 10);
+    const finalHealth = (baseHealth * monsterLevel) * rarityHealthMultiplier * levelMultiplier;
+    const maxHealth = Math.round(finalHealth);
+
+    return {
+        rarity: rarityList[selectedRarityKey],
+        health: maxHealth, // Initial health
+        maxHealth: maxHealth // Maximum health
+    };
+}
+
+export default function Monster() {
+    const [monsterData, setMonsterData] = useState(null);
+    const baseHealth = 10; // Base health for calculation
+    const monsterLevel = 1; // Example level
+
+    useEffect(() => {
+        // Perform calculations before setting state
+        const { rarity, health, maxHealth } = calculateHealth(baseHealth, monsterLevel);
+        
+        setMonsterData({
+            name: names[Math.floor(Math.random() * names.length)],
+            image: monsterImg,
+            health,
+            maxHealth,
+            rarity
+        });
+    }, []); // Empty dependency array ensures this effect runs once after the initial render
+
+    if (!monsterData) {
+        // Render a loading state or nothing while calculations are in progress
+        return <div>Loading...</div>;
+    }
+
+    const { name, image, health, maxHealth, rarity } = monsterData;
+
+    return (
+        <span>
+            <center><h1>{name} {rarity} Lvl {monsterLevel}</h1></center>
+            <img src={image} alt="Monster Image"/>
+            <h1>HP: {health} / {maxHealth} ({Math.round((health / maxHealth) * 100)}%)</h1>
+        </span>
     );
 }

@@ -72,9 +72,10 @@ main {
 
 #box {
   padding: 2rem;
-  border-radius: 6px;
+  border-radius: 25px;
   background-color: #140524;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  text-align: center;
 }
 
 main h2 {
@@ -103,14 +104,22 @@ main h2 {
   height: 4rem;
   width: 6rem;
   object-fit: cover;
+
 }
 
 #box li h3 {
   margin: 0.5rem 0;
+  text-align: center;
 }
 
 #box li p {
   font-size: 0.9rem;
+  text-align: center;
+}
+
+#box span img {
+  border-radius: 50px;
+  box-shadow: 0 0px 10px rgb(255, 255, 255);
 }
 
 .center {
