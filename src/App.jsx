@@ -1,20 +1,15 @@
-import Header from "./components/Header";
-import icon from "./assets/magic_wand.png";
-import Monster from "./components/Monster";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./pages/homeScreen/home";
+import FirstScreen from "./pages/firstScreen/first_screen";
 
 function App() {
   return (
-    <div>
-      <Header title="Praecantatio Idle" image={icon} description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos impedit placeat magni blanditiis maiores recusandae itaque molestias porro nemo, nobis fugiat officiis praesentium alias eius unde, earum reprehenderit nihil deserunt?"/>
-      <main>
-        <section id="box">
-          <Monster/>
-        </section>
-        <section>
-          
-        </section>
-      </main>
-    </div>
+   <Router>
+    <Routes>
+      <Route path="/" element={<Home/>}/>
+      <Route path="/firstScreen" element={<FirstScreen/>}/>
+    </Routes>
+   </Router>
   );
 }
 

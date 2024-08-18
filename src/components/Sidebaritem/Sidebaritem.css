@@ -1,0 +1,21 @@
+/* SidebarItem.css */
+.sidebar-item {
+    display: flex;
+    gap: 14px; 
+    margin-top: 7%; 
+    margin-left: 10%; 
+    color: #ffffff; 
+    white-space: nowrap;
+  }
+  
+  .sidebar-item img {
+    object-fit: contain;
+    flex-shrink: 0;
+    width: 20px; /* w-5 */
+    aspect-ratio: 0.83 / 1;
+  }
+  
+  .sidebar-item-text {
+    margin: auto 0;
+  }
+  

@@ -1,0 +1,159 @@
+/* Sidebar.css */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  background-color: #2d3748; 
+}
+
+.euro-icon {
+  margin-left: 10%;
+}
+
+.sidebar-title {
+  font-size: 2rem;
+  color: #ffffff; 
+}
+
+.sidebar-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  height: 10%;
+  gap: 10%;
+  background-color: #4a5568; 
+}
+
+.sidebar-header img {
+  object-fit: contain;
+  width: 3.4375rem; 
+  margin-left: 2%;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  font-size: 0.875rem;
+  font-weight: bold;
+  height: 90%;
+}
+
+.sidebar-version {
+  margin-top: 10%;
+  margin-left: 7%;
+  color: #ffffff;
+}
+
+.sidebar-wallet {
+  display: flex;
+  gap: 2rem;
+  margin-top: 10%;
+  width: 100%;
+  align-items: center;
+}
+
+.sidebar-wallet .text-white {
+  color: #ffffff;
+}
+
+.sidebar-wallet .text-amber {
+  color: #fbbf24;
+}
+
+.sidebar-section {
+  margin-top: 10%;
+  margin-left: 7%;
+  color: #ffffff;
+}
+
+.sidebar-section:first-of-type {
+  margin-top: 1.75rem; 
+}
+
+/* Media Queries para Responsividade */
+@media (max-width: 1024px) {
+  .sidebar {
+      width: 30%;
+  }
+
+  .sidebar-header {
+      padding: 4%;
+      gap: 8%;
+  }
+
+  .sidebar-header img {
+      width: 3rem;
+  }
+
+  .sidebar-nav {
+      font-size: 0.8125rem; /* Levemente menor */
+  }
+
+  .sidebar-wallet {
+      gap: 1.5rem;
+  }
+
+  .sidebar-section {
+      margin-top: 8%;
+      margin-left: 5%;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+      width: 35%;
+  }
+
+  .sidebar-header {
+      padding: 3%;
+      gap: 6%;
+  }
+
+  .sidebar-header img {
+      width: 2.75rem;
+  }
+
+  .sidebar-nav {
+      font-size: 0.75rem;
+  }
+
+  .sidebar-wallet {
+      gap: 1.25rem;
+  }
+
+  .sidebar-section {
+      margin-top: 6%;
+      margin-left: 4%;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+      width: 40%;
+  }
+
+  .sidebar-header {
+      padding: 2%;
+      gap: 5%;
+  }
+
+  .sidebar-header img {
+      width: 2.5rem;
+  }
+
+  .sidebar-nav {
+      font-size: 0.6875rem;
+  }
+
+  .sidebar-wallet {
+      gap: 1rem;
+  }
+
+  .sidebar-section {
+      margin-top: 4%;
+      margin-left: 3%;
+  }
+}
