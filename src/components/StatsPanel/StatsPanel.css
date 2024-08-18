@@ -6,7 +6,7 @@
   font-size: 1.5rem; 
   font-weight: bold;
   color: white;
-  background-color: #374151; 
+  background-color: #272939; 
 }
 
 .stats-title {
@@ -15,11 +15,13 @@
 }
 
 .stats-info-header {
-  background-color: #4b5563; 
+  background-color: #0F0E25; 
   height: 10%; 
+  gap: 10%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-left: 5%;
 }
 
 .stats-info-content {
@@ -35,11 +37,13 @@
 }
 
 .stats-info-shop {
-  background-color: #4b5563; 
+  background-color: #0F0E25; 
   height: 10%; 
+  gap: 10%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-left: 5%;
 }
 
 @media (max-width: 1024px) {

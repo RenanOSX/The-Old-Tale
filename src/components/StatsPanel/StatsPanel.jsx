@@ -1,10 +1,13 @@
 import React from 'react';
 import './StatsPanel.css';
+import signal from '../../assets/signal.png'
+import card from '../../assets/card.png'
 
 function StatsPanel() {
   return (
     <aside className="stats-info">
         <header className="stats-info-header">
+          <img src={signal}/>
           <div className='stats-title'>
             Estatísticas e <br /> Infos
           </div>
@@ -25,9 +28,13 @@ function StatsPanel() {
           <p>Nível de experiência 10</p>
           <p>Ofício Mago</p>
         </div>
-        <div className="stats-info-shop">
-          Loja
-        </div>
+        <header className="stats-info-shop">
+          <img src={card}/>
+          <div className='stats-title'>
+            Loja
+          </div>
+        </header>
+        
     </aside>
   );
 }
