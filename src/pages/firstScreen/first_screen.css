@@ -3,7 +3,7 @@
   flex-direction: column;
   height: 100vh; /* Garante que a tela ocupe toda a altura da janela */
   overflow: hidden; /* Remove barra branca */
-  background-color: #3f3f46;
+  background-color: #050418;
 }
 
 .layout-container {
