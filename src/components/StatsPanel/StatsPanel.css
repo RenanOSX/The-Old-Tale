@@ -1,0 +1,97 @@
+/* StatsInfo.css */
+.stats-info {
+  display: flex;
+  flex-direction: column;
+  width: 25%; 
+  font-size: 1.5rem; 
+  font-weight: bold;
+  color: white;
+  background-color: #374151; 
+}
+
+.stats-title {
+  font-size: 2rem; 
+  color: #ffffff;
+}
+
+.stats-info-header {
+  background-color: #4b5563; 
+  height: 10%; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats-info-content {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem; 
+  margin-left: 2.5rem; 
+  font-size: 0.875rem;
+}
+
+.stats-info-content p {
+  margin-top: 0.875rem; 
+}
+
+.stats-info-shop {
+  background-color: #4b5563; 
+  height: 10%; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 1024px) {
+  .stats-info {
+    width: 30%;
+    font-size: 1.25rem;
+  }
+
+  .stats-info-content {
+    margin-top: 1.75rem;
+    margin-left: 2rem;
+    font-size: 0.8125rem;
+  }
+
+  .stats-info-shop {
+    padding: 0.75rem 3.5rem 1rem 3.5rem;
+    width: 20rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-info {
+    width: 35%;
+    font-size: 1.125rem;
+  }
+
+  .stats-info-content {
+    margin-top: 1.5rem;
+    margin-left: 1.5rem;
+    font-size: 0.75rem;
+  }
+
+  .stats-info-shop {
+    padding: 0.625rem 3rem 0.875rem 3rem;
+    width: 18rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-info {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .stats-info-content {
+    margin-top: 1rem;
+    margin-left: 1rem;
+    font-size: 0.6875rem;
+  }
+
+  .stats-info-shop {
+    padding: 0.5rem 2.5rem 0.75rem 2.5rem;
+    width: 100%;
+  }
+}
