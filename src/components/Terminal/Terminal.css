@@ -1,0 +1,66 @@
+.terminal {
+    font-family: monospace;
+    background-color: black;
+    color: white;
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    width: 600px;
+    height: 400px;
+    overflow-y: auto;
+    position: relative;
+    tab-size: 4; /* Optional: Set tab size for better alignment */
+  }
+  
+  .output {
+    white-space: pre-wrap;
+  }
+  
+  .input-line {
+    display: flex;
+    align-items: center;
+  }
+  
+  .prompt {
+    color: #0f0; /* Green for the prompt */
+  }
+  
+  .input-area {
+    display: flex;
+    align-items: center;
+  }
+  
+  .blinking-cursor {
+    background-color: white;
+    height: 1em;
+    width: 0.8em;
+    margin-left: 2px;
+    animation: blink 1s step-start infinite;
+  }
+  
+  @keyframes blink {
+    50% { background-color: transparent; }
+  }
+  
+  .output-line.command {
+    color: #0f0; /* Green for the command prompt */
+  }
+  
+  .output-line.output {
+    color: #fff; /* Default white for output */
+  }
+  
+  .output-line.error {
+    color: #f00; /* Red for errors */
+  }
+  
+  /* Multi-color output styles */
+  .output-line.output {
+    color: var(--output-color); /* Apply dynamic color */
+  }
+  
+  /* Example of how to handle different colors for outputs */
+  .output-line.output.color-1 { color: #ff6347; } /* Tomato */
+  .output-line.output.color-2 { color: #4682b4; } /* SteelBlue */
+  .output-line.output.color-3 { color: #32cd32; } /* LimeGreen */
+  
