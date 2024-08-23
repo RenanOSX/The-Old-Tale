@@ -1,5 +1,6 @@
 import React from 'react';
 import './MainContent.css';
+import Terminal from '../Terminal/Terminal';
 
 function MainContent() {
   return (
@@ -12,7 +13,9 @@ function MainContent() {
      
           <section className="logs-section">
             <h2 className="logs-header">LOGS DE BATALHA</h2>
-            <div className="logs-content" />
+            <div className="logs-content">
+              <Terminal />
+            </div>
           </section>
         </div>
     </main>

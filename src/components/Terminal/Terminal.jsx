@@ -49,6 +49,10 @@ const Terminal = () => {
       return;
     }
 
+    // Clear the output from the terminal to don't be too big
+    // if (output.length >= 12) {
+    //   setOutput([]);
+    // }
     setOutput((prevOutput) => [
       ...prevOutput,
       { text: `root@linux:~$ ${command}`, type: 'command' },

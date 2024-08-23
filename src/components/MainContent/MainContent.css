@@ -43,7 +43,8 @@
   display: flex;
   flex-direction: column;
   align-self: center;
-  width: 50%;
+  /*Limit the terminal size to fit the screen */
+  /*width: 50%;*/
   margin-top: 1rem; 
   font-size: 0.875rem;
   font-weight: bold;
@@ -52,7 +53,7 @@
   border-radius: 1rem; 
   align-items: center;
   height: 40%;
-  margin-bottom: 1rem;
+  /*margin-bottom: 0.5rem;*/
 }
 
 .logs-header {
@@ -61,12 +62,16 @@
 
 .logs-content {
   display: flex;
-  margin-top: 1.5rem; 
+  margin-top: 0.2rem; /* Changed from 1.5 to 0.2 */
   background-color: #000000;
   height: 18rem; 
-  width: 80%;
-  border-radius: 1rem; 
+  width: 90%;
+  /*border-radius: 1rem;*/
   margin-bottom: 2rem;
+  /* limit the bottom size to fit the screen */
+  overflow-y: auto;
+  /* Remove the scroll bar from Terminal */
+  scrollbar-width: none;
 }
 
 /* Media Queries para Responsividade */
