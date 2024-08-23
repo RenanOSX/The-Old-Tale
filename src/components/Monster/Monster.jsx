@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import monsterImg from "../../assets/monster.png";
+import "./Monster.css";
 
 const names = ["Goblin", "Orc", "Troll", "Dragon", "Wyvern", "Giant", "Golem", "Elemental", "Demon", "Angel", "Fairy", "Imp", "Dwarf", "Elf", "Human", "Vampire", "Werewolf", "Zombie", "Skeleton", "Ghost", "Wraith", "Specter", "Lich", "Necromancer", "Warlock", "Wizard", "Sorcerer", "Mage", "Enchanter", "Summoner", "Conjurer", "Illusionist", "Diviner", "Alchemist", "Bard", "Druid", "Shaman", "Cleric", "Priest", "Paladin", "Monk", "Barbarian"];
 
@@ -116,10 +117,33 @@ export default function Monster() {
 
     const { name, image, health, maxHealth, rarity } = monsterData;
 
+    // Based on the rarity of the monster apply different border colors for css
+    const borderColor = rarity === "Common" ? "#00FF00" : // Green
+                       rarity === "Uncommon" ? "#0000FF" : // Blue
+                       rarity === "Rare" ? "#FF00FF" : // Magenta
+                       rarity === "Epic" ? "#FFA500" : // Orange
+                       rarity === "Legendary" ? "#FFD700" : // Gold
+                       rarity === "Mythic" ? "#FF69B4" : // Hot Pink
+                       rarity === "Cosmic" ? "#00FFFF" : // Cyan
+                       rarity === "Divine" ? "#FF0000" : // Red
+                       rarity === "Eternal" ? "#FFFF00" : // Yellow
+                       rarity === "Godly" ? "#C0C0C0" : // Silver
+                       rarity === "Glitched" ? "#000000" : // Black
+                       rarity === "???" ? "#808080" : // Gray
+                       rarity === "Admin" ? "#FFFFFF" : // White
+                       "transparent";
+
+    const monsterBoxStyle = {
+        boxShadow: `0 0 1rem ${borderColor},
+                    0 0 0.8rem ${borderColor},
+                    0 0 .5rem ${borderColor},
+                    inset 0 0 1.0rem ${borderColor}`,
+    };
+
     return (
-        <span>
-            <center><h1>{name} {rarity} Lvl {monsterLevel}</h1></center>
-            <img src={image} alt="Monster Image"/>
+        <span className="monster-box">
+            <h1 className={rarity}>{name} {rarity} Lvl {monsterLevel}</h1>
+            <img src={image} alt="Monster Image" style={monsterBoxStyle}/>
             <h1>HP: {health} / {maxHealth} ({Math.round((health / maxHealth) * 100)}%)</h1>
         </span>
     );
