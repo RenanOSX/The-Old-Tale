@@ -17,6 +17,8 @@ const sidebarItems = [
   { icon: defesa, text: "Defesa" }
 ];
 
+const currentMoney = localStorage.getItem('Money');
+
 function Sidebar() {
   return (
     <aside className="sidebar">
@@ -29,7 +31,7 @@ function Sidebar() {
           <div className="sidebar-wallet">
             <img className='euro-icon' src={euro}/>
             <div className="text-white">Carteira</div>
-            <div className="text-amber">100 R$</div>
+            <div className="text-amber">{currentMoney}</div>
           </div>
           <div className="sidebar-section">COMBAT</div>
           {sidebarItems.map((item, index) => (

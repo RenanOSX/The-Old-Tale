@@ -8,11 +8,11 @@ body, html {
   box-sizing: border-box;
   font-family: Outfit, sans-serif;
   height: 100%;
-  overflow: hidden; 
+  /*overflow: hidden;*/ 
 }
 
 .overflow-hidden {
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 .bg-neutral-700 {

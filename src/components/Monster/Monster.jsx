@@ -2,6 +2,25 @@ import React, { useState, useEffect } from 'react';
 import monsterImg from "../../assets/monster.png";
 import "./Monster.css";
 
+function moneyAdd(amount) {
+    let money = parseInt(localStorage.getItem('Money'));
+    console.log(money);
+    if (!isNaN(money)) {
+        money += amount;
+        localStorage.setItem('Money', money);
+        console.log(money);
+        return money;
+    } else {
+        localStorage.setItem('Money', 0);
+        console.log("Set to 0");
+        return 0;
+    }
+}
+
+window.onload = function() {
+    moneyAdd();
+}
+
 const names = ["Goblin", "Orc", "Troll", "Dragon", "Wyvern", "Giant", "Golem", "Elemental", "Demon", "Angel", "Fairy", "Imp", "Dwarf", "Elf", "Human", "Vampire", "Werewolf", "Zombie", "Skeleton", "Ghost", "Wraith", "Specter", "Lich", "Necromancer", "Warlock", "Wizard", "Sorcerer", "Mage", "Enchanter", "Summoner", "Conjurer", "Illusionist", "Diviner", "Alchemist", "Bard", "Druid", "Shaman", "Cleric", "Priest", "Paladin", "Monk", "Barbarian"];
 
 const rarityList = {
@@ -92,7 +111,7 @@ function calculateHealth(baseHealth, monsterLevel) {
     };
 }
 
-export default function Monster() {
+function Monster() {
     const [monsterData, setMonsterData] = useState(null);
     const baseHealth = 10; // Base health for calculation
     const monsterLevel = 1; // Example level
@@ -115,7 +134,7 @@ export default function Monster() {
         return <div>Loading...</div>;
     }
 
-    const { name, image, health, maxHealth, rarity } = monsterData;
+    let { name, image, health, maxHealth, rarity } = monsterData;
 
     // Based on the rarity of the monster apply different border colors for css
     const borderColor = rarity === "Common" ? "#00FF00" : // Green
@@ -138,13 +157,39 @@ export default function Monster() {
                     0 0 0.8rem ${borderColor},
                     0 0 .5rem ${borderColor},
                     inset 0 0 1.0rem ${borderColor}`,
+        cursor: "pointer"
+    };
+
+    // Function for dealing with damage to the monster by click
+    const clickHandler = () => {
+        // Deal 1 dmg to health
+        setMonsterData(prevState => {
+            if (prevState.health <= 1) {
+                // Generate a new monster if the current one is dead
+                const { rarity, health, maxHealth } = calculateHealth(baseHealth, monsterLevel);
+                moneyAdd(1);
+                return {
+                    ...prevState,
+                    health,
+                    maxHealth,
+                    rarity
+                };
+            } else {
+                return {
+                    ...prevState,
+                    health: prevState.health - 1 // If monster is not dead deal 1 dmg
+                };
+            }
+        })
     };
 
     return (
         <span className="monster-box">
             <h1 className={rarity}>{name} {rarity} Lvl {monsterLevel}</h1>
-            <img src={image} alt="Monster Image" style={monsterBoxStyle}/>
-            <h1>HP: {health} / {maxHealth} ({Math.round((health / maxHealth) * 100)}%)</h1>
+            <img style={monsterBoxStyle} onClick={clickHandler} src={image} alt="Monster"/>
+            <h1 id="monsterhp">HP: {health} / {maxHealth} ({Math.round((health / maxHealth) * 100)}%)</h1>
         </span>
     );
 }
+
+export default Monster;
