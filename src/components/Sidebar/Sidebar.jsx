@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SidebarItem from '../Sidebaritem/Sidebaritem';
 import './Sidebar.css';
 import magicWand from '../../assets/magic_wand.png';
@@ -17,9 +17,23 @@ const sidebarItems = [
   { icon: defesa, text: "Defesa" }
 ];
 
-const currentMoney = localStorage.getItem('Money');
 
 function Sidebar() {
+  const [currentMoney, setCurrentMoney] = useState(localStorage.getItem('Money'));
+
+  useEffect(() => {
+    const handleMoneyUpdate = (event) => {
+      setCurrentMoney(event.detail);
+    };
+
+    // Adiciona o listener para o evento customizado
+    window.addEventListener('moneyUpdated', handleMoneyUpdate);
+
+    // Remove o listener quando o componente for desmontado
+    return () => {
+      window.removeEventListener('moneyUpdated', handleMoneyUpdate);
+    };
+  }, []);
   return (
     <aside className="sidebar">
         <header className="sidebar-header">
@@ -31,7 +45,7 @@ function Sidebar() {
           <div className="sidebar-wallet">
             <img className='euro-icon' src={euro}/>
             <div className="text-white">Carteira</div>
-            <div className="text-amber">{currentMoney}</div>
+            <div className="text-amber">{currentMoney} GC</div>
           </div>
           <div className="sidebar-section">COMBAT</div>
           {sidebarItems.map((item, index) => (
