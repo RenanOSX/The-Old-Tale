@@ -38,12 +38,17 @@ function MainContent() {
 
   const handleMonsterUpdate = () => {
     const newMonsters = monsters.map(monster => {
-      if (monster.isDead()) {
-        return Monster.createNew(monster.level); // Gera um novo monstro no mesmo nível
-      }
-      return monster;
-    });
+      // Ensure monster is an instance of Monster
+      const monsterInstance = monster instanceof Monster ? monster : new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth);
+      console.log(monsterInstance)
 
+      if (monsterInstance.isDead()) {
+        return Monster.createNew(); // Generate a new monster at the same level
+      } else {
+          return monsterInstance;
+      }
+    });
+  
     setMonsters(newMonsters);
     localStorage.setItem('monsters', JSON.stringify(newMonsters));
   };

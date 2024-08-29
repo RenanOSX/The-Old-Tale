@@ -1,25 +1,28 @@
+// MonsterComponent.jsx
 import React, { useEffect, useState } from 'react';
 import monsterImg from "../../assets/monster.png";
 import "./Monster.css";
 import Monster from '../../models/Monster';
+import Player from '../../models/Player';
 
 function MonsterComponent({ monster, player, onMonsterUpdate }) {
-  const [currentMonster, setCurrentMonster] = useState(new Monster(monster.name, monster.rarity, monster.level));
-  
+  const [currentMonster, setCurrentMonster] = useState(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
+  const [currentPlayer, setCurrentPlayer] = useState(new Player(player.name, player.level, player.xp, player.stamina, player.attackDamage, player.money));
+
   const clickHandler = () => {
     if (currentMonster.isDead()) {
       onMonsterUpdate(); // Notifica o componente pai sobre a atualização do monstro
     } else {
-      currentMonster.takeDamage(player.attackDamage);
-      setCurrentMonster(currentMonster)
-      console.log(currentMonster)
+      console.log(currentMonster, currentPlayer, currentPlayer.attackDamage);
+      currentMonster.takeDamage(currentPlayer.attackDamage);
+      setCurrentMonster(new Monster(currentMonster.name, currentMonster.rarity, currentMonster.level, currentMonster.health, currentMonster.maxHealth));
     }
   };
 
   useEffect(() => {
-    currentMonster.save()
-  }, [currentMonster])
-  
+    currentMonster.save();
+  }, [currentMonster]);
+
   if (!currentMonster) return null;
 
   const borderColor = {
