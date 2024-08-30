@@ -26,7 +26,7 @@
 
 .monster-box img {
   display: block;
-  max-width: 90%; /* Garante que a imagem não exceda a largura do container */
+  max-width: 70%; /* Garante que a imagem não exceda a largura do container */
   height: auto; /* Mantém a proporção da imagem */
   border-radius: 1rem;
   margin: 0 auto;

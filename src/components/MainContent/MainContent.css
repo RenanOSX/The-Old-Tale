@@ -1,17 +1,30 @@
 /* MainContent.css */
+* {
+  box-sizing: border-box; /* Inclui padding e border no cálculo da largura para todos os elementos */
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden; /* Evita scroll na página */
+}
+
 .main-content {
   display: flex;
   flex-direction: column;
-  width: 50%;
-  height: 100%;
+  width: 100%;
+  height: 100vh; /* Ajustar para ocupar a altura total da viewport */
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  height: 90%;
+  flex-grow: 1;
   align-items: center;
-  justify-items: center;
+  justify-content: center;
+  width: 100%; /* Garantir que o conteúdo ocupe toda a largura */
+  overflow: hidden; /* Evita scroll no conteúdo */
 }
 
 .header-title {
@@ -23,58 +36,46 @@
 .main-header {
   display: flex;
   flex-direction: row;
-  padding: 5%;
+  height: 10%;
   background-color: #a1a1aa; 
   align-items: center;
   justify-content: center;
-  height: 0.01%; 
+  width: 100%; /* Ocupa toda a largura disponível */
 }
 
 .main-section-content {
-  margin-top: 1rem;
   background-color: #d4d4d8;
-  height: 40rem; 
-  border-radius: 1rem; 
-  padding: 2.5rem;
-  width: 80%;
+  width: 100%;
+  border: 0.2rem solid #000000;
   align-self: center;
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-grow: 1; /* Permite que o conteúdo principal cresça para ocupar o espaço disponível */
 }
 
-.logs-section {
+.section-buttons {
   display: flex;
-  flex-direction: column;
-  align-self: center;
-  /*Limit the terminal size to fit the screen */
-  /*width: 50%;*/
-  margin-top: 1rem; 
-  font-size: 0.875rem;
-  font-weight: bold;
-  color: #ffffff;
-  background-color: #0F0E25; 
-  border-radius: 1rem; 
-  align-items: center;
-  height: 40%;
-  width: 90%;
-  /*margin-bottom: 0.5rem;*/
+  flex-direction: row;
+  justify-content: space-around;
+  border-left: 0.2rem solid #000000;
+  border-right: 0.2rem solid #000000;
+  background-color: #A5A5AB; /* Cor do retângulo */
+  padding: 1rem; /* Espaçamento interno */
+  width: 100%; /* Ocupa toda a largura disponível */
 }
 
-.logs-header {
-  align-self: center;
+.attack-button {
+  margin-top: 0.5rem;
 }
 
 .logs-content {
   display: flex;
-  margin-top: 0.2rem; /* Changed from 1.5 to 0.2 */
+  margin-top: 0.2rem; 
   background-color: #000000;
-  height: 18rem; 
-  width: 90%;
-  /*border-radius: 1rem;*/
-  margin-bottom: 2rem;
-  /* limit the bottom size to fit the screen */
+  width: 100%;
+  flex-grow: 1;
   overflow-y: auto;
-  /* Remove the scroll bar from Terminal */
   scrollbar-width: none;
 }
 
@@ -85,25 +86,15 @@
       padding: 2.5%;
   }
 
-  .main-section {
-      margin: 1.5rem 1rem 0;
-      padding: 1rem 1rem;
-      border-radius: 2rem;
-  }
-
   .main-section-content {
-      height: 20rem;
+      height: auto;
       border-radius: 1rem;
   }
 
-  .logs-section {
-      width: 100%;
-      padding: 1rem 2rem 1.5rem;
-  }
-
   .logs-content {
-      height: 12.5rem;
+      height: auto;
       margin-top: 1rem;
+      flex-grow: 1;
   }
 }
 
@@ -113,23 +104,14 @@
       padding: 2%;
   }
 
-  .main-section {
-      margin: 1rem 0.5rem 0;
-      padding: 0.75rem 0.5rem;
-      border-radius: 1.5rem;
-  }
-
   .main-section-content {
-      height: 15rem;
+      height: auto;
       border-radius: 0.75rem;
   }
 
-  .logs-section {
-      padding: 0.5rem 1rem 1rem;
-  }
-
   .logs-content {
-      height: 10rem;
+      height: auto;
       margin-top: 0.75rem;
+      flex-grow: 1;
   }
 }

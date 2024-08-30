@@ -4,6 +4,7 @@ import Terminal from '../Terminal/Terminal';
 import MonsterComponent from '../Monster/Monster';
 import Monster from '../../models/Monster.js';
 import Player from '../../models/Player.js';
+import btn from '../../assets/btn.png';
 
 function MainContent() {
   const [monsters, setMonsters] = useState([]);
@@ -36,22 +37,15 @@ function MainContent() {
     }
   }, []);
 
-  const handleMonsterUpdate = () => {
-    const newMonsters = monsters.map(monster => {
-      // Ensure monster is an instance of Monster
-      const monsterInstance = monster instanceof Monster ? monster : new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth);
-      console.log(monsterInstance)
-
-      if (monsterInstance.isDead()) {
-        return Monster.createNew(); // Generate a new monster at the same level
-      } else {
-          return monsterInstance;
-      }
-    });
+  const handleMonsterUpdate = (index) => {
+    const newMonsters = [...monsters];
   
+    newMonsters[index] = Monster.createNew(); // Generate a completely new monster
+
     setMonsters(newMonsters);
     localStorage.setItem('monsters', JSON.stringify(newMonsters));
   };
+
 
   return (
     <main className="main-content">
@@ -67,16 +61,22 @@ function MainContent() {
               key={index}
               monster={monster}
               player={player}
+              index={index}
               onMonsterUpdate={handleMonsterUpdate}
             />
           ))}
         </div>
-        <section className="logs-section">
-          <h2 className="logs-header">LOGS DE BATALHA</h2>
-          <div className="logs-content">
-            <Terminal />
-          </div>
-        </section>
+
+        <div className='section-buttons'>
+          {monsters.map((monster, index) => (
+            <img key={index} src={btn} alt='Attack' className="attack-button" />
+          ))}
+        </div>
+  
+        <div className="logs-content">
+          <Terminal />
+        </div>
+  
       </div>
     </main>
   );

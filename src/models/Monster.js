@@ -63,10 +63,6 @@ class Monster {
       this.level = level;
       this.maxHealth = maxHealth || this.calculateHealth();
       this.health = health !== null ? health : this.maxHealth;
-      if (isNaN(this.health) && this.health !== null) {
-        console.error("Failed to initialize health for monster:", this);
-        this.health = this.maxHealth = 1; // Valor padrão em caso de erro
-      }
     }
   
     static getRandomName() {
