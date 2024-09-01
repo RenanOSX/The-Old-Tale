@@ -1,7 +1,7 @@
 import React from 'react';
-import './SidebarItem.css';
+import './ItensBarraEsquerda.css';
 
-function SidebarItem({ icon, text }) {
+function ItensBarraEsquerda({ icon, text }) {
   return (
     <div className="sidebar-item">
       <img loading="lazy" src={icon} alt="" className="sidebar-item-icon" />
@@ -10,4 +10,4 @@ function SidebarItem({ icon, text }) {
   );
 }
 
-export default SidebarItem;
+export default ItensBarraEsquerda;

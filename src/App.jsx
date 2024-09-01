@@ -1,13 +1,12 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./pages/homeScreen/home";
-import FirstScreen from "./pages/firstScreen/first_screen";
+import TelaPrincipal from "./pages/TelaPrincipal/TelaPrincipal";
 
 function App() {
   return (
    <Router>
     <Routes>
-      <Route path="/" element={<Home/>}/>
-      <Route path="/firstScreen" element={<FirstScreen/>}/>
+      <Route path="/" element={<TelaPrincipal/>}/>
+      <Route path="/TelaPrincipal" element={<TelaPrincipal/>}/>
     </Routes>
    </Router>
   );

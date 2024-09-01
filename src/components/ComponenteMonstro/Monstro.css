@@ -1,0 +1,38 @@
+.monster-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 100%;
+}
+
+.monster-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1.2rem;
+  max-width: 100%;
+}
+
+.monster-box h1 {
+  max-width: 80%; /* Define o tamanho máximo que o h1 pode ocupar */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
+.monster-box img {
+  display: block;
+  max-width: 70%; /* Garante que a imagem não exceda a largura do container */
+  height: auto; /* Mantém a proporção da imagem */
+  border-radius: 1rem;
+  margin: 0 auto;
+}
+
+#monsterhp {
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}

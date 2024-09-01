@@ -1,9 +1,9 @@
 import React from 'react';
-import './StatsPanel.css';
+import './BarraLateralDireita.css'
 import signal from '../../assets/signal.png'
 import card from '../../assets/card.png'
 
-function StatsPanel() {
+function BarraLateralDireita() {
   return (
     <aside className="stats-info">
         <header className="stats-info-header">
@@ -39,4 +39,4 @@ function StatsPanel() {
   );
 }
 
-export default StatsPanel;
+export default BarraLateralDireita;
