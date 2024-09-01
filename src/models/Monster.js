@@ -1,114 +1,51 @@
-const names = ["Goblin", "Orc", "Troll", "Dragon", "Wyvern", "Giant", "Golem", "Elemental", "Demon", "Angel", "Fairy", "Imp", "Dwarf", "Elf", "Human", "Vampire", "Werewolf", "Zombie", "Skeleton", "Ghost", "Wraith", "Specter", "Lich", "Necromancer", "Warlock", "Wizard", "Sorcerer", "Mage", "Enchanter", "Summoner", "Conjurer", "Illusionist", "Diviner", "Alchemist", "Bard", "Druid", "Shaman", "Cleric", "Priest", "Paladin", "Monk", "Barbarian"];
+import ListaDeRaridades from '../constants/ListaDeRaridades.js';
 
-const rarityList = {
-    1: "Common",
-    2: "Uncommon",
-    3: "Rare",
-    4: "Epic",
-    5: "Legendary",
-    6: "Mythic",
-    7: "Cosmic",
-    8: "Divine",
-    9: "Eternal",
-    10: "Godly",
-    11: "Glitched",
-    12: "???",
-    13: "Admin"
-};
+import PesoDeRaridade from '../constants/PesosDeRaridade.js';
 
-const rarityWeights = {
-    1: 1000,
-    2: 500,
-    3: 200,
-    4: 80,
-    5: 30,
-    6: 15,
-    7: 7,
-    8: 3,
-    9: 1,
-    10: 0.5,
-    11: 0.2,
-    12: 0.05,
-    13: 0.01,
-    14: 0
-};
+import MultiplicadorDeVida from '../constants/MultiplicadoresDeVida.js';
 
-const healthMultipliers = {
-    1: 1,
-    2: 1.1,
-    3: 1.2,
-    4: 1.5,
-    5: 2,
-    6: 3,
-    7: 10,
-    8: 25,
-    9: 50,
-    10: 100,
-    11: 200,
-    12: 500,
-    13: 1000,
-    14: 1
-};
-// Monster.js
+import IntervaloDeNiveis from '../constants/IntervalosDeNiveis.js';
+
 class Monster {
     constructor(
-      name = Monster.getRandomName(),
-      rarity = Monster.getRandomRarity(),
-      level = Monster.getRandomLevel(rarity),
+      name = null,
+      rarity = Monster.buscarRaridadeAleatoria(),
+      level = Monster.buscarNivelAleatorio(rarity),
       health = null,
       maxHealth = null
     ) {
       this.name = name;
       this.rarity = rarity;
       this.level = level;
-      this.maxHealth = maxHealth || this.calculateHealth();
+      this.maxHealth = maxHealth || this.calcularVida();
       this.health = health !== null ? health : this.maxHealth;
     }
   
-    static getRandomName() {
-      return names[Math.floor(Math.random() * names.length)];
-    }
+    static buscarRaridadeAleatoria() {
+      const pesoTotal = Object.values(PesoDeRaridade).reduce((somador, peso) => somador + peso, 0);
+      let pesoAleatorio = Math.random() * pesoTotal;
   
-    static getRandomRarity() {
-      const totalWeight = Object.values(rarityWeights).reduce((sum, weight) => sum + weight, 0);
-      let randomWeight = Math.random() * totalWeight;
-  
-      for (let key in rarityWeights) {
-        if (randomWeight < rarityWeights[key]) {
+      for (let key in PesoDeRaridade) {
+        if (pesoAleatorio < PesoDeRaridade[key]) {
           return parseInt(key);
         }
-        randomWeight -= rarityWeights[key];
+        pesoAleatorio -= PesoDeRaridade[key];
       }
-      return 1; // Default to Common if something goes wrong
+      return 1;
     }
   
-    static getLevelRange(rarityKey) {
-      const levelRanges = {
-        1: [1, 5],      // Common
-        2: [5, 10],     // Uncommon
-        3: [10, 20],    // Rare
-        4: [20, 30],    // Epic
-        5: [30, 50],    // Legendary
-        6: [50, 75],    // Mythic
-        7: [75, 100],   // Cosmic
-        8: [100, 150],  // Divine
-        9: [150, 200],  // Eternal
-        10: [200, 250], // Godly
-        11: [250, 300], // Glitched
-        12: [300, 350], // ???
-        13: [350, 400], // Admin
-      };
-      return levelRanges[rarityKey] || [1, 5];
+    static buscarIntervaloDeRaridade(rarityKey) {
+      return IntervaloDeNiveis[rarityKey] || [1, 5];
     }
   
-    static getRandomLevel(rarityKey) {
-      const [minLevel, maxLevel] = this.getLevelRange(rarityKey);
-      return Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel;
+    static buscarNivelAleatorio(rarityKey) {
+      const [nivelMinimo, nivelMaximo] = this.buscarIntervaloDeRaridade(rarityKey);
+      return Math.floor(Math.random() * (nivelMaximo - nivelMinimo + 1)) + nivelMinimo;
     }
   
-    calculateHealth() {
-      const rarityKey = Object.keys(rarityList).find(key => rarityList[key] === this.rarity);
-      const rarityHealthMultiplier = healthMultipliers[rarityKey];
+    calcularVida() {
+      const rarityKey = Object.keys(ListaDeRaridades).find(key => ListaDeRaridades[key] === this.rarity);
+      const rarityHealthMultiplier = MultiplicadorDeVida[rarityKey];
       const levelMultiplier = 1 + (this.level / 10);
       const baseHealth = 10;
       return Math.round((baseHealth * this.level) * rarityHealthMultiplier * levelMultiplier);
@@ -153,14 +90,13 @@ class Monster {
       return null;
     }
   
-    static createNew() {
-      const rarityKey = this.getRandomRarity();
-      const name = this.getRandomName();
-      const rarity = rarityList[rarityKey];
-      const level = this.getRandomLevel(rarityKey);
+    static createNew(name) {
+      const rarityKey = this.buscarRaridadeAleatoria();
+      const rarity = ListaDeRaridades[rarityKey];
+      const level = this.buscarNivelAleatorio(rarityKey);
   
       return new Monster(name, rarity, level);
     }
-  }
-  
-  export default Monster;
+}
+
+export default Monster;

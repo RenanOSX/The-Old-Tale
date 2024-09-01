@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import SidebarItem from '../Sidebaritem/Sidebaritem';
-import './Sidebar.css';
+import ItensBarraEsquerda from '../ItensBarraEsquerda/ItensBarraEsquerda';
+import './BarraLateralEsquerda.css';
 import magicWand from '../../assets/magic_wand.png';
 import euro from '../../assets/euro_icon.png'
 import ataque from '../../assets/ata.png'
@@ -18,7 +18,7 @@ const sidebarItems = [
 ];
 
 
-function Sidebar() {
+function BarraLateralEsquerda() {
   const [currentMoney, setCurrentMoney] = useState(localStorage.getItem('Money'));
 
   useEffect(() => {
@@ -49,7 +49,7 @@ function Sidebar() {
           </div>
           <div className="sidebar-section">COMBAT</div>
           {sidebarItems.map((item, index) => (
-            <SidebarItem key={index} icon={item.icon} text={item.text} />
+            <ItensBarraEsquerda key={index} icon={item.icon} text={item.text} />
           ))}
           <div className="sidebar-section">SKILLS</div>
         </nav>
@@ -57,4 +57,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+export default BarraLateralEsquerda;
