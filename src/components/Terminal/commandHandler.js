@@ -14,9 +14,9 @@ const items = {
 }
 
 const commandHandler = {
-    help: () => ({ text: 'Available commands: help, echo, clear, date', type: 'success' }),
+    help: () => ({ text: 'Available commands: help, echo, cls, date', type: 'success' }),
     echo: (args) => ({ text: args.join(' '), type: 'success' }),
-    clear: () => ({ text: 'clear', type: 'clear' }), // Handle clear separately in the terminal component
+    cls: () => ({ text: 'cls', type: 'clear' }), // Handle clear separately in the terminal component
     date: () => ({ text: new Date().toLocaleString(), type: 'success' }),
     shop: (args) => {
         // Verifica quantidade de argumentos

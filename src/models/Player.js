@@ -5,7 +5,7 @@ class Player {
         this._xp = parseInt(localStorage.getItem('PlayerXP'), 10) || 0;
         this._level = parseInt(localStorage.getItem('PlayerLevel'), 10) || 1;
         this._stamina = parseInt(localStorage.getItem('PlayerStamina'), 10) || 100; // Valor inicial padrão
-        this._attackDamage = parseInt(localStorage.getItem('PlayerAttackDamage'), 10) || 1;
+        this._attackDamage = parseInt(localStorage.getItem('PlayerAttackDamage'), 10) || 10;
     }
 
     get xp() {

@@ -21,7 +21,7 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
     }, [monster]);
 
     const clickHandler = () => {
-        if (currentMonster.health === 1) {
+        if (currentMonster.health <= 0) {
             onMonsterUpdate(index);
             console.log('Monster is dead');
         } else {

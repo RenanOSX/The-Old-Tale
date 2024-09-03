@@ -11,8 +11,8 @@ app.use(cors()); // Use o middleware cors
 app.post("/ia", async (req, res) => {
     try {
         const response = await axios.post("http://localhost:11434/api/generate", {
-            model: "llama3.1:latest",
-            prompt: "choose a fictional name of a one-word monster, send just that, nothing else and never select repeated names",
+            model: "llama3.1",
+            prompt: "Give a single name for a rpg fantasy monster, only one word, without repetitions.",
             stream: false,
         });
         const respData = response.data.response.toString();
