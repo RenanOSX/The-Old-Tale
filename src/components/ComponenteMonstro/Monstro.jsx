@@ -10,20 +10,22 @@ import Player from '../../models/Player';
 
 function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
     if (!monster) {
-        return <div>Loading...</div>; // Ou qualquer outro fallback enquanto o monstro está sendo carregado
+        return <div>Loading...</div>;
     }
         
     const [currentMonster, setCurrentMonster] = useState(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
-    const [currentPlayer, setCurrentPlayer] = useState(new Player(player.name, player.level, player.xp, player.stamina, player.attackDamage, player.money));
+
+    const [currentPlayer, setCurrentPlayer] = useState(new Player(player._name,  player._money,  player._xp, player._xpToNextLevel, player._level, player._vida, player._dano, player._defesa, player._agilidade));
 
     useEffect(() => {
         setCurrentMonster(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
-    }, [monster]);
+        setCurrentPlayer(new Player(player._name,  player._money,  player._xp, player._xpToNextLevel, player._level, player._vida, player._dano, player._defesa, player._agilidade));
+    }, [monster, player]);
 
     const clickHandler = () => {
-        currentMonster.takeDamage(currentPlayer.attackDamage);
+        currentMonster.takeDamage(currentPlayer._dano);
         if (currentMonster.health <= 0) {
-            onMonsterUpdate(index);
+            onMonsterUpdate(index, currentMonster.rarity);
             console.log('Monster is dead');
         } else {
             setCurrentMonster(new Monster(currentMonster.name, currentMonster.rarity, currentMonster.level, currentMonster.health, currentMonster.maxHealth));

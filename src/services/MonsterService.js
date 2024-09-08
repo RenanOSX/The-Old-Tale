@@ -1,7 +1,5 @@
 import Monster from '../models/Monster.js';
 
-import Player from '../models/Player.js';
-
 class MonsterService {
     async buscaNomeMonstro() {
         try {
@@ -39,21 +37,6 @@ class MonsterService {
             localStorage.setItem('monsters', JSON.stringify(newMonsters));
             return newMonsters;
         }
-    }
-
-    buscaJogador() {
-        const storedPlayer = localStorage.getItem('player');
-        if (storedPlayer) {
-            return JSON.parse(storedPlayer);
-        } else {
-            const newPlayer = this.criaJogador();
-            localStorage.setItem('player', JSON.stringify(newPlayer));
-            return newPlayer;
-        }
-    }
-
-    criaJogador() {
-        return new Player();
     }
 }
 

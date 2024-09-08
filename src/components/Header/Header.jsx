@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import AuthServices from '../../services/AuthServices';
-
 import './Header.css';
 
 import yinYang from '../../assets/images/yin_yang.png';
 
-const Header = () => {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const currentUser = AuthServices.getCurrentUser();
-    setUser(currentUser);
-  }, []);
-
+const Header = ({user}) => {
   return (
     <div className="box">
       <header className="header">
