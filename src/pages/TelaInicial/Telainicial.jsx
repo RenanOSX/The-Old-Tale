@@ -33,7 +33,7 @@ const TelaInicial = ({ onLogin }) => {
   return (
     <div className="tela-inicial">
       <div className="container">
-        <img className="yin-yang" alt="Yin yang" src={yinYang} />
+        <img className="yin-yang-inicial" alt="Yin yang" src={yinYang} />
         <div className="input-group">
           <label className={`label ${emailFocused ? 'focused' : ''}`}>EMAIL</label>
           <input

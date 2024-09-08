@@ -8,12 +8,45 @@
   
   .sidebar-section {
     margin-top: 10%;
-    margin-left: 7%;
+    text-align: center;
     color: #ffffff;
     font-size: 0.875rem;
     font-weight: bold;
   }
+
+  .sidebar-section-combat {
+    margin-top: 10%;
+    margin-left: 10%;
+    text-align: left;
+    color: #ffffff;
+    font-size: 0.875rem;
+    font-weight: bold;
+  }
+
+  .sidebar-section-money {
+    margin-top: 10%;
+    text-align: center;
+    color: #766404;
+    font-size: 0.875rem;
+    font-weight: bold;
+  }
+
+  .version {
+    margin-top: 60%;
+    margin-left: 10%;
+    text-align: left;
+    color: #FFFFFF;
+    font-size: 0.875rem;
+    font-weight: bold;
+  }
   
+  .btn {
+    height: 5rem;
+    margin-top: 2rem;
+    align-self: center;
+    width: 5rem;
+  }
+
   .sidebar-section:first-of-type {
     margin-top: 1.75rem;
   }

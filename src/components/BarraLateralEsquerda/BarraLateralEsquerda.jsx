@@ -4,6 +4,8 @@ import ItensBarraEsquerda from '../ItensBarraEsquerda/ItensBarraEsquerda';
 
 import './BarraLateralEsquerda.css';
 
+import btn from '../../assets/icons/button.png'
+
 import dano from '../../assets/icons/dano_icon.png';
 
 import defesa from '../../assets/icons/defesa_icon.png';
@@ -16,32 +18,30 @@ const sidebarItems = [
   { icon: agilidade, text: "Agilidade" }
 ];
 
-
 function BarraLateralEsquerda() {
-  const [currentMoney, setCurrentMoney] = useState(localStorage.getItem('Money'));
-
-  useEffect(() => {
-    const handleMoneyUpdate = (event) => {
-      setCurrentMoney(event.detail);
-    };
-
-    // Adiciona o listener para o evento customizado
-    window.addEventListener('moneyUpdated', handleMoneyUpdate);
-
-    // Remove o listener quando o componente for desmontado
-    return () => {
-      window.removeEventListener('moneyUpdated', handleMoneyUpdate);
-    };
-  }, []);
   return (
     <aside className="sidebar">
-      <div className="sidebar-section">
+      <div className="sidebar-section-combat">
         COMBAT
       </div>
       
       {sidebarItems.map((item, index) => (
         <ItensBarraEsquerda key={index} icon={item.icon} text={item.text} />
       ))}
+
+      <div className='sidebar-section'>
+        SORTEAR MONSTROS
+      </div>
+
+      <img src={btn} alt='button' className='btn' />
+
+      <div className="sidebar-section-money">
+        {3} GC
+      </div>
+
+      <div className='version'>
+        ALPHA VERSION 0.1
+      </div>
     </aside>
   );
 }

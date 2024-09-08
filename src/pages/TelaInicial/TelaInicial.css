@@ -20,10 +20,9 @@
     align-items: center;
   }
   
-  .yin-yang {
-    width: 100%;
-    max-width: 468px;
-    height: auto;
+  .yin-yang-inicial {
+    width: 30rem;
+    height: 30rem;
     margin-bottom: 20px;
   }
   
