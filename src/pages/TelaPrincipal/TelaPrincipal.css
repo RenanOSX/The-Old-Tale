@@ -1,8 +1,8 @@
 .first-screen {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Garante que a tela ocupe toda a altura da janela */
-  /*overflow: hidden;*/ /* Remove barra branca */
+  padding-top: 92px; 
+  height: 100vh; 
   background-color: #050418;
 }
 

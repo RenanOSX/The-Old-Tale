@@ -1,10 +1,10 @@
 class Player {
 
     constructor() {
-        this._money = parseInt(localStorage.getItem('PlayerMoney'), 10) || 0;
+        this._money = parseInt(localStorage.getItem('PlayerMoney'), 10) || 5;
         this._xp = parseInt(localStorage.getItem('PlayerXP'), 10) || 0;
         this._level = parseInt(localStorage.getItem('PlayerLevel'), 10) || 1;
-        this._stamina = parseInt(localStorage.getItem('PlayerStamina'), 10) || 100; // Valor inicial padrão
+        this._stamina = parseInt(localStorage.getItem('PlayerStamina'), 10) || 100; 
         this._attackDamage = parseInt(localStorage.getItem('PlayerAttackDamage'), 10) || 10;
     }
 

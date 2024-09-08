@@ -6,8 +6,6 @@ import Terminal from '../Terminal/Terminal.jsx';
 
 import ComponenteMonstro from '../ComponenteMonstro/Monstro.jsx';
 
-import btn from '../../assets/btn.png';
-
 import MonsterService from '../../services/monsterService.js';
 
 function ComponenteCentral() {
@@ -58,11 +56,6 @@ function ComponenteCentral() {
 
   return (
     <main className="main-content">
-      <header className="main-header">
-        <div className='header-title'>
-          0%
-        </div>
-      </header>
       <div className='content'>
         <div className="main-section-content">
           {monsters.map((monster, index) => (
@@ -77,12 +70,6 @@ function ComponenteCentral() {
                 onMonsterUpdate={handleMonsterUpdate}
               />
             )
-          ))}
-        </div>
-
-        <div className='section-buttons'>
-          {monsters.map((monster, index) => (
-            <img key={index} src={btn} alt='Attack' className="attack-button" />
           ))}
         </div>
 

@@ -46,7 +46,6 @@ html, body {
 .main-section-content {
   background-color: #d4d4d8;
   width: 100%;
-  border: 0.2rem solid #000000;
   align-self: center;
   display: flex;
   align-items: center;

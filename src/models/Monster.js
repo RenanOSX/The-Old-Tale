@@ -58,7 +58,6 @@ class Monster {
     takeDamage(amount) {
       if(amount >= this.health) {
         this.health = 0;
-        onMonsterUpdate(index);
       } else {
         this.health = Math.max(this.health - amount, 0);
       }

@@ -1,21 +1,80 @@
-/* SidebarItem.css */
+/* ItensBarraEsquerda.css */
 .sidebar-item {
-    display: flex;
-    gap: 14px; 
-    margin-top: 7%; 
-    margin-left: 10%; 
-    color: #ffffff; 
-    white-space: nowrap;
+  display: flex;
+  flex-direction: row;
+  gap: 14px;
+  height: 2.5rem;
+  margin-left: 10%;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 8rem;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.container .atributos {
+  color: #ffffff;
+  font-size: 1rem;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: "Outfit", Helvetica;
+  font-weight: bold;
+}
+
+.sidebar-item .overlap-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  border: 5px solid #000000;
+  font-size: 1rem;
+  color: #000000;
+  font-family: "Outfit", Helvetica;
+  font-weight: bold;
+  height: 100%;
+  width: 12rem;
+}
+
+.sidebar-item .text-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 1rem;
+  color: #000000;
+}
+
+.sidebar-item img {
+  object-fit: contain;
+  flex-shrink: 0;
+  width: 20px; /* w-5 */
+  aspect-ratio: 0.83 / 1;
+}
+
+.sidebar-item-text {
+  margin: auto 0;
+}
+
+@media (max-width: 768px) {
+  .sidebar-item {
+    margin-left: 5%;
   }
-  
-  .sidebar-item img {
-    object-fit: contain;
-    flex-shrink: 0;
-    width: 20px; /* w-5 */
-    aspect-ratio: 0.83 / 1;
+
+  .sidebar-item .overlap-group {
+    width: 8rem;
+    height: 1.5rem;
   }
-  
-  .sidebar-item-text {
-    margin: auto 0;
+
+  .sidebar-item .text-wrapper {
+    font-size: 0.875rem;
   }
-  
+}

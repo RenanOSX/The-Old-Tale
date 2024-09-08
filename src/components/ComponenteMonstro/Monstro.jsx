@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import monsterImg from "../../assets/monster.png";
+import monsterImg from "../../assets/images/monster.png";
 
 import "./Monstro.css";
 
@@ -21,11 +21,11 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
     }, [monster]);
 
     const clickHandler = () => {
+        currentMonster.takeDamage(currentPlayer.attackDamage);
         if (currentMonster.health <= 0) {
             onMonsterUpdate(index);
             console.log('Monster is dead');
         } else {
-            currentMonster.takeDamage(currentPlayer.attackDamage);
             setCurrentMonster(new Monster(currentMonster.name, currentMonster.rarity, currentMonster.level, currentMonster.health, currentMonster.maxHealth));
         }
     };
