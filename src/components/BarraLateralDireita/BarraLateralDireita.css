@@ -9,41 +9,75 @@
   background-color: #000000; 
 }
 
-.stats-title {
-  font-size: 2rem; 
-  color: #ffffff;
-}
-
-.stats-info-header {
-  background-color: #0F0E25; 
-  height: 10%; 
-  gap: 10%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding-left: 5%;
-}
-
-.stats-info-content {
-  display: flex;
-  flex-direction: column;
-  margin-top: 2rem; 
-  margin-left: 2.5rem; 
+.money-right {
+  margin-top: 10%;
+  text-align: center;
+  color: #766404;
   font-size: 0.875rem;
+  font-weight: bold;
 }
 
-.stats-info-content p {
-  margin-top: 0.875rem; 
+.arrow-down {
+  width: 2rem;
+  height: 2rem;
+  margin-top: 2rem;
+  align-self: center;
 }
 
-.stats-info-shop {
-  background-color: #0F0E25; 
-  height: 10%; 
-  gap: 10%;
+.group-profile {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
-  padding-left: 5%;
+  font-size: 1rem;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.profile-name {
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  margin-left: 2rem;
+  background-color: #000000;
+  text-align: center;
+}
+
+.circle-impermanence {
+  width: 2rem;
+  height: 2rem;
+  align-self: left;
+  margin-left: 2rem;
+}
+
+.carteira {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  color: #766404;
+  font-size: 0.875rem;
+  align-items: center;
+  font-weight: bold;
+  align-self: left;
+  margin-left: 2rem;
+  margin-top: 2rem;
+}
+
+.atributos-player {
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: #000000;
+  margin-top: 2rem;
+  margin-left: 2rem;
+}
+
+.title-gerar-mundo {
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: #000000;
+  margin-top: 3rem;
+  text-align: center;
 }
 
 @media (max-width: 1024px) {
