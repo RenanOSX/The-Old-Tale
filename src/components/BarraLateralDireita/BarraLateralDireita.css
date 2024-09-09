@@ -33,6 +33,16 @@
   text-align: center;
 }
 
+.theme-input {
+  margin-left: 2rem;
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+.theme-button {
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+
 @media (max-width: 1024px) {
   .stats-info {
     width: 30%;
@@ -49,6 +59,7 @@
     padding: 0.75rem 3.5rem 1rem 3.5rem;
     width: 20rem;
   }
+
 }
 
 @media (max-width: 768px) {

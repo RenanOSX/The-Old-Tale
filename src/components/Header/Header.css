@@ -55,3 +55,9 @@
     width: 5rem;
     object-fit: cover;
   }
+  
+  .button-exit{
+    padding: 8px 23px;
+    background-color: #F44336;
+    border-radius: 25px;
+  }

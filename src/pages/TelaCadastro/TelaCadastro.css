@@ -1,5 +1,7 @@
 .cadastro {
-  background-color: #000000;
+  background-image: url("../../assets/images/ed.jpg");
+  background-repeat: no-repeat; 
+  background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,8 +10,10 @@
   box-sizing: border-box;
 }
 
-.container {
-  background-color: #000000;
+.container-cadastro {
+  background: black;
+  border-radius: 55px;
+  opacity: 85%;
   width: 100%;
   max-width: 1440px;
   padding: 20px;

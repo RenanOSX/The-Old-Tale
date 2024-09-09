@@ -94,6 +94,19 @@ const TelaPrincipal = () => {
     }
   };
 
+  const [color, setColor] = useState('');
+
+  const handleSubmit = async (event, {theme}) => {
+    event.preventDefault();
+    const color = await MonsterService.changeTheme(theme);
+    if (color) {
+      setColor(color);
+      console.log(`Received color: ${color}`);
+    } else {
+      console.error('Failed to receive a valid color from the API');
+    }
+  };
+
   if (loading) {
     return (
       <div className='carregamento'>
@@ -104,7 +117,7 @@ const TelaPrincipal = () => {
 
   return (
     <div className="first-screen">
-      <Header user={user}/>
+      <Header user={user} color={color}/>
       <div className="layout-container">
         <BarraLateralEsquerda player={player} />
         <ComponenteCentral
@@ -113,7 +126,7 @@ const TelaPrincipal = () => {
           loadingMonsters={loadingMonsters}
           onMonsterUpdate={handleMonsterUpdate}
         />
-        <BarraLateralDireita player={player} />
+        <BarraLateralDireita player={player}  handleSubmit={handleSubmit}/>
       </div>
     </div>
   );

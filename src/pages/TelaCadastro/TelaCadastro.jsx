@@ -42,7 +42,7 @@ const TelaCadastro = () => {
         src={arrowLeft}
         onClick={handleBackClick}
       />
-      <div className="container">
+      <div className="container-cadastro">
         <div className="text-wrapper-2">CADASTRO</div>
         
         <div className="input-group">
