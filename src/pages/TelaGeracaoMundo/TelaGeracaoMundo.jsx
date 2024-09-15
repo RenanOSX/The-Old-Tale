@@ -4,18 +4,37 @@ import { useNavigate } from 'react-router-dom';
 
 import { useState } from "react";
 
-import './TelaRecuperarSenha.css';
-
 import AuthServices from "../../services/AuthServices";
+
+import './TelaGeracaoMundo.css';
 
 import arrowLeft from '../../assets/icons/arrow_circle_left.png';
 
 import circleRight from '../../assets/icons/arrow_circle_right.png';
 
 const TelaGeracaoMundo = () => { 
+  const navigate = useNavigate();
+  
+  const [theme, setTheme] = useState('');
 
-    const [theme, setTheme] = useState('');
-    const [themeFocused, setThemeFocused] = useState(false);
+  const [themeFocused, setThemeFocused] = useState(false);
+
+  const handleBackClick = () => {
+    navigate('/telaInicial');
+  };
+
+  const handleSubmit = async () => {
+    const currentUser = await AuthServices.getCurrentUser();
+
+    if (currentUser) {
+      currentUser.theme = theme;
+      await AuthServices.updateUser(currentUser);
+
+      navigate('/telaPrincipal');
+    } else {
+      console.error('Usuário não autenticado');
+    }
+  }
 
   return (
     <div className="geracaoMundo">
@@ -26,10 +45,10 @@ const TelaGeracaoMundo = () => {
         onClick={handleBackClick}
       />
       <div className="container-geracaoMundo">
-        <div className="text-wrapper-2">RECUPERAR SENHA</div>
+        <div className="text-wrapper-2">"GERAR UM TEMA PARA O SEU MUNDO"</div>
         
         <div className="input-group">
-          <label className={`label ${themeFocused ? 'focused' : ''}`}>EMAIL</label>
+          <label className={`label ${themeFocused ? 'focused' : ''}`}>TEMA</label>
           <input
             type="text"
             className="input"
@@ -39,7 +58,7 @@ const TelaGeracaoMundo = () => {
           />
         </div>
 
-        <img className="arrow-circle-right" alt="Arrow circle right"  src={circleRight} />
+        <img className="arrow-circle-right" alt="Arrow circle right" onClick={handleSubmit} src={circleRight} />
       </div>
     </div>
   );

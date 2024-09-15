@@ -35,7 +35,7 @@ const TelaCadastro = () => {
     }
     const result = await AuthServices.register(email, password, name);
     if (result.success) {
-      navigate('/telaPrincipal');
+      navigate('/geracaoMundo');
     } else {
       console.error(result.error);
     }

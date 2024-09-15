@@ -5,8 +5,14 @@ import { db } from './FirebaseConfig';
 import { ref, set, get, child } from 'firebase/database';
 
 class MonsterService {
-    async buscaNomeMonstro() {
-        const inputText = 'Give a single name for a fantasy monster, only one word, without repetitions.';
+    async buscaNomeMonstro(theme) {
+        const inputText = `
+        Generate a single name related to the theme "${theme}".
+        The name should be one word, without repetitions,
+        and can be inspired by various sources such as pop culture,
+        religions, movies, mythology, or any other relevant themes. 
+        Avoid including quotes around the name.`;
+        
         try {
             const response = await fetch('http://localhost:5000/names-generator', { 
                 method: 'POST',
@@ -32,28 +38,29 @@ class MonsterService {
         return Monster.createNew(name); 
     }
 
-    async buscaMonstros(userId) {
-        const monstersRef = ref(db, `users/${userId}/monsters`);
-        const snapshot = await get(monstersRef);
-
+    async buscaMonstros(userId, theme) { 
+        const dbRef = ref(db);
+        const snapshot = await get(child(dbRef, `users/${userId}/monsters`));
+    
         if (snapshot.exists()) {
-        const data = snapshot.val();
-        return data.map(monsterData => new Monster(
+          console.log('Monstros encontrados:', snapshot.val());
+          const data = snapshot.val();
+          return Object.values(data).map(monsterData => new Monster(
             monsterData.name,
             monsterData.rarity,
             monsterData.level,
             monsterData.health,
             monsterData.maxHealth
-        ));
+          ));
         } else {
-            const newMonsters = [];
-            for (let i = 0; i < 3; i++) {
-                const name = await this.buscaNomeMonstro();
-                const newMonster = await this.criaMonstro(name);
-                newMonsters.push(newMonster);
-            }
-            await set(monstersRef, newMonsters);
-            return newMonsters;
+          const newMonsters = {};
+          for (let i = 0; i < 3; i++) {
+            const name = await this.buscaNomeMonstro(theme);
+            const newMonster = await this.criaMonstro(name);
+            newMonsters[i] = newMonster;
+          }
+          await set(ref(db, `users/${userId}/monsters`), newMonsters);
+          return Object.values(newMonsters);
         }
     }
 

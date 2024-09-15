@@ -1,15 +1,24 @@
 import React, { useState } from "react";
+
 import { useNavigate } from 'react-router-dom';
+
 import yinYang from '../../assets/images/yin_yang.png';
-import AuthServices from "../../services/AuthServices";
+
 import circleRight from '../../assets/icons/arrow_circle_right.png';
+
+import AuthServices from "../../services/AuthServices";
+
 import './TelaInicial.css';
 
 const TelaInicial = ({ onLogin }) => {
   const [emailFocused, setEmailFocused] = useState(false);
+  
   const [email, setEmail] = useState('');
+  
   const [password, setPassword] = useState('');
+  
   const [passwordFocused, setPasswordFocused] = useState(false);
+
   const navigate = useNavigate();
 
   const navegarCadastro = () => {
@@ -22,9 +31,17 @@ const TelaInicial = ({ onLogin }) => {
 
   const nevegarTelaPrincipal = async () => {
     const result = await AuthServices.login(email, password);
+
     if (result.success) {
       onLogin(result.user);
-      navigate('/telaPrincipal');
+
+      const theme = await AuthServices.buscarTheme(result.user.uid);
+
+      if (theme && theme !== '') {
+        navigate('/telaPrincipal');
+      } else {
+        navigate('/geracaoMundo');
+      }
     } else {
       console.error(result.error);
     }

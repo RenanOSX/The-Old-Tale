@@ -1,5 +1,12 @@
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, updateProfile } from "firebase/auth";
+
 import { auth } from './FirebaseConfig.js';
+
+import { getAuth } from "firebase/auth";
+
+import { ref, set, get } from 'firebase/database';
+
+import { db } from "./FirebaseConfig.js";
 
 class AuthServices {
   constructor() {
@@ -52,10 +59,43 @@ class AuthServices {
     }
   }
 
+  async updateUser(user) {
+    const auth = getAuth();
+    if (auth.currentUser) {
+      // Atualiza o perfil do usuário autenticado
+      await updateProfile(auth.currentUser, {
+        displayName: user.displayName || auth.currentUser.displayName,
+        photoURL: user.photoURL || auth.currentUser.photoURL,
+      });
+
+      // Atualiza os dados do usuário no Realtime Database
+      const userRef = ref(db, `users/${auth.currentUser.uid}`);
+      await set(userRef, {
+        theme: user.theme,
+        photoURL: user.photoURL || auth.currentUser.photoURL,
+        // Adicione outros campos que você deseja atualizar
+      });
+    } else {
+      throw new Error('Usuário não autenticado');
+    }
+  }
+
+  async buscarTheme(userId) {
+    const userRef = ref(db, `users/${userId}`);
+    const snapshot = await get(userRef);
+    if (snapshot.exists()) {
+      const userData = snapshot.val();
+      console.log('Theme-buscar:', userData.theme);
+      return userData.theme;
+    }
+    return '';
+  }
+
   getCurrentUser() {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
   }
+  
 }
 
 export default new AuthServices();

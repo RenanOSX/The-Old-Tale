@@ -21,7 +21,10 @@ import Player from '../../models/Player.js';
 import './TelaPrincipal.css';
 
 const TelaPrincipal = () => {
+
   const [monsters, setMonsters] = useState([]);
+
+  const [theme, setTheme] = useState('');
 
   const [user, setUser] = useState(null);
 
@@ -33,27 +36,58 @@ const TelaPrincipal = () => {
 
   const [color, setColor] = useState('');
 
+  const [currentLog, setCurrentLog] = useState('');
+
   const [logs, setLogs] = useState([]);
 
   useEffect(() => {
     const initializeData = async () => {
-      const currentUser = await AuthServices.getCurrentUser();
-      
-      setUser(currentUser);
+      try {
+        setLoading(true);  // Ativa o estado de carregamento
+  
+        const currentUser = await AuthServices.getCurrentUser();
 
-      if (currentUser) {
-        const fetchedMonsters = await MonsterService.buscaMonstros(currentUser.uid);
-        setMonsters(fetchedMonsters);
-
-        const fetchedPlayerData = await PlayerService.buscaJogador(currentUser.uid);
-        setPlayer(fetchedPlayerData);
+        setUser(currentUser);
+        
+        if (currentUser) {
+          setCurrentLog('Buscando temas...');
+          const userTheme = theme !== '' ? theme : await AuthServices.buscarTheme(currentUser.uid);
+          
+          const color = await MonsterService.changeTheme(theme);
+          if (color) {
+            setColor(color);
+            console.log(`Received color: ${color}`);
+          } else {
+            console.error('Failed to receive a valid color from the API');
+          }
+          
+          setCurrentLog('Tema carregado.');
+  
+          setCurrentLog('Buscando monstros...');
+          const fetchedMonsters = await MonsterService.buscaMonstros(currentUser.uid, userTheme);
+          setMonsters(fetchedMonsters);
+          setLogs((prevLogs) => [...prevLogs, 'Monstros carregados.']);
+  
+          setCurrentLog('Buscando dados do jogador...');
+          const fetchedPlayerData = await PlayerService.buscaJogador(currentUser.uid);
+          setPlayer(fetchedPlayerData);
+          setLogs((prevLogs) => [...prevLogs, 'Dados do jogador carregados.']);
+        } else {
+          setCurrentLog('Usuário não autenticado.');
+        }
+  
+      } catch (error) {
+        console.error('Erro ao inicializar dados:', error);
+        setCurrentLog('Erro ao carregar dados.');
+        setLogs((prevLogs) => [...prevLogs, `Erro: ${error.message}`]);
+      } finally {
+        setLoading(false);  // Desativa o estado de carregamento
       }
-
-      setLoading(false);
-    }; 
-
+    };
+  
     initializeData();
-  }, []);
+  }, [theme]); // Dependência `theme` para recarregar caso o tema mude
+  
 
   const handleMonsterUpdate = async (index, raridade) => {
     setLoadingMonsters((prev) => {
@@ -98,30 +132,6 @@ const TelaPrincipal = () => {
     }
   };
 
-  useEffect(() => {
-    if (loading) {
-      const logMessages = [
-        'Gerando nome de monstros...',
-        'Gerando temas...',
-        'Carregando dados do jogador...',
-        'Preparando ambiente...',
-        'Finalizando...'
-      ];
-
-      let index = 0;
-      const interval = setInterval(() => {
-        if (index < logMessages.length) {
-          setLogs((prevLogs) => [...prevLogs, logMessages[index]]);
-          index++;
-        } else {
-          clearInterval(interval);
-        }
-      }, 1000);
-
-      return () => clearInterval(interval);
-    }
-  }, [loading]);
-
   const handleSubmit = async (event, {theme}) => {
     event.preventDefault();
     const color = await MonsterService.changeTheme(theme);
@@ -142,6 +152,7 @@ const TelaPrincipal = () => {
               {log}
             </div>
           ))}
+          <div className="log">{currentLog}</div>
         </div>
       </div>
     );
