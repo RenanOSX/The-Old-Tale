@@ -1,5 +1,9 @@
 import Monster from '../models/Monster.js';
 
+import { db } from './FirebaseConfig';
+
+import { ref, set, get, child } from 'firebase/database';
+
 class MonsterService {
     async buscaNomeMonstro() {
         const inputText = 'Give a single name for a fantasy monster, only one word, without repetitions.';
@@ -28,10 +32,19 @@ class MonsterService {
         return Monster.createNew(name); 
     }
 
-    async buscaMonstros() {
-        const storedMonsters = localStorage.getItem('monsters');
-        if (storedMonsters) {
-            return JSON.parse(storedMonsters);
+    async buscaMonstros(userId) {
+        const monstersRef = ref(db, `users/${userId}/monsters`);
+        const snapshot = await get(monstersRef);
+
+        if (snapshot.exists()) {
+        const data = snapshot.val();
+        return data.map(monsterData => new Monster(
+            monsterData.name,
+            monsterData.rarity,
+            monsterData.level,
+            monsterData.health,
+            monsterData.maxHealth
+        ));
         } else {
             const newMonsters = [];
             for (let i = 0; i < 3; i++) {
@@ -39,8 +52,16 @@ class MonsterService {
                 const newMonster = await this.criaMonstro(name);
                 newMonsters.push(newMonster);
             }
-            localStorage.setItem('monsters', JSON.stringify(newMonsters));
+            await set(monstersRef, newMonsters);
             return newMonsters;
+        }
+    }
+
+    async salvaMonstros(userId, monsters) {
+        try {
+            await set(ref(db, `users/${userId}/monsters`), monsters);
+        } catch (error) {
+            console.error('Erro ao salvar monstros no Firebase:', error);
         }
     }
 

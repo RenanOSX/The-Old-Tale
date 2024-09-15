@@ -58,7 +58,6 @@ class Player {
             this._xp += xpMonster;
             console.log('XP Atual: ', this._xp);
             this.levelUp();
-            this.save();
         } else {
             console.error('Raridade do monstro inválida:', raridadeMonstro);
         }
@@ -70,12 +69,10 @@ class Player {
         } else {
             console.error("Not enough stamina");
         }
-        this.save();
     }
 
     earnMoney(amount) {
         this._money += amount;
-        this.save();
     }
 
     levelUp() {
@@ -90,38 +87,6 @@ class Player {
                 this._money += 1;
                 this._xpToNextLevel = Player.calculateXpToNextLevel(this._level);
             }
-        }
-        this.save();
-    }
-
-    save() {
-        const playerData = {
-            _name: this._name,
-            _money: this._money,
-            _xp: this._xp,
-            _xpToNextLevel: this._xpToNextLevel,
-            _level: this._level,
-            _vida: this._vida,
-            _dano: this._dano,
-            _defesa: this._defesa,
-            _agilidade: this._agilidade
-        };
-        localStorage.setItem('player', JSON.stringify(playerData));
-    }
-
-    load() {
-        const storedPlayer = localStorage.getItem('player');
-        if (storedPlayer) {
-            const playerData = JSON.parse(storedPlayer);
-            this._name = playerData._name;
-            this._money = playerData._money;
-            this._xp = playerData._xp !== null ? playerData._xp : 0;
-            this._xpToNextLevel = playerData._xpToNextLevel;
-            this._level = playerData._level;
-            this._vida = playerData._vida;
-            this._dano = playerData._dano;
-            this._defesa = playerData._defesa;
-            this._agilidade = playerData._agilidade;
         }
     }
 }

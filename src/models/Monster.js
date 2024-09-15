@@ -63,37 +63,6 @@ class Monster {
       }
     }
   
-    save() {
-      // Obtém a lista de monstros do localStorage
-      let monsters = JSON.parse(localStorage.getItem('monsters')) || [];
-      
-      // Verifica se o monstro já existe na lista
-      const index = monsters.findIndex(m => m.name === this.name);
-      if (index !== -1) {
-        // Atualiza o monstro existente
-        monsters[index] = this;
-      } else {
-        // Adiciona um novo monstro à lista
-        monsters.push(this);
-      }
-  
-      // Salva a lista atualizada no localStorage
-      localStorage.setItem('monsters', JSON.stringify(monsters));
-    }
-  
-    static load() {
-      const data = JSON.parse(localStorage.getItem('monster'))
-
-      if (data && !isNaN(data.health)) {
-        const { name, rarity, level, health, maxHealth } = data;
-        const monster = new Monster(name, rarity, level);
-        monster.health = health;
-        monster.maxHealth = maxHealth;
-        return monster;
-      }
-      return null;
-    }
-  
     static createNew(name) {
       const rarityKey = this.buscarRaridadeAleatoria();
       const rarity = ListaDeRaridades[rarityKey];

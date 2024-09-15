@@ -9,12 +9,19 @@ const TelaCadastro = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
+
   const [name, setName] = useState('');
+
   const [password, setPassword] = useState('');
+
   const [confirmPassword, setConfirmPassword] = useState('');
+
   const [emailFocused, setEmailFocused] = useState(false);
+
   const [nameFocused, setNameFocused] = useState(false);
+
   const [passwordFocused, setPasswordFocused] = useState(false);
+
   const [confirmPasswordFocused, setConfirmPasswordFocused] = useState(false);
 
   const handleBackClick = () => {

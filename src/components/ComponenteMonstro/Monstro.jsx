@@ -32,10 +32,6 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
         }
     };
 
-    useEffect(() => {
-        currentMonster.save();
-    }, [currentMonster]);
-
     if (!currentMonster) return null;
 
     const borderColor = {

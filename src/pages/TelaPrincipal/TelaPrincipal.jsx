@@ -12,7 +12,7 @@ import BarraLateralDireita from '../../components/BarraLateralDireita/BarraLater
 
 import { useState, useEffect } from 'react';
 
-import MonsterService from '../../services/monsterService.js';
+import MonsterService from '../../services/MonsterService.js';
 
 import PlayerService from '../../services/PlayerService';
 
@@ -31,18 +31,21 @@ const TelaPrincipal = () => {
   
   const [loadingMonsters, setLoadingMonsters] = useState([]);
 
+  const [color, setColor] = useState('');
+
+  const [logs, setLogs] = useState([]);
+
   useEffect(() => {
     const initializeData = async () => {
       const currentUser = await AuthServices.getCurrentUser();
       
       setUser(currentUser);
-      
-      const fetchedMonsters = await MonsterService.buscaMonstros();
-
-      setMonsters(fetchedMonsters);
 
       if (currentUser) {
-        const fetchedPlayerData = await PlayerService.buscaJogador(currentUser.displayName);
+        const fetchedMonsters = await MonsterService.buscaMonstros(currentUser.uid);
+        setMonsters(fetchedMonsters);
+
+        const fetchedPlayerData = await PlayerService.buscaJogador(currentUser.uid);
         setPlayer(fetchedPlayerData);
       }
 
@@ -72,8 +75,6 @@ const TelaPrincipal = () => {
 
       setMonsters(newMonsters);
 
-      localStorage.setItem('monsters', JSON.stringify(newMonsters));
-
       const updatedPlayer = new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._vida, player._dano, player._defesa, player._agilidade);
 
       updatedPlayer.addXP(raridade)
@@ -82,7 +83,10 @@ const TelaPrincipal = () => {
 
       setPlayer(updatedPlayer);
 
-      localStorage.setItem('player', JSON.stringify(updatedPlayer));
+      if (user) {
+        await MonsterService.salvaMonstros(user.uid, newMonsters);
+        await PlayerService.salvaJogador(user.uid, updatedPlayer);
+      }
     } catch (error) {
       console.error('Erro ao atualizar o monstro:', error);
     } finally {
@@ -94,7 +98,29 @@ const TelaPrincipal = () => {
     }
   };
 
-  const [color, setColor] = useState('');
+  useEffect(() => {
+    if (loading) {
+      const logMessages = [
+        'Gerando nome de monstros...',
+        'Gerando temas...',
+        'Carregando dados do jogador...',
+        'Preparando ambiente...',
+        'Finalizando...'
+      ];
+
+      let index = 0;
+      const interval = setInterval(() => {
+        if (index < logMessages.length) {
+          setLogs((prevLogs) => [...prevLogs, logMessages[index]]);
+          index++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [loading]);
 
   const handleSubmit = async (event, {theme}) => {
     event.preventDefault();
@@ -110,7 +136,13 @@ const TelaPrincipal = () => {
   if (loading) {
     return (
       <div className='carregamento'>
-        Loading...
+        <div className="logs">
+          {logs.map((log, index) => (
+            <div key={index} className="log">
+              {log}
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
