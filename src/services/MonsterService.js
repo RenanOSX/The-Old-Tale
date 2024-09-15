@@ -11,7 +11,7 @@ class MonsterService {
         The name should be one word, without repetitions,
         and can be inspired by various sources such as pop culture,
         religions, movies, mythology, or any other relevant themes. 
-        Avoid including quotes around the name.`;
+        Avoid including quotes around the name and explications, give only the name.`;
         
         try {
             const response = await fetch('http://localhost:5000/names-generator', { 

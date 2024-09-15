@@ -8,16 +8,21 @@ import arrowDown from '../../assets/icons/arrow_down.png'
 
 import JogadorInfo from '../JogadorInfo/JogadorInfo';
 
-function BarraLateralDireita({ player, handleSubmit }) {
-  const [theme, setTheme] = useState('');
+import Popup from '../PopUpInputTheme.jsx/PopUpInputTheme';
 
-  const handleInputChange = (event) => {
-    setTheme(event.target.value);
+function BarraLateralDireita({ player, setTheme }) {
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+
+  const handleYinYangClick = () => {
+    setIsPopupVisible(true); // Mostrar o pop-up quando o botão Yin Yang for clicado
   };
 
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    handleSubmit(event, { theme });
+  const handleClosePopup = () => {
+    setIsPopupVisible(false); // Ocultar o pop-up
+  };
+
+  const handleFormSubmit = () => {
+    setIsPopupVisible(false); // Ocultar o pop-up após o envio do formulário
   };
 
   return (
@@ -28,27 +33,22 @@ function BarraLateralDireita({ player, handleSubmit }) {
         
       <img src={arrowDown} className='arrow-down' alt="Arrow Down"/>
 
-      {/* <img src={yinYangBtn} className='arrow-down' alt="Yin Yang Button"/> */}
-      <form onSubmit={handleFormSubmit}>
-          <input 
-            className='theme-input'
-            type="text" 
-            id="theme-input" 
-            placeholder="EX: Inferno" 
-            value={theme} 
-            onChange={handleInputChange} 
-          />
-          <button 
-          type="submit"
-          className='theme-button'>
-            Mudar</button>
-        </form>
+      <button className='yin-yang-btn' onClick={handleYinYangClick}>
+        <img src={yinYangBtn} alt="Yin Yang Button"/>
+      </button>
 
       <div className="money-right">
         200 GC
       </div>
     
       <JogadorInfo jogador={player} />
+
+      <Popup
+        isVisible={isPopupVisible}
+        onClose={handleClosePopup}
+        onSubmit={handleFormSubmit}
+        setThemeInput={setTheme}
+      />
     </aside>
   );
 }

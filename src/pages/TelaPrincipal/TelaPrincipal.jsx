@@ -52,8 +52,16 @@ const TelaPrincipal = () => {
         if (currentUser) {
           setCurrentLog('Buscando temas...');
           const userTheme = theme !== '' ? theme : await AuthServices.buscarTheme(currentUser.uid);
+
+          const firebaseTheme = await AuthServices.buscarTheme(currentUser.uid);
+
+          if (firebaseTheme !== userTheme) {
+            currentUser.theme = theme;
+            await AuthServices.updateUser(currentUser);
+          }
           
           const color = await MonsterService.changeTheme(theme);
+
           if (color) {
             setColor(color);
             console.log(`Received color: ${color}`);
@@ -87,7 +95,6 @@ const TelaPrincipal = () => {
   
     initializeData();
   }, [theme]); // Dependência `theme` para recarregar caso o tema mude
-  
 
   const handleMonsterUpdate = async (index, raridade) => {
     setLoadingMonsters((prev) => {
@@ -132,17 +139,6 @@ const TelaPrincipal = () => {
     }
   };
 
-  const handleSubmit = async (event, {theme}) => {
-    event.preventDefault();
-    const color = await MonsterService.changeTheme(theme);
-    if (color) {
-      setColor(color);
-      console.log(`Received color: ${color}`);
-    } else {
-      console.error('Failed to receive a valid color from the API');
-    }
-  };
-
   if (loading) {
     return (
       <div className='carregamento'>
@@ -169,7 +165,7 @@ const TelaPrincipal = () => {
           loadingMonsters={loadingMonsters}
           onMonsterUpdate={handleMonsterUpdate}
         />
-        <BarraLateralDireita player={player}  handleSubmit={handleSubmit}/>
+        <BarraLateralDireita player={player} setTheme={setTheme}/>
       </div>
     </div>
   );
