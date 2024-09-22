@@ -10,7 +10,7 @@ class MonsterService {
         Generate a single name related to the theme "${theme}".
         The name should be one word, without repetitions,
         and can be inspired by various sources such as pop culture,
-        religions, movies, mythology, or any other relevant themes. 
+        religions, movies, mythology, or any other relevant themes and should be real. 
         Avoid including quotes around the name and explications, give only the name.`;
         
         try {
@@ -69,30 +69,6 @@ class MonsterService {
             await set(ref(db, `users/${userId}/monsters`), monsters);
         } catch (error) {
             console.error('Erro ao salvar monstros no Firebase:', error);
-        }
-    }
-
-    async changeTheme(theme) {
-        const inputText = `send me a color in hexadecimal related to the theme ${theme}, 
-        do not send me anything else besides that because I will apply in a css style`;
-        try {
-            const response = await fetch('http://localhost:5000/theme-generator', { 
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    text: inputText
-                })
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            console.log(`API response: ${JSON.stringify(data)}`);
-            return data.color; // Supondo que a resposta contenha uma cor
-        } catch (error) {
-            console.error('Erro ao buscar dados da API:', error);
         }
     }
 }

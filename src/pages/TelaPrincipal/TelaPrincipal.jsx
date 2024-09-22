@@ -16,9 +16,15 @@ import MonsterService from '../../services/MonsterService.js';
 
 import PlayerService from '../../services/PlayerService';
 
+import IntroductionScreen from '../IntroductionScreen/IntroductionScreen.jsx';
+
 import Player from '../../models/Player.js';
 
 import './TelaPrincipal.css';
+
+import LoadingScreen from '../LoadingScreen/LoadingScreen.jsx';
+
+import GameplayService from '../../services/GameplayService.js';
 
 const TelaPrincipal = () => {
 
@@ -40,6 +46,10 @@ const TelaPrincipal = () => {
 
   const [logs, setLogs] = useState([]);
 
+  const [showIntroduction, setShowIntroduction] = useState(false);
+
+  const [introduction, setIntroduction] = useState('');
+
   useEffect(() => {
     const initializeData = async () => {
       try {
@@ -60,7 +70,7 @@ const TelaPrincipal = () => {
             await AuthServices.updateUser(currentUser);
           }
           
-          const color = await MonsterService.changeTheme(theme);
+          const color = await GameplayService.changeTheme(theme);
 
           if (color) {
             setColor(color);
@@ -80,10 +90,20 @@ const TelaPrincipal = () => {
           const fetchedPlayerData = await PlayerService.buscaJogador(currentUser.uid);
           setPlayer(fetchedPlayerData);
           setLogs((prevLogs) => [...prevLogs, 'Dados do jogador carregados.']);
+           // Verificar se a introdução já foi exibida
+
+          const introductionShown = localStorage.getItem('introductionShown');
+          console.log('IntroductionShown: ' + introductionShown, 'userTheme: ' + userTheme);
+          if (!introductionShown || introductionShown == null) {
+            setCurrentLog('Gerando introdução...');
+            const intro = await GameplayService.geraHistoria(userTheme, 'introducao');
+            setIntroduction(intro);
+            setShowIntroduction(true);
+            localStorage.setItem('introductionShown', 'true');
+          }
         } else {
           setCurrentLog('Usuário não autenticado.');
         }
-  
       } catch (error) {
         console.error('Erro ao inicializar dados:', error);
         setCurrentLog('Erro ao carregar dados.');
@@ -139,33 +159,30 @@ const TelaPrincipal = () => {
     }
   };
 
+  const handleProceed = () => {
+    setShowIntroduction(false);
+  };
+
   if (loading) {
-    return (
-      <div className='carregamento'>
-        <div className="logs">
-          {logs.map((log, index) => (
-            <div key={index} className="log">
-              {log}
-            </div>
-          ))}
-          <div className="log">{currentLog}</div>
-        </div>
-      </div>
-    );
+    return <LoadingScreen logs={logs} currentLog={currentLog} />;
+  }
+
+  if (showIntroduction) {
+    return <IntroductionScreen introduction={introduction} onProceed={handleProceed} />;
   }
 
   return (
     <div className="first-screen">
-      <Header user={user} color={color}/>
+      <Header user={user} textColor={color.textColor} color={color.headerColor}/>
       <div className="layout-container">
-        <BarraLateralEsquerda player={player} />
+        <BarraLateralEsquerda player={player} color={color.headerColor}/>
         <ComponenteCentral
           monsters={monsters}
           player={player}
           loadingMonsters={loadingMonsters}
           onMonsterUpdate={handleMonsterUpdate}
         />
-        <BarraLateralDireita player={player} setTheme={setTheme}/>
+        <BarraLateralDireita player={player} setTheme={setTheme} color={color.headerColor}/>
       </div>
     </div>
   );

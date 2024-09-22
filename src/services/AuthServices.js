@@ -62,18 +62,11 @@ class AuthServices {
   async updateUser(user) {
     const auth = getAuth();
     if (auth.currentUser) {
-      // Atualiza o perfil do usuário autenticado
-      await updateProfile(auth.currentUser, {
-        displayName: user.displayName || auth.currentUser.displayName,
-        photoURL: user.photoURL || auth.currentUser.photoURL,
-      });
-
       // Atualiza os dados do usuário no Realtime Database
       const userRef = ref(db, `users/${auth.currentUser.uid}`);
       await set(userRef, {
         theme: user.theme,
         photoURL: user.photoURL || auth.currentUser.photoURL,
-        // Adicione outros campos que você deseja atualizar
       });
     } else {
       throw new Error('Usuário não autenticado');

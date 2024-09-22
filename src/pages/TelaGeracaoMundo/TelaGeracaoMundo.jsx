@@ -24,17 +24,21 @@ const TelaGeracaoMundo = () => {
   };
 
   const handleSubmit = async () => {
-    const currentUser = await AuthServices.getCurrentUser();
-
-    if (currentUser) {
-      currentUser.theme = theme;
-      await AuthServices.updateUser(currentUser);
-
-      navigate('/telaPrincipal');
-    } else {
-      console.error('Usuário não autenticado');
+    try {
+      const currentUser = await AuthServices.getCurrentUser();
+      if (currentUser) {
+        console.log('Usuário autenticado:', currentUser);
+        currentUser.theme = theme;
+        await AuthServices.updateUser(currentUser);
+        console.log('Tema atualizado:', currentUser.theme);
+        navigate('/telaPrincipal');
+      } else {
+        console.error('Usuário não autenticado');
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar o tema:', error);
     }
-  }
+  };
 
   return (
     <div className="geracaoMundo">

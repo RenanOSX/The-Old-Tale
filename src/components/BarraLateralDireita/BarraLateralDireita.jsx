@@ -10,7 +10,7 @@ import JogadorInfo from '../JogadorInfo/JogadorInfo';
 
 import Popup from '../PopUpInputTheme.jsx/PopUpInputTheme';
 
-function BarraLateralDireita({ player, setTheme }) {
+function BarraLateralDireita({ player, setTheme, color }) {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   const handleYinYangClick = () => {
@@ -25,8 +25,17 @@ function BarraLateralDireita({ player, setTheme }) {
     setIsPopupVisible(false); // Ocultar o pop-up após o envio do formulário
   };
 
+  const hexToRgba = (hex, alpha) => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+
+  const subtleColor = hexToRgba(color, 0.5);
+
   return (
-    <aside className="stats-info">
+    <aside className="stats-info"  style={{ background: `linear-gradient(180deg, #070707 99%,  ${subtleColor} 100%)` }}>
       <div className='title-gerar-mundo'>
         "GERE UM NOVO TEMA"
       </div>
