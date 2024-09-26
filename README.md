@@ -42,11 +42,11 @@ Para clonar o projeto para o seu computador, siga os seguintes passos:
 
 ## Atualizar Projeto Local
 
-- É **obrigatório** que sempre utilize do seguinte comando ```git fetch``` para mostrar quais atualizações pendentes que você precisa atualizar, **ele mostra os commits que você está pra trás**, após isso utilize ```git merge origin/main``` para puxar as atualizações e aplica-las ao seu projeto local, isso vai fazer com que você não esteja mexendo em um projeto desatualizado.
+- É **obrigatório** que sempre utilize do seguinte comando ```git fetch``` para mostrar quais atualizações pendentes que você precisa atualizar, **ele mostra os commits que você está pra trás**, após isso utilize ```git pull origin {nome_da_branch}``` para puxar as atualizações e aplica-las ao seu projeto local, isso vai fazer com que você não esteja mexendo em um projeto desatualizado.
 
 ## Iniciando Projeto Localmente
 
-- Após instalar tudo necessário você pode iniciar o projeto com o comando ```npm run dev``` e basta segurar 'CTRL+CliqueEsquerdo' no link para abri-lo no browser.
+- Após instalar tudo necessário você pode iniciar o projeto com o comando ```npm run dev``` e basta segurar 'CTRL+CliqueEsquerdo' no link para abri-lo no browser. Depois disso abra outro terminal e digite ```python server``` depois aperte TAB ai o server vai virar ```.\server.py```, ai sim você pode dar ENTER.
 
 ## Fazendo Commits
 
