@@ -48,14 +48,31 @@
 
 .damage-text {
   position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.5rem;
+  color: #ff0000; /* Red color for damage text */
+  font-size: 2rem; /* Adjust the size as needed */
   font-weight: bold;
-  color: red;
-  pointer-events: none;
+  animation: floatUp 0.5s ease-out forwards, fadeOut 0.5s ease-out forwards;
+  pointer-events: none; /* Prevent the text from interfering with clicks */
 }
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50px); /* Adjust the distance as needed */
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 
 /* Media Queries para Responsividade */
 @media (max-width: 1200px) {

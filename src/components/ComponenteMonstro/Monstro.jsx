@@ -9,6 +9,8 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
     const [isDamaged, setIsDamaged] = useState(false);
     const [damageValue, setDamageValue] = useState(0);
     const [showDamage, setShowDamage] = useState(false);
+    const [damagePosition, setDamagePosition] = useState({ top: 0, left: 0 });
+
 
     const damageAnimation = useSpring({
         backgroundColor: isDamaged ? 'rgba(255, 0, 0, 0.5)' : 'transparent',
@@ -19,8 +21,8 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
 
     const damageTextAnimation = useSpring({
         opacity: showDamage ? 1 : 0,
-        transform: showDamage ? 'translateY(-20px)' : 'translateY(0px)',
-        config: { duration: 500 },
+        transform: showDamage ? 'translateY(-40px)' : 'translateY(0px)',
+        config: { duration: 2 },
     });
 
     const [currentMonster, setCurrentMonster] = useState(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
@@ -40,7 +42,7 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
 
     useEffect(() => {
         if (showDamage) {
-            const timer = setTimeout(() => setShowDamage(false), 500);
+            const timer = setTimeout(() => setShowDamage(false), 200);
             return () => clearTimeout(timer);
         }
     }, [showDamage]);
@@ -58,6 +60,15 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
             console.log('Monster is dead');
         }
     };
+
+    const getRandomPosition = () => {
+        const min = -20; // Minimum offset
+        const max = 20;  // Maximum offset
+        const top = Math.floor(Math.random() * (max - min + 1)) + min;
+        const left = Math.floor(Math.random() * (max - min + 1)) + min;
+        return { top, left };
+      };
+    
 
     if (!currentMonster) return null;
 
@@ -96,8 +107,8 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
                 <h1 id="monsterhp">HP: {currentMonster.health} / {currentMonster.maxHealth} ({Math.round((currentMonster.health / currentMonster.maxHealth) * 100)}%)</h1>
             </animated.div>
             {showDamage && (
-                <animated.div className="damage-text" style={damageTextAnimation}>
-                    +{damageValue}
+                <animated.div className="damage-text" style={{ ...damageTextAnimation, top: `${damagePosition.top}px`, left: `${damagePosition.left}px` }}>
+                +{damageValue}
                 </animated.div>
             )}
         </div>
