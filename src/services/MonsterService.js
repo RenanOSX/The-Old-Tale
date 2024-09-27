@@ -34,6 +34,47 @@ class MonsterService {
         }
     }
 
+    async criaImagem(theme) {
+        const payload = {
+            "prompt": "(masterpiece:1.1, good quality, high quality),<lora:add_detail:1>, (Cyberpunk:1), (opponent, enemy:1), vibrant colors, saturated colors",
+            "negative_prompt": "bad quality, worse quality:1, medium quality, distorted, foggy, mutated, overexposure, (background:1.2, sole objects, only objects)",
+            "steps": 1,
+            "batch_size": 1,
+            "cfg_scale": 7,
+            "width": 512,
+            "height": 512,
+            "override_settings_restore_afterwards": false,
+            "sampler_index": "Euler a",
+            "scheduler": "Karras",
+            "sd_lora": "add_detail",
+            "sd_model_name":"dreamshaper_8",
+            "override_settings": {
+                "sd_model_checkpoint": "dreamshaper_8",
+                "CLIP_stop_at_last_layers": 2
+            }
+        }
+
+        try {
+            const response = await fetch('http://localhost:5000/image-generator', { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: payload
+                })
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            console.log(`API response: ${JSON.stringify(data)}`);
+            return data;
+        } catch (error) {
+            console.error('Erro ao buscar dados da API:', error);
+        }
+    }
+
     async criaMonstro(name) {
         return Monster.createNew(name); 
     }
