@@ -10,6 +10,7 @@ const Terminal = () => {
   const terminalRef = useRef(null);
   const inputRef = useRef(null);
   const playerRef = useRef(null);
+  const [isPlayerReady, setIsPlayerReady] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -49,6 +50,11 @@ const Terminal = () => {
         height: '0',
         width: '0',
         videoId: '',
+        events: {
+          onReady: () => {
+            setIsPlayerReady(true);
+          },
+        },
       });
     };
   }, []);
@@ -89,7 +95,7 @@ const Terminal = () => {
   };
 
   const run = (url) => {
-    if (playerRef.current) {
+    if (isPlayerReady && playerRef.current) {
       playerRef.current.loadVideoByUrl(url);
     } else {
       console.error('YouTube player is not initialized.');

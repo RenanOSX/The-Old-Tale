@@ -17,9 +17,11 @@ import TelaGeracaoMundo from './pages/TelaGeracaoMundo/TelaGeracaoMundo';
 const App = () => {
   const [user, setUser] = useState(null);
 
+ 
   useEffect(() => {
     const currentUser = AuthServices.getCurrentUser();
     setUser(currentUser);
+
   }, []);
 
   const handleLogin = (user) => {

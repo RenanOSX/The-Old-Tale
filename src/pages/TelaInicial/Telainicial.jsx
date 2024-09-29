@@ -10,6 +10,8 @@ import AuthServices from "../../services/AuthServices";
 
 import './TelaInicial.css';
 
+import audio from '../../assets/mp3.mp3';
+
 const TelaInicial = ({ onLogin }) => {
   const [emailFocused, setEmailFocused] = useState(false);
   
@@ -31,6 +33,16 @@ const TelaInicial = ({ onLogin }) => {
 
   const nevegarTelaPrincipal = async () => {
     const result = await AuthServices.login(email, password);
+
+    const music = new Audio(audio);
+
+    music.loop = true;
+
+    music.play().catch(error => {
+      console.error('Error playing audio:', error);
+    })
+
+    music.volume = 0.1;
 
     if (result.success) {
       onLogin(result.user);

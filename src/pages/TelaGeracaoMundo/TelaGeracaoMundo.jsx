@@ -12,6 +12,10 @@ import arrowLeft from '../../assets/icons/arrow_circle_left.png';
 
 import circleRight from '../../assets/icons/arrow_circle_right.png';
 
+import GameplayService from "../../services/GameplayService";
+
+import audio from '../../assets/mp3.mp3';
+
 const TelaGeracaoMundo = () => { 
   const navigate = useNavigate();
   
@@ -38,6 +42,16 @@ const TelaGeracaoMundo = () => {
         await AuthServices.updateUser(currentUser);
         
         console.log('Tema atualizado:', currentUser.theme);
+
+        const music = new Audio(audio);
+
+        music.volume = 0.1;
+
+        music.loop = true;
+
+        music.play().catch(error => {
+          console.error('Error playing audio:', error);
+        });
         
         navigate('/telaPrincipal');
       } else {
