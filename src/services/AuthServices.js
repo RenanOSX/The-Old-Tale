@@ -66,6 +66,7 @@ class AuthServices {
       const userRef = ref(db, `users/${auth.currentUser.uid}`);
       await set(userRef, {
         theme: user.theme,
+        color: user.color,
         photoURL: user.photoURL || auth.currentUser.photoURL,
       });
     } else {
@@ -80,6 +81,17 @@ class AuthServices {
       const userData = snapshot.val();
       console.log('Theme-buscar:', userData.theme);
       return userData.theme;
+    }
+    return '';
+  }
+
+  async buscarColor(userId) {
+    const userRef = ref(db, `users/${userId}`);
+    const snapshot = await get(userRef);
+    if (snapshot.exists()) {
+      const userData = snapshot.val();
+      console.log('Theme-buscar:', userData.theme);
+      return userData.color;
     }
     return '';
   }

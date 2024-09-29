@@ -6,6 +6,8 @@ import Terminal from '../Terminal/Terminal.jsx';
 
 import ComponenteMonstro from '../ComponenteMonstro/Monstro.jsx';
 
+import LoadingMonstro from '../ComponenteMonstro/LoadingMonster.jsx';
+
 function ComponenteCentral({ monsters, player, loadingMonsters, onMonsterUpdate }) {
   return (
     <main className="main-content">
@@ -13,7 +15,7 @@ function ComponenteCentral({ monsters, player, loadingMonsters, onMonsterUpdate 
         <div className="main-section-content">
           {monsters.map((monster, index) => (
             loadingMonsters[index] ? (
-              <div key={index}>Loading...</div>
+              <LoadingMonstro key={index} index={index} />
             ) : (
               <ComponenteMonstro
                 key={index}

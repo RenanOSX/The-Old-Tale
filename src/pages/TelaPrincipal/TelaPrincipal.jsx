@@ -25,7 +25,6 @@ import './TelaPrincipal.css';
 import LoadingScreen from '../LoadingScreen/LoadingScreen.jsx';
 
 import GameplayService from '../../services/GameplayService.js';
-import { set } from 'firebase/database';
 
 const TelaPrincipal = () => {
 
@@ -54,7 +53,7 @@ const TelaPrincipal = () => {
   useEffect(() => {
     const initializeData = async () => {
       try {
-        setLoading(true);  // Ativa o estado de carregamento
+        setLoading(true); 
   
         const currentUser = await AuthServices.getCurrentUser();
 
@@ -68,13 +67,16 @@ const TelaPrincipal = () => {
 
           const firebaseTheme = await AuthServices.buscarTheme(currentUser.uid);
 
+          const color = await AuthServices.buscarColor(currentUser.uid);
+
           if (firebaseTheme !== userTheme) {
             currentUser.theme = theme;
+            currentUser.color = await GameplayService.changeTheme(theme);
             await AuthServices.updateUser(currentUser);
           }
           
-          const color = await GameplayService.changeTheme(theme);
-
+          console.log(color)
+          
           if (color) {
             setColor(color);
             console.log(`Received color: ${color}`);
@@ -93,7 +95,6 @@ const TelaPrincipal = () => {
           const fetchedPlayerData = await PlayerService.buscaJogador(currentUser.uid);
           setPlayer(fetchedPlayerData);
           setLogs((prevLogs) => [...prevLogs, 'Dados do jogador carregados.']);
-           // Verificar se a introdução já foi exibida
 
           const introductionShown = localStorage.getItem('introductionShown');
           console.log('IntroductionShown: ' + introductionShown, 'userTheme: ' + userTheme);
@@ -112,12 +113,12 @@ const TelaPrincipal = () => {
         setCurrentLog('Erro ao carregar dados.');
         setLogs((prevLogs) => [...prevLogs, `Erro: ${error.message}`]);
       } finally {
-        setLoading(false);  // Desativa o estado de carregamento
+        setLoading(false);  
       }
     };
   
     initializeData();
-  }, [theme]); // Dependência `theme` para recarregar caso o tema mude
+  }, [theme]); 
 
   const handleMonsterUpdate = async (index, raridade) => {
     setLoadingMonsters((prev) => {

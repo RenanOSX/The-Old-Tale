@@ -28,9 +28,17 @@ const TelaGeracaoMundo = () => {
       const currentUser = await AuthServices.getCurrentUser();
       if (currentUser) {
         console.log('Usuário autenticado:', currentUser);
+        
         currentUser.theme = theme;
+        
+        const color = await GameplayService.changeTheme(theme);
+        
+        currentUser.color = color;
+        
         await AuthServices.updateUser(currentUser);
+        
         console.log('Tema atualizado:', currentUser.theme);
+        
         navigate('/telaPrincipal');
       } else {
         console.error('Usuário não autenticado');

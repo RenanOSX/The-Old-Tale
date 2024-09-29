@@ -88,12 +88,14 @@ const JogadorInfo = ({ jogador }) => {
 
       <div className="level-icons">
           {levels.map((level, index) => (
-            <div key={index} className="level-icon">
+            <div key={index + 1} className="level-icon">
               {
                 currentPlayer._level === index + 1
                   ?  [
-                    <img src={level.icon} alt={level.text}/>,
-                    <p>{level.text}</p>
+                    <React.Fragment key={index}>
+                      <img src={level.icon} alt={level.text} />
+                      <p>{level.text}</p>
+                    </React.Fragment>
                   ] : null
               }
             </div>
