@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react';
+
 import { useSpring, animated } from '@react-spring/web';
-import monsterImg from "../../assets/images/monster.png";
+
 import "./Monstro.css";
+
 import Monster from '../../models/Monster';
+
 import Player from '../../models/Player';
 
 function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
     const [isDamaged, setIsDamaged] = useState(false);
+    
     const [damageValue, setDamageValue] = useState(0);
+
     const [showDamage, setShowDamage] = useState(false);
+    
     const [damagePosition, setDamagePosition] = useState({ top: 0, left: 0 });
 
+    const [image, setImage] = useState(null)
 
     const damageAnimation = useSpring({
         backgroundColor: isDamaged ? 'rgba(255, 0, 0, 0.5)' : 'transparent',
@@ -31,6 +38,20 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
     useEffect(() => {
         setCurrentMonster(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
         setCurrentPlayer(new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._vida, player._dano, player._defesa, player._agilidade));
+        
+        const fetchImage = async () => {
+            try {
+                const response = await import(`../../assets/images/monsters/${index}.png`)
+                setImage(response.default)
+            } catch (err) {
+                setError(err)
+            } finally {
+                setLoading(false)
+            }
+        }
+    
+        fetchImage()
+
     }, [monster, player]);
 
     useEffect(() => {
@@ -60,16 +81,7 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
             console.log('Monster is dead');
         }
     };
-
-    const getRandomPosition = () => {
-        const min = -20; // Minimum offset
-        const max = 20;  // Maximum offset
-        const top = Math.floor(Math.random() * (max - min + 1)) + min;
-        const left = Math.floor(Math.random() * (max - min + 1)) + min;
-        return { top, left };
-      };
     
-
     if (!currentMonster) return null;
 
     const borderColor = {
@@ -103,7 +115,7 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
                         {currentMonster.name} {currentMonster.rarity} - {currentMonster.level}
                     </div>
                 </h1>
-                <img style={monsterBoxStyle} src={monsterImg} alt="Monster" />
+                <img style={monsterBoxStyle} srcSet={image} alt="Monster" />
                 <h1 id="monsterhp">HP: {currentMonster.health} / {currentMonster.maxHealth} ({Math.round((currentMonster.health / currentMonster.maxHealth) * 100)}%)</h1>
             </animated.div>
             {showDamage && (

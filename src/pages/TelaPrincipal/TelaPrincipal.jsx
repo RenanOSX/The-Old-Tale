@@ -25,6 +25,7 @@ import './TelaPrincipal.css';
 import LoadingScreen from '../LoadingScreen/LoadingScreen.jsx';
 
 import GameplayService from '../../services/GameplayService.js';
+import { set } from 'firebase/database';
 
 const TelaPrincipal = () => {
 
@@ -62,6 +63,8 @@ const TelaPrincipal = () => {
         if (currentUser) {
           setCurrentLog('Buscando temas...');
           const userTheme = theme !== '' ? theme : await AuthServices.buscarTheme(currentUser.uid);
+
+          setTheme(userTheme);
 
           const firebaseTheme = await AuthServices.buscarTheme(currentUser.uid);
 
@@ -126,11 +129,11 @@ const TelaPrincipal = () => {
     });
 
     try {
-      const name = await MonsterService.buscaNomeMonstro();
+      const name = await MonsterService.buscaNomeMonstro(theme);
 
       const newMonster = await MonsterService.criaMonstro(name);
 
-      await MonsterService.criaImagem(theme)
+      await MonsterService.criaImagem(theme, index);
 
       const newMonsters = [...monsters];
 

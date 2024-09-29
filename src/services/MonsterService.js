@@ -34,11 +34,12 @@ class MonsterService {
         }
     }
 
-    async criaImagem(theme) {
+    async criaImagem(theme, index) {
+        console.log('Theme:', theme);
         const payload = {
-            "prompt": "(masterpiece:1.1, good quality, high quality),<lora:add_detail:1>, (Cyberpunk:1), (opponent, enemy:1), vibrant colors, saturated colors",
+            "prompt": `(masterpiece:1.1, good quality, high quality),<lora:add_detail:1>, (${theme}:1), (opponent, enemy:1), vibrant colors, saturated colors`,
             "negative_prompt": "bad quality, worse quality:1, medium quality, distorted, foggy, mutated, overexposure, (background:1.2, sole objects, only objects)",
-            "steps": 1,
+            "steps": 10,
             "batch_size": 1,
             "cfg_scale": 7,
             "width": 512,
@@ -54,15 +55,15 @@ class MonsterService {
             }
         }
 
+        console.log('Payload:', payload)
+    
         try {
-            const response = await fetch('http://localhost:5000/image-generator', { 
+            const response = await fetch(`http://localhost:5000/image-generator?index=${index}`, { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    text: payload
-                })
+                body: JSON.stringify(payload)
             });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -98,6 +99,7 @@ class MonsterService {
           for (let i = 0; i < 3; i++) {
             const name = await this.buscaNomeMonstro(theme);
             const newMonster = await this.criaMonstro(name);
+            await this.criaImagem(theme, i);
             newMonsters[i] = newMonster;
           }
           await set(ref(db, `users/${userId}/monsters`), newMonsters);

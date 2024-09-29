@@ -18,22 +18,29 @@ model = OllamaLLM(model="llama3.1")
 @app.route('/image-generator', methods=['POST'])
 def get_image():
     try:
-        url = "http://127.0.0.1:7861"
+        url = "http://127.0.0.1:7860"
         
         payload = request.json
 
-        print(payload)
+        index = request.args.get('index', random.randint(0, 1000))
 
         response = requests.post(url=f'{url}/sdapi/v1/txt2img', json=payload)
-        print(response.json())
+        
+        response.raise_for_status() 
+        
         r = response.json()
 
         i = random.randint(0, 1000)
 
-        with open(f'output{i}.png', 'wb') as f:
+        with open(f'./src/assets/images/monsters/{index}.png', 'wb') as f:
             f.write(base64.b64decode(r['images'][0]))
 
+
         return jsonify(r)
+    except requests.exceptions.RequestException as e:
+        return jsonify({'error': f'Request failed: {str(e)}'}), 500
+    except KeyError as e:
+        return jsonify({'error': f'Missing key in response: {str(e)}'}), 500
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
