@@ -7,7 +7,8 @@ class Player {
         xp = 0,
         xpToNextLevel = 100,
         level = 1,
-        vida = 100,
+        vidaMaxima = 100,
+        vidaAtual = 100,
         dano = 1,
         defesa = 1,
         agilidade = 1
@@ -17,7 +18,8 @@ class Player {
         this._xp = xp; 
         this._xpToNextLevel = xpToNextLevel || this.calculateXpToNextLevel(level);
         this._level = level;
-        this._vida = vida;
+        this._vidaMaxima = vidaMaxima;
+        this._vidaAtual = vidaAtual;
         this._dano = dano;
         this._defesa = defesa;
         this._agilidade = agilidade;
@@ -64,8 +66,8 @@ class Player {
     }
 
     spendVida(amount) {
-        if (amount <= this._vida) {
-            this._vida -= amount;
+        if (amount <= this._vidaAtual) {
+            this._vidaAtual -= amount;
         } else {
             console.error("Not enough stamina");
         }

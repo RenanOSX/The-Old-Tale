@@ -44,9 +44,7 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
                 const response = await import(`../../assets/images/monsters/${index}.png`)
                 setImage(response.default)
             } catch (err) {
-                setError(err)
-            } finally {
-                setLoading(false)
+                console.error('Error fetching image:', err)
             }
         }
     
@@ -81,7 +79,7 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
             console.log('Monster is dead');
         }
     };
-    
+
     if (!currentMonster) return null;
 
     const borderColor = {
