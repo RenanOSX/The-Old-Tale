@@ -15,7 +15,7 @@ function ComponenteCentral({ monsters, player, loadingMonsters, onMonsterUpdate 
         <div className="main-section-content">
           {monsters.map((monster, index) => (
             loadingMonsters[index] ? (
-              <LoadingMonstro key={index} index={index} />
+              <div key={index}>Loading...</div>
             ) : (
               <ComponenteMonstro
                 key={index}

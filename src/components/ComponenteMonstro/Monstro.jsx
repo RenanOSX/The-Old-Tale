@@ -43,6 +43,7 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
             try {
                 const response = await import(`../../assets/images/monsters/${index}.png`)
                 setImage(response.default)
+                console.log(response)
             } catch (err) {
                 console.error('Error fetching image:', err)
             }
@@ -50,7 +51,9 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
     
         fetchImage()
 
-    }, [monster, player]);
+   
+
+    }, [monster, player, image]);
 
     useEffect(() => {
         if (isDamaged) {
