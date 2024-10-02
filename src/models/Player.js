@@ -1,92 +1,82 @@
+import XpPorRaridade from "../constants/XpPorRaridade";
+
 class Player {
-
-    constructor() {
-        this._money = parseInt(localStorage.getItem('PlayerMoney'), 10) || 5;
-        this._xp = parseInt(localStorage.getItem('PlayerXP'), 10) || 0;
-        this._level = parseInt(localStorage.getItem('PlayerLevel'), 10) || 1;
-        this._stamina = parseInt(localStorage.getItem('PlayerStamina'), 10) || 100; 
-        this._attackDamage = parseInt(localStorage.getItem('PlayerAttackDamage'), 10) || 10;
+    constructor(
+        name = 'Default Player',
+        money = 5,
+        xp = 0,
+        xpToNextLevel = 100,
+        level = 1,
+        dano = 1,
+        defesa = 1,
+        agilidade = 1
+    ) {
+        this._name = name;
+        this._money = money;
+        this._xp = xp; 
+        this._xpToNextLevel = xpToNextLevel || this.calculateXpToNextLevel(level);
+        this._level = level;
+        this._dano = dano;
+        this._defesa = defesa;
+        this._agilidade = agilidade;
     }
 
-    get xp() {
-        return this._xp;
+    static createNew(name) {
+        return new Player(name);
     }
 
-    get stamina() {
-        return this._stamina;
+    static calculateXpToNextLevel(level = this._level) {
+        if (level <= 1) {
+            return 100;
+        } else if (level === 2) {
+            return 200;
+        } else if (level === 3) {
+            return 300;
+        } else if (level === 4) {
+            return 400;
+        } else if (level === 5) {
+            return 500;
+        } else if (level === 6) {
+            return 600;
+        } else if (level === 7) {
+            return 700;
+        } else if (level === 8) {
+            return 800;
+        } else if (level === 9) {
+            return 900;
+        } else if (level === 10) {
+            return 1000;
+        }
     }
 
-    get attackDamage() {
-        return this._attackDamage;
-    }
-
-    get money() {
-        return this._money;
-    }
-
-    get level() {
-        return this._level;
-    }
-
-    set level(value) {
-        this._level = value;
-        localStorage.setItem('PlayerLevel', value);
-    }
-
-    set xp(value) {
-        this._xp = value;
-        localStorage.setItem('PlayerXP', value);
-    }
-
-    set stamina(value) {
-        this._stamina = value;
-        localStorage.setItem('PlayerStamina', value);
-    }
-
-    set attackDamage(value) {
-        this._attackDamage = value;
-        localStorage.setItem('PlayerAttackDamage', value);
-    }
-
-    set money(value) {
-        this._money = value;
-        localStorage.setItem('PlayerMoney', value);
-    }
-
-    addXP(amount) {
-        this.xp += amount;
-        this.levelUp();
-    }
-
-    spendStamina(amount) {
-        if (amount <= this.stamina) {
-            this.stamina -= amount;
+    addXP(raridadeMonstro) {
+        const xpMonster = XpPorRaridade[raridadeMonstro];
+        
+        if (xpMonster !== undefined) {
+            this._xp += xpMonster;
+            console.log('XP Atual: ', this._xp);
+            this.levelUp();
         } else {
-            console.error("Not enough stamina");
+            console.error('Raridade do monstro inválida:', raridadeMonstro);
         }
     }
 
     earnMoney(amount) {
-        this.money += amount;
+        this._money += amount;
     }
 
     levelUp() {
-        if (this.xp >= 100) { // Exemplo de condição para subir de nível
-            this.xp = 0; // Subtrai a XP necessária para o nível
-            this.stamina += 10; // Aumenta a stamina
-            this.attackDamage += 5; // Aumenta o dano de ataque
-            this.level += 1;
-            // Salva as novas variáveis no localStorage
-            this.save();
+        if (this._xp >= this._xpToNextLevel) { 
+            if (this._level === 10) {
+                this._xp = 0;
+                this._money += 10;
+            } else {
+                this._xp = 0; 
+                this._level += 1;
+                this._money += 1;
+                this._xpToNextLevel = Player.calculateXpToNextLevel(this._level);
+            }
         }
-    }
-
-    save() {
-        localStorage.setItem('PlayerXP', this.xp);
-        localStorage.setItem('PlayerStamina', this.stamina);
-        localStorage.setItem('PlayerAttackDamage', this.attackDamage);
-        localStorage.setItem('PlayerMoney', this.money);
-        localStorage.setItem('PlayerLevel', this.level);
     }
 }
 

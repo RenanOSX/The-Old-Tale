@@ -10,8 +10,7 @@ const IntervaloDeNiveis = {
     9: [150, 200],  // Eternal
     10: [200, 250], // Godly
     11: [250, 300], // Glitched
-    12: [300, 350], // ???
-    13: [350, 400], // Admin
+    12: [300, 350], // Admin
 };
 
 export default IntervaloDeNiveis;

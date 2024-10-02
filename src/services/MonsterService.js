@@ -1,59 +1,130 @@
 import Monster from '../models/Monster.js';
 
-import Player from '../models/Player.js';
+import { db } from './FirebaseConfig';
+
+import { ref, set, get, child } from 'firebase/database';
 
 class MonsterService {
-    async buscaNomeMonstro() {
+    
+    async resetMonsters(userId, theme) {
+        const newMonsters = {};
+        for (let i = 0; i < 3; i++) {
+            const name = await this.buscaNomeMonstro(theme);
+            const newMonster = await this.criaMonstro(name);
+            newMonster.imagePath = await this.criaImagem(theme, i);
+            newMonsters[i] = newMonster;
+        }
+        await set(ref(db, `users/${userId}/monsters`), newMonsters);
+    }
+
+    async buscaNomeMonstro(theme) {
+        const inputText = `
+        Generate a single name related to the theme "${theme}".
+        The name should be one word, without repetitions,
+        and can be inspired by various sources such as pop culture,
+        religions, movies, mythology, or any other relevant themes and should be real. 
+        Avoid including quotes around the name and explications, give only the name.`;
+        
         try {
-            const response = await fetch('http://localhost:3001/ia', { 
+            const response = await fetch('http://localhost:5000/names-generator', { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({
+                    text: inputText
+                })
             });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            const name = await response.text();
-            return name;
+            const data = await response.json();
+
+            return data.monster_name;
         } catch (error) {
             console.error('Erro ao buscar dados da API:', error);
         }
     }
 
+    async criaImagem(theme, index) {
+        const payload = {
+            "prompt": `(masterpiece:1.1, good quality, high quality),<lora:add_detail:1>, (${theme}:1), (opponent, enemy:1), vibrant colors, saturated colors`,
+            "negative_prompt": "bad quality, worse quality:1, medium quality, distorted, foggy, mutated, overexposure, (background:1.2, sole objects, only objects)",
+            "steps": 10,
+            "batch_size": 1,
+            "cfg_scale": 7,
+            "width": 512,
+            "height": 512,
+            "override_settings_restore_afterwards": false,
+            "sampler_index": "Euler a",
+            "scheduler": "Karras",
+            "sd_lora": "add_detail",
+            "sd_model_name":"dreamshaper_8",
+            "override_settings": {
+                "sd_model_checkpoint": "dreamshaper_8",
+                "CLIP_stop_at_last_layers": 2
+            }
+        }
+    
+        console.log('Creating image with theme:', theme);
+
+        try {
+            const response = await fetch(`http://localhost:5000/image-generator?index=${index}`, { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+    
+            // Return the image path from the response
+            return data.imagePath;
+        } catch (error) {
+            console.error('Erro ao buscar dados da API:', error);
+        }
+    }
     async criaMonstro(name) {
         return Monster.createNew(name); 
     }
 
-    async buscaMonstros() {
-        const storedMonsters = localStorage.getItem('monsters');
-        if (storedMonsters) {
-            return JSON.parse(storedMonsters);
+    async buscaMonstros(userId, theme) { 
+        const dbRef = ref(db);
+        const snapshot = await get(child(dbRef, `users/${userId}/monsters`));
+    
+        if (snapshot.exists()) {
+
+          const data = snapshot.val();
+          return Object.values(data).map(monsterData => new Monster(
+            monsterData.name,
+            monsterData.rarity,
+            monsterData.level,
+            monsterData.health,
+            monsterData.maxHealth
+          ));
         } else {
-            const newMonsters = [];
-            for (let i = 0; i < 3; i++) {
-                const name = await this.buscaNomeMonstro();
-                const newMonster = await this.criaMonstro(name);
-                newMonsters.push(newMonster);
-            }
-            localStorage.setItem('monsters', JSON.stringify(newMonsters));
-            return newMonsters;
+          const newMonsters = {};
+          for (let i = 0; i < 3; i++) {
+            const name = await this.buscaNomeMonstro(theme);
+            const newMonster = await this.criaMonstro(name);
+            console.log('Theme-:', theme);
+            await this.criaImagem(theme, i);
+            newMonsters[i] = newMonster;
+          }
+          await set(ref(db, `users/${userId}/monsters`), newMonsters);
+          return Object.values(newMonsters);
         }
     }
 
-    buscaJogador() {
-        const storedPlayer = localStorage.getItem('player');
-        if (storedPlayer) {
-            return JSON.parse(storedPlayer);
-        } else {
-            const newPlayer = this.criaJogador();
-            localStorage.setItem('player', JSON.stringify(newPlayer));
-            return newPlayer;
+    async salvaMonstros(userId, monsters) {
+        try {
+            await set(ref(db, `users/${userId}/monsters`), monsters);
+        } catch (error) {
+            console.error('Erro ao salvar monstros no Firebase:', error);
         }
-    }
-
-    criaJogador() {
-        return new Player();
     }
 }
 

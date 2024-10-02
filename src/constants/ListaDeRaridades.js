@@ -10,7 +10,7 @@ const ListaDeRaridades = {
     9: "Eterno",
     10: "Maestral",
     11: "Defeituoso",
-    13: "Administrador"
+    12: "Administrador"
 };
 
 export default ListaDeRaridades;

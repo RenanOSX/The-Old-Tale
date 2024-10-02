@@ -10,8 +10,7 @@ const MultiplicadorDeVida = {
     9: 50,
     10: 100,
     11: 200,
-    12: 500,
-    13: 1000
+    12: 500
 };
 
 export default MultiplicadorDeVida;

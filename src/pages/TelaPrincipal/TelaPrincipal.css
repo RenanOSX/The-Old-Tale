@@ -3,7 +3,22 @@
   flex-direction: column;
   padding-top: 92px; 
   height: 100vh; 
-  background-color: #050418;
+
+}
+
+.carregamento {
+  display: flex;
+  flex-direction: row;
+  height: 100vh; /* Garante que ocupe toda a altura da viewport */
+  width: 100vw; /* Garante que ocupe toda a largura da viewport */
+  background-color: #000000;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: 'Outfit', 'Helvetica'
 }
 
 .layout-container {

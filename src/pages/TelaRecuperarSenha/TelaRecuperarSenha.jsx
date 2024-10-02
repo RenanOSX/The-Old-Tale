@@ -40,7 +40,7 @@ const TelaRecuperarSenha = () => {
         src={arrowLeft}
         onClick={handleBackClick}
       />
-      <div className="container">
+      <div className="container-recSenha">
         <div className="text-wrapper-2">RECUPERAR SENHA</div>
         
         <div className="input-group">

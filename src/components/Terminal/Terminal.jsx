@@ -8,6 +8,9 @@ const Terminal = () => {
   const [history, setHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const terminalRef = useRef(null);
+  const inputRef = useRef(null);
+  const playerRef = useRef(null);
+  const [isPlayerReady, setIsPlayerReady] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -17,15 +20,11 @@ const Terminal = () => {
         navigateHistory(-1);
       } else if (e.key === 'ArrowDown') {
         navigateHistory(1);
-      } else if (e.key === 'Backspace') {
-        setInput(input.slice(0, -1));
-      } else if (e.key.length === 1) {
-        setInput(input + e.key);
       }
     };
 
     const handleFocus = () => {
-      terminalRef.current.focus();
+      inputRef.current.focus();
     };
 
     const terminal = terminalRef.current;
@@ -38,10 +37,32 @@ const Terminal = () => {
     };
   }, [input, history, historyIndex]);
 
+  useEffect(() => {
+    // Carregar a API do YouTube
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    // Inicializar o player quando a API estiver pronta
+    window.onYouTubeIframeAPIReady = () => {
+      playerRef.current = new window.YT.Player('youtube-player', {
+        height: '0',
+        width: '0',
+        videoId: '',
+        events: {
+          onReady: () => {
+            setIsPlayerReady(true);
+          },
+        },
+      });
+    };
+  }, []);
+
   const processCommand = (command) => {
     if (command.trim() === '') return;
 
-    const result = handleCommand(command);
+    const result = handleCommand(command, run);
 
     if (result.type === 'clear') {
       setOutput([]);
@@ -49,14 +70,10 @@ const Terminal = () => {
       return;
     }
 
-    // Clear the output from the terminal to don't be too big
-    // if (output.length >= 12) {
-    //   setOutput([]);
-    // }
     setOutput((prevOutput) => [
       ...prevOutput,
       { text: `root@linux:~$ ${command}`, type: 'command' },
-      { text: result.text, type: result.type }, // Add type for styling
+      { text: result.text, type: result.type },
     ]);
     setHistory((prevHistory) => [...prevHistory, command]);
     setHistoryIndex(-1);
@@ -77,14 +94,23 @@ const Terminal = () => {
     }
   };
 
+  const run = (url) => {
+    if (isPlayerReady && playerRef.current) {
+      playerRef.current.loadVideoByUrl(url);
+    } else {
+      console.error('YouTube player is not initialized.');
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setInput(e.target.value);
+  };
+
   return (
     <div className="terminal" tabIndex="0" ref={terminalRef}>
       <div className="output">
         {output.map((line, index) => (
-          <div
-            key={index}
-            className={`output-line ${line.type}`}
-          >
+          <div key={index} className={`output-line ${line.type}`}>
             {line.text}
           </div>
         ))}
@@ -95,7 +121,15 @@ const Terminal = () => {
           &nbsp;{input}
           <span className="blinking-cursor"></span>
         </span>
+        <input
+          type="text"
+          ref={inputRef}
+          value={input}
+          onChange={handleInputChange}
+          className="hidden-input"
+        />
       </div>
+      <div id="youtube-player"></div>
     </div>
   );
 };

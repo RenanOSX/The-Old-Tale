@@ -10,8 +10,7 @@ const PesoDeRaridade = {
     9: 1,
     10: 0.5,
     11: 0.2,
-    12: 0.05,
-    13: 0.01
+    12: 0.05
 };
 
 export default PesoDeRaridade;

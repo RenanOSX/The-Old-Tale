@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import monsterImg from "../../assets/images/monster.png";
+import { useSpring, animated } from '@react-spring/web';
 
 import "./Monstro.css";
 
@@ -9,30 +9,95 @@ import Monster from '../../models/Monster';
 import Player from '../../models/Player';
 
 function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
-    if (!monster) {
-        return <div>Loading...</div>; // Ou qualquer outro fallback enquanto o monstro está sendo carregado
-    }
-        
+    const [isDamaged, setIsDamaged] = useState(false);
+    
+    const [damageValue, setDamageValue] = useState(0);
+
+    const [showDamage, setShowDamage] = useState(false);
+    
+    const [damagePosition, setDamagePosition] = useState({ top: 0, left: 0 });
+
+    const [loading, setLoading] = useState(true);
+
+    const [image, setImage] = useState(null)
+
     const [currentMonster, setCurrentMonster] = useState(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
-    const [currentPlayer, setCurrentPlayer] = useState(new Player(player.name, player.level, player.xp, player.stamina, player.attackDamage, player.money));
 
-    useEffect(() => {
-        setCurrentMonster(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
-    }, [monster]);
+    const [currentPlayer, setCurrentPlayer] = useState(new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._dano, player._defesa, player._agilidade));
 
-    const clickHandler = () => {
-        currentMonster.takeDamage(currentPlayer.attackDamage);
-        if (currentMonster.health <= 0) {
-            onMonsterUpdate(index);
-            console.log('Monster is dead');
-        } else {
-            setCurrentMonster(new Monster(currentMonster.name, currentMonster.rarity, currentMonster.level, currentMonster.health, currentMonster.maxHealth));
+    const damageAnimation = useSpring({
+        backgroundColor: isDamaged ? 'rgba(255, 0, 0, 0.5)' : 'transparent',
+        transform: isDamaged ? 'scale(1.05)' : 'scale(1)',
+        boxShadow: isDamaged ? '0 0 20px rgba(255, 0, 0, 0.5)' : '0 0 10px rgba(0, 0, 0, 0.1)',
+        config: { duration: 300 },
+    });
+
+    const damageTextAnimation = useSpring({
+        opacity: showDamage ? 1 : 0,
+        transform: showDamage ? 'translateY(-40px)' : 'translateY(0px)',
+        config: { duration: 2 },
+    });
+
+    const fetchImage = async () => {
+        try {
+            // Força a atualização da imagem ao adicionar um parâmetro de tempo
+            const timestamp = new Date().getTime();
+            const imagePath = `/assets/images/monsters/${index}.png?timestamp=${timestamp}`;
+            const response = await fetch(imagePath);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            setImage(imagePath);
+        } catch (err) {
+            console.error('Error fetching image:', err);
+        } finally {
+            setLoading(false);
         }
     };
 
     useEffect(() => {
-        currentMonster.save();
-    }, [currentMonster]);
+        
+        setCurrentMonster(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
+       
+        setCurrentPlayer(new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._dano, player._defesa, player._agilidade));
+    
+        fetchImage()
+
+        console.log('Monster index: ', index);
+
+    }, [monster, player]);
+
+    useEffect(() => {
+        if (isDamaged) {
+            const timer = setTimeout(() => setIsDamaged(false), 300);
+            return () => clearTimeout(timer);
+        }
+    }, [isDamaged]);
+
+    useEffect(() => {
+        if (showDamage) {
+            const timer = setTimeout(() => setShowDamage(false), 200);
+            return () => clearTimeout(timer);
+        }
+    }, [showDamage]);
+
+    const clickHandler = () => {
+        const damage = currentPlayer._dano;
+
+        const updatedMonster = new Monster(currentMonster.name, currentMonster.rarity, currentMonster.level, currentMonster.health - damage, currentMonster.maxHealth);
+
+        setCurrentMonster(updatedMonster);
+
+        setDamageValue(damage);
+
+        setIsDamaged(true);
+
+        setShowDamage(true);
+
+        if (updatedMonster.health <= 0) {
+            onMonsterUpdate(index, updatedMonster.rarity);
+        }
+    };
 
     if (!currentMonster) return null;
 
@@ -60,15 +125,22 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
     };
 
     return (
-        <span className="monster-box">
-            <h1 className={currentMonster.rarity}>
-                <div className="monster-name">
-                    {currentMonster.name} {currentMonster.rarity} - {currentMonster.level}
-                </div>
-            </h1>
-            <img style={monsterBoxStyle} onClick={clickHandler} src={monsterImg} alt="Monster" />
-            <h1 id="monsterhp">HP: {currentMonster.health} / {currentMonster.maxHealth} ({Math.round((currentMonster.health / currentMonster.maxHealth) * 100)}%)</h1>
-        </span>
+        <div className="monster-container">
+            <animated.div className="monster-box" style={{ ...damageAnimation, borderColor: borderColor[currentMonster.rarity] }} onClick={clickHandler}>
+                <h1 className={currentMonster.rarity}>
+                    <div className="monster-name">
+                        {currentMonster.name} {currentMonster.rarity} - {currentMonster.level}
+                    </div>
+                </h1>
+                <img style={monsterBoxStyle} src={image} alt="Monster" />
+                <h1 id="monsterhp">HP: {currentMonster.health} / {currentMonster.maxHealth} ({Math.round((currentMonster.health / currentMonster.maxHealth) * 100)}%)</h1>
+            </animated.div>
+            {showDamage && (
+                <animated.div className="damage-text" style={{ ...damageTextAnimation, top: `${damagePosition.top}px`, left: `${damagePosition.left}px` }}>
+                +{damageValue}
+                </animated.div>
+            )}
+        </div>
     );
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import iconPlus from '../../assets/icons/icon_plus.png';
+import iconPlus from '/assets/icons/icon_plus.png';
 
 import './ItensBarraEsquerda.css';
 
