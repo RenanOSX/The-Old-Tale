@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import { useSpring, animated } from '@react-spring/web';
+
 import './BarraLateralDireita.css'
 
 import yinYangBtn from '/assets/icons/yin_yang_button.png'
@@ -12,17 +14,23 @@ import Popup from '../PopUpInputTheme.jsx/PopUpInputTheme';
 
 function BarraLateralDireita({ player, setTheme, color }) {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleYinYangClick = () => {
-    setIsPopupVisible(true); // Mostrar o pop-up quando o botão Yin Yang for clicado
+    if (player.moedas >= 200) {
+      setIsPopupVisible(true);
+    } else {
+      setErrorMessage('Moedas insuficientes');
+      setTimeout(() => setErrorMessage(''), 3000); 
+    }
   };
 
   const handleClosePopup = () => {
-    setIsPopupVisible(false); // Ocultar o pop-up
+    setIsPopupVisible(false); 
   };
 
   const handleFormSubmit = () => {
-    setIsPopupVisible(false); // Ocultar o pop-up após o envio do formulário
+    setIsPopupVisible(false); 
   };
 
   const hexToRgba = (hex, alpha) => {
@@ -31,6 +39,12 @@ function BarraLateralDireita({ player, setTheme, color }) {
     const b = parseInt(hex.slice(5, 7), 16);
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   };
+
+  const errorAnimation = useSpring({
+    opacity: errorMessage ? 1 : 0,
+    transform: errorMessage ? 'translateY(0)' : 'translateY(-20px)',
+    config: { duration: 300 },
+  });
 
   const subtleColor = hexToRgba(color, 0.5);
 
@@ -49,6 +63,10 @@ function BarraLateralDireita({ player, setTheme, color }) {
       <div className="money-right">
         200 GC
       </div>
+
+      <animated.div style={errorAnimation} className="error-message">
+        {errorMessage}
+      </animated.div>
     
       <JogadorInfo jogador={player} />
 

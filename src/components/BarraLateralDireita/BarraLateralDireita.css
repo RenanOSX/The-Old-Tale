@@ -10,6 +10,18 @@
   background-color: #000000; 
 }
 
+.error-message {
+  color: red;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  text-align: center;
+  background-color: rgba(255, 0, 0, 0.1);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0.5rem rgba(255, 0, 0, 0.2);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
 .popup {
   position: fixed;
   top: 0;
