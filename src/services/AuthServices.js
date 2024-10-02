@@ -28,12 +28,17 @@ class AuthServices {
   async register(email, password, name) {
     try {
       const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+      
       const user = userCredential.user;
+      
       await updateProfile(user, { displayName: name });
+      
       localStorage.setItem('user', JSON.stringify({ ...user, displayName: name }));
+      
       return { success: true, user };
     } catch (error) {
       console.error("Error registering: ", error);
+      
       return { success: false, error };
     }
   }
@@ -58,19 +63,29 @@ class AuthServices {
       return { success: false, error };
     }
   }
+  
+  async updateAuthProfile(user) {
+    try {
+      await updateProfile(user, { displayName: user.displayName });
+      console.log('Perfil de autenticação atualizado com sucesso.');
+    } catch (error) {
+      console.error('Erro ao atualizar perfil de autenticação:', error);
+      throw error;
+    }
+  }
 
-  async updateUser(user) {
-    const auth = getAuth();
-    if (auth.currentUser) {
-      // Atualiza os dados do usuário no Realtime Database
-      const userRef = ref(db, `users/${auth.currentUser.uid}`);
+  async updateUserInDatabase(user) {
+    try {
+      const userRef = ref(db, `users/${user.uid}`);
       await set(userRef, {
+        displayName: user.displayName,
         theme: user.theme,
-        color: user.color,
-        photoURL: user.photoURL || auth.currentUser.photoURL,
+        color: user.color
       });
-    } else {
-      throw new Error('Usuário não autenticado');
+      console.log('Dados atualizados no Realtime Database com sucesso.');
+    } catch (error) {
+      console.error('Erro ao atualizar dados no Realtime Database:', error);
+      throw error;
     }
   }
 
@@ -90,7 +105,7 @@ class AuthServices {
     const snapshot = await get(userRef);
     if (snapshot.exists()) {
       const userData = snapshot.val();
-      console.log('Theme-buscar:', userData.theme);
+      console.log('Color-buscar:', userData.color);
       return userData.color;
     }
     return '';

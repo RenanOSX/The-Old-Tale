@@ -6,8 +6,6 @@ import Terminal from '../Terminal/Terminal.jsx';
 
 import ComponenteMonstro from '../ComponenteMonstro/Monstro.jsx';
 
-import LoadingMonstro from '../ComponenteMonstro/LoadingMonster.jsx';
-
 function ComponenteCentral({ monsters, player, loadingMonsters, onMonsterUpdate }) {
   return (
     <main className="main-content">

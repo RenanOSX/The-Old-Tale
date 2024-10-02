@@ -35,8 +35,7 @@ def get_image():
         with open(f'./src/assets/images/monsters/{index}.png', 'wb') as f:
             f.write(base64.b64decode(r['images'][0]))
 
-
-        return jsonify(r)
+        return jsonify({'imagePath': f'/assets/images/monsters/{index}.png'})
     except requests.exceptions.RequestException as e:
         return jsonify({'error': f'Request failed: {str(e)}'}), 500
     except KeyError as e:

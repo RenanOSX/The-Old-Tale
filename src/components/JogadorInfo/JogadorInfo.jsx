@@ -45,14 +45,12 @@ const JogadorInfo = ({ jogador }) => {
     return <div style={{alignSelf:'center'}}>No player data available</div>;
   }
 
-  const [currentPlayer, setCurrentPlayer] = useState(new Player(jogador._name,  jogador._money,  jogador._xp, jogador._xpToNextLevel, jogador._level, jogador._vida, jogador._dano, jogador._defesa, jogador._agilidade));
+  const [currentPlayer, setCurrentPlayer] = useState(new Player(jogador._name,  jogador._money,  jogador._xp, jogador._xpToNextLevel, jogador._level, jogador._dano, jogador._defesa, jogador._agilidade));
 
   const xpPercentage = (currentPlayer._xp / currentPlayer._xpToNextLevel) * 100;
 
-  const vidaPercentage = (currentPlayer._vidaAtual / currentPlayer._vidaMaxima) * 100; 
-
   useEffect(() => {
-    setCurrentPlayer(new Player(jogador._name,  jogador._money,  jogador._xp, jogador._xpToNextLevel, jogador._level, jogador._vida, jogador._dano, jogador._defesa, jogador._agilidade));
+    setCurrentPlayer(new Player(jogador._name,  jogador._money,  jogador._xp, jogador._xpToNextLevel, jogador._level, jogador._dano, jogador._defesa, jogador._agilidade));
   }, [jogador]);
 
   return (
@@ -71,19 +69,7 @@ const JogadorInfo = ({ jogador }) => {
         <div className="xp-text">
           XP - {currentPlayer._xp} / {currentPlayer._xpToNextLevel}
         </div>
-
-        <div className="vida-bar-container">
-          <div className="vida-bar" style={{ width: `${vidaPercentage}%` }}></div>
-        </div>
-        
-        <div className="vida-text">
-          Vida - {currentPlayer._vidaAtual} / {currentPlayer._vidaMaxima}
-        </div>
-      </div>
-
-      <div className="carteira">
-        <img src={euro} alt="Euro"/>
-        {currentPlayer._money} GC
+  
       </div>
 
       <div className="level-icons">
@@ -100,6 +86,11 @@ const JogadorInfo = ({ jogador }) => {
               }
             </div>
           ))}
+        </div>
+
+        <div className="carteira">
+          <img src={euro} alt="Euro"/>
+          {currentPlayer._money} GC
         </div>
     </div>
   );

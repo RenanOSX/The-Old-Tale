@@ -10,16 +10,17 @@ import AuthServices from "../../services/AuthServices";
 
 import './TelaInicial.css';
 
-import audio from '../../assets/mp3.mp3';
+import InputGroup from '../../components/InputGroup/InputGroup';
+
+import { playMusic, handleAuthError } from "../../utils/Functions";
 
 const TelaInicial = ({ onLogin }) => {
-  const [emailFocused, setEmailFocused] = useState(false);
-  
+
   const [email, setEmail] = useState('');
   
   const [password, setPassword] = useState('');
-  
-  const [passwordFocused, setPasswordFocused] = useState(false);
+
+  const [error, setError] = useState('');
 
   const navigate = useNavigate();
 
@@ -31,31 +32,22 @@ const TelaInicial = ({ onLogin }) => {
     navigate('/recuperarSenha');
   };
 
-  const nevegarTelaPrincipal = async () => {
-    const result = await AuthServices.login(email, password);
+  const handleLogin = async () => {
+    try {
+      const result = await AuthServices.login(email, password);
+      
+      if (result.success) {
+        onLogin(result.user);
 
-    const music = new Audio(audio);
+        playMusic();
 
-    music.loop = true;
-
-    music.play().catch(error => {
-      console.error('Error playing audio:', error);
-    })
-
-    music.volume = 0.1;
-
-    if (result.success) {
-      onLogin(result.user);
-
-      const theme = await AuthServices.buscarTheme(result.user.uid);
-
-      if (theme && theme !== '') {
         navigate('/telaPrincipal');
+        
       } else {
-        navigate('/geracaoMundo');
+        handleAuthError(result.error, setError);
       }
-    } else {
-      console.error(result.error);
+    } catch (error) {
+      handleAuthError(error, setError);
     }
   };
 
@@ -63,29 +55,22 @@ const TelaInicial = ({ onLogin }) => {
     <div className="tela-inicial">
       <div className="container-inicial">
         <img className="yin-yang-inicial" alt="Yin yang" src={yinYang} />
-        <div className="input-group">
-          <label className={`label ${emailFocused ? 'focused' : ''}`}>EMAIL</label>
-          <input
-            type="email"
-            className="input"
-            onFocus={() => setEmailFocused(true)}
-            onChange={(e) => setEmail(e.target.value)}
-            onBlur={(e) => setEmailFocused(e.target.value !== '')}
-          />
-        </div>
-        <div className="input-group">
-          <label className={`label ${passwordFocused ? 'focused' : ''}`}>SENHA</label>
-          <input
-            type="password"
-            className="input"
-            onFocus={() => setPasswordFocused(true)}
-            onChange={(e) => setPassword(e.target.value)}
-            onBlur={(e) => setPasswordFocused(e.target.value !== '')}
-          />
-        </div>
+        {error && <p className="error-message">{error}</p>}
+        <InputGroup
+          label="EMAIL"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <InputGroup
+          label="SENHA"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <div className="text-link" onClick={navegarCadastro}>CADASTRAR</div>
         <div className="text-link" onClick={navegarRecSenha}>RECUPERAR SENHA</div>
-        <img className="arrow-circle-right" alt="Arrow circle right" onClick={nevegarTelaPrincipal} src={circleRight} />
+        <img className="arrow-circle-right" alt="Arrow circle right" onClick={handleLogin} src={circleRight} />
       </div>
     </div>
   );

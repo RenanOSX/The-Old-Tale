@@ -1,50 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, Suspense } from 'react';
 
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-import AuthServices from './services/AuthServices';
+import { AuthContext, AuthProvider } from './context/AuthContext';
 
-import TelaInicial from './pages/TelaInicial/Telainicial';
+import LoadingScreen from './pages/LoadingScreen/LoadingScreen';
 
-import TelaPrincipal from './pages/TelaPrincipal/TelaPrincipal';
+const TelaInicial = React.lazy(() => import('./pages/TelaInicial/Telainicial'));
 
-import TelaCadastro from './pages/TelaCadastro/TelaCadastro';
+const TelaPrincipal = React.lazy(() => import('./pages/TelaPrincipal/TelaPrincipal'));
 
-import TelaRecuperarSenha from './pages/TelaRecuperarSenha/TelaRecuperarSenha';
+const TelaCadastro = React.lazy(() => import('./pages/TelaCadastro/TelaCadastro'));
 
-import TelaGeracaoMundo from './pages/TelaGeracaoMundo/TelaGeracaoMundo';
+const TelaRecuperarSenha = React.lazy(() => import('./pages/TelaRecuperarSenha/TelaRecuperarSenha'));
 
-const App = () => {
-  const [user, setUser] = useState(null);
-
- 
-  useEffect(() => {
-    const currentUser = AuthServices.getCurrentUser();
-    setUser(currentUser);
-
-  }, []);
-
-  const handleLogin = (user) => {
-    setUser(user);
-  };
-
-  const handleLogout = () => {
-    AuthServices.logout();
-    setUser(null);
-  };
+const AppRoutes = () => {
+  const { user } = useContext(AuthContext);
 
   return (
-    <Router>
+    <Suspense fallback={<LoadingScreen currentLog={''} logs={[]}/>}>
       <Routes>
-        <Route path="/" element={user ? <Navigate to="/telaPrincipal" /> : <TelaInicial onLogin={handleLogin} />} />
-        <Route path='/telaInicial' element={<TelaInicial onLogin={handleLogin} />} />
-        <Route path="/telaPrincipal" element={user ? <TelaPrincipal onLogout={handleLogout} /> : <Navigate to="/" />} />
+        <Route path="/" element={user ? <Navigate to="/telaPrincipal" /> : <TelaInicial />} />
+        <Route path="/telaInicial" element={<TelaInicial />} />
+        <Route path="/telaPrincipal" element={user ? <TelaPrincipal /> : <Navigate to="/" />} />
         <Route path="/cadastro" element={<TelaCadastro />} />
         <Route path="/recuperarSenha" element={<TelaRecuperarSenha />} />
-        <Route path="/geracaoMundo" element={<TelaGeracaoMundo />} />
       </Routes>
-    </Router>
+    </Suspense>
   );
 };
+
+const App = () => (
+  <AuthProvider>
+    <Router>
+      <AppRoutes />
+    </Router>
+  </AuthProvider>
+);
 
 export default App;

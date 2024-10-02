@@ -19,6 +19,10 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
 
     const [image, setImage] = useState(null)
 
+    const [currentMonster, setCurrentMonster] = useState(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
+
+    const [currentPlayer, setCurrentPlayer] = useState(new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._dano, player._defesa, player._agilidade));
+
     const damageAnimation = useSpring({
         backgroundColor: isDamaged ? 'rgba(255, 0, 0, 0.5)' : 'transparent',
         transform: isDamaged ? 'scale(1.05)' : 'scale(1)',
@@ -32,28 +36,26 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
         config: { duration: 2 },
     });
 
-    const [currentMonster, setCurrentMonster] = useState(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
-    const [currentPlayer, setCurrentPlayer] = useState(new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._vida, player._dano, player._defesa, player._agilidade));
+    const fetchImage = async () => {
+        try {
+            const response = await import(`../../assets/images/monsters/${index}.png`);
+            setImage(response.default);
+        } catch (err) {
+            console.error('Error fetching image:', err);
+        }
+    };
 
     useEffect(() => {
-        setCurrentMonster(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
-        setCurrentPlayer(new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._vida, player._dano, player._defesa, player._agilidade));
         
-        const fetchImage = async () => {
-            try {
-                const response = await import(`../../assets/images/monsters/${index}.png`)
-                setImage(response.default)
-                console.log(response)
-            } catch (err) {
-                console.error('Error fetching image:', err)
-            }
-        }
+        setCurrentMonster(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
+       
+        setCurrentPlayer(new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._dano, player._defesa, player._agilidade));
     
         fetchImage()
 
-   
+        console.log('Monster index: ', index);
 
-    }, [monster, player, image]);
+    }, [monster, player]);
 
     useEffect(() => {
         if (isDamaged) {
@@ -71,15 +73,19 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
 
     const clickHandler = () => {
         const damage = currentPlayer._dano;
+
         const updatedMonster = new Monster(currentMonster.name, currentMonster.rarity, currentMonster.level, currentMonster.health - damage, currentMonster.maxHealth);
+
         setCurrentMonster(updatedMonster);
+
         setDamageValue(damage);
+
         setIsDamaged(true);
+
         setShowDamage(true);
 
         if (updatedMonster.health <= 0) {
             onMonsterUpdate(index, updatedMonster.rarity);
-            console.log('Monster is dead');
         }
     };
 
@@ -116,7 +122,7 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
                         {currentMonster.name} {currentMonster.rarity} - {currentMonster.level}
                     </div>
                 </h1>
-                <img style={monsterBoxStyle} srcSet={image} alt="Monster" />
+                <img style={monsterBoxStyle} src={image} alt="Monster" />
                 <h1 id="monsterhp">HP: {currentMonster.health} / {currentMonster.maxHealth} ({Math.round((currentMonster.health / currentMonster.maxHealth) * 100)}%)</h1>
             </animated.div>
             {showDamage && (

@@ -27,7 +27,7 @@ class MonsterService {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
-            console.log(`API response: ${JSON.stringify(data)}`);
+
             return data.monster_name;
         } catch (error) {
             console.error('Erro ao buscar dados da API:', error);
@@ -35,7 +35,6 @@ class MonsterService {
     }
 
     async criaImagem(theme, index) {
-        console.log('Theme:', theme);
         const payload = {
             "prompt": `(masterpiece:1.1, good quality, high quality),<lora:add_detail:1>, (${theme}:1), (opponent, enemy:1), vibrant colors, saturated colors`,
             "negative_prompt": "bad quality, worse quality:1, medium quality, distorted, foggy, mutated, overexposure, (background:1.2, sole objects, only objects)",
@@ -54,8 +53,6 @@ class MonsterService {
                 "CLIP_stop_at_last_layers": 2
             }
         }
-
-        console.log('Payload:', payload)
     
         try {
             const response = await fetch(`http://localhost:5000/image-generator?index=${index}`, { 
@@ -69,13 +66,16 @@ class MonsterService {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
-            console.log(`API response: ${JSON.stringify(data)}`);
-            return data;
+
+            const timestamp = new Date().getTime();
+            const imagePath = `${data.imagePath}?timestamp=${timestamp}`;
+    
+            console.log(imagePath);
+            return imagePath;
         } catch (error) {
             console.error('Erro ao buscar dados da API:', error);
         }
     }
-
     async criaMonstro(name) {
         return Monster.createNew(name); 
     }
@@ -85,7 +85,7 @@ class MonsterService {
         const snapshot = await get(child(dbRef, `users/${userId}/monsters`));
     
         if (snapshot.exists()) {
-          console.log('Monstros encontrados:', snapshot.val());
+
           const data = snapshot.val();
           return Object.values(data).map(monsterData => new Monster(
             monsterData.name,
@@ -99,7 +99,7 @@ class MonsterService {
           for (let i = 0; i < 3; i++) {
             const name = await this.buscaNomeMonstro(theme);
             const newMonster = await this.criaMonstro(name);
-            await this.criaImagem(theme, i);
+            newMonster.imagePath = await this.criaImagem(theme, i);
             newMonsters[i] = newMonster;
           }
           await set(ref(db, `users/${userId}/monsters`), newMonsters);
