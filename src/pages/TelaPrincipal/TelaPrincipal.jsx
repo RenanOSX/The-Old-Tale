@@ -193,7 +193,7 @@ const TelaPrincipal = () => {
     <div className="first-screen">
       <Header user={user} textColor={color.textColor} color={color.headerColor}/>
       <div className="layout-container">
-        <BarraLateralEsquerda player={player} color={color.headerColor}/>
+        <BarraLateralEsquerda userId={user.uid} player={player} color={color.headerColor}/>
         <ComponenteCentral
           monsters={monsters}
           player={player}

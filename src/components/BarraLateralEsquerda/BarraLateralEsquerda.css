@@ -40,12 +40,27 @@
     font-size: 0.875rem;
     font-weight: bold;
   }
+
+  .btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+  }
   
   .btn {
     height: 5rem;
     margin-top: 2rem;
     align-self: center;
     width: 5rem;
+    border: none;
+    border-radius: 50%; /* Torna o botão circular */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn:hover {
+    filter: brightness(70%); /* Escurece a cor de fundo ao passar o mouse */
   }
 
   .sidebar-section:first-of-type {

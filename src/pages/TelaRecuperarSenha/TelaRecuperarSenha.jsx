@@ -8,9 +8,9 @@ import './TelaRecuperarSenha.css';
 
 import AuthServices from "../../services/AuthServices";
 
-import arrowLeft from '../../assets/icons/arrow_circle_left.png';
+import arrowLeft from '/assets/icons/arrow_circle_left.png';
 
-import circleRight from '../../assets/icons/arrow_circle_right.png';
+import circleRight from '/assets/icons/arrow_circle_right.png';
 
 const TelaRecuperarSenha = () => {  
   const navigate = useNavigate();

@@ -6,9 +6,9 @@ import AuthServices from "../../services/AuthServices";
 
 import './TelaCadastro.css';
 
-import arrowLeft from '../../assets/icons/arrow_circle_left.png';
+import arrowLeft from '/assets/icons/arrow_circle_left.png';
 
-import circleRight from '../../assets/icons/arrow_circle_right.png';
+import circleRight from '/assets/icons/arrow_circle_right.png';
 
 import InputGroup from '../../components/InputGroup/InputGroup';
 
@@ -17,6 +17,8 @@ import { handleAuthErrorCadastro, playMusic } from "../../utils/Functions";
 import GameplayService from "../../services/GameplayService";
 
 import { AuthContext } from "../../context/AuthContext";
+
+import Spinner from "../../components/Spinner/Spinner";
 
 const TelaCadastro = () => {  
   const navigate = useNavigate();
@@ -28,6 +30,8 @@ const TelaCadastro = () => {
   const [password, setPassword] = useState('');
 
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [loading, setLoading] = useState(false);
 
   const { handleSignup }  = useContext(AuthContext);
 
@@ -41,9 +45,11 @@ const TelaCadastro = () => {
 
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Ativar loading
 
     if (password !== confirmPassword) {
       setError('As senhas não correspondem.');
+      setLoading(false); // Desativar loading
       return;
     }
 
@@ -63,6 +69,7 @@ const TelaCadastro = () => {
         } catch (error) {
           console.error('Erro ao atualizar perfil de autenticação:', error);
           setError('Erro ao atualizar perfil de autenticação.');
+          setLoading(false); // Desativar loading
           return;
         }
 
@@ -74,18 +81,19 @@ const TelaCadastro = () => {
         } catch (error) {
           console.error('Erro ao atualizar dados no Realtime Database:', error);
           setError('Erro ao atualizar dados no Realtime Database.');
+          setLoading(false); // Desativar loading
           return;
         }
 
-        // Tocar música
-        playMusic();
-
-        navigate('/telaPrincipal');
+        navigate(-1);
       } else {
-        setError(result.error.message);
+        setError('Erro ao criar conta.');
       }
     } catch (error) {
-      setError(error.message);
+      console.error('Erro ao criar conta:', error);
+      setError('Erro ao criar conta.');
+    } finally {
+      setLoading(false); // Desativar loading
     }
   };
 
@@ -99,43 +107,49 @@ const TelaCadastro = () => {
       />
       <div className="container-cadastro">
         <div className="text-wrapper-2">CADASTRO</div>
-        {error && <p className="error-message">{error}</p>}
-        <InputGroup
-          label="EMAIL"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <InputGroup
-          label="NOME"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <InputGroup
-          label="SENHA"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <InputGroup
-          label="CONFIRMAR SENHA"
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <InputGroup
-          label="TEMA"
-          type="text"
-          value={theme}
-          onChange={(e) => setTheme(e.target.value)}
-        />
-        <img
-          className="arrow-circle-right"
-          alt="Arrow circle right"
-          src={circleRight}
-          onClick={handleSignupSubmit}
-        />
+        { loading ? (
+          <Spinner />
+        ) : (
+          <>
+            {error && <p className="error-message">{error}</p>}
+            <InputGroup
+              label="EMAIL"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <InputGroup
+              label="NOME"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <InputGroup
+              label="SENHA"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <InputGroup
+              label="CONFIRMAR SENHA"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            <InputGroup
+              label="TEMA"
+              type="text"
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
+            />
+            <img
+              className="arrow-circle-right"
+              alt="Arrow circle right"
+              src={circleRight}
+              onClick={handleSignupSubmit}
+            />
+          </>
+        )}
       </div>
     </div>
   );
