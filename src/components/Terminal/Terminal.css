@@ -98,3 +98,8 @@
     height: 200px; /* Ajustar altura para telas menores */
   }
 }
+
+.loading-message {
+  color: rgb(110, 110, 110);
+  margin-top: 10px;
+}
