@@ -54,6 +54,8 @@ class MonsterService {
             }
         }
     
+        console.log('Creating image with theme:', theme);
+
         try {
             const response = await fetch(`http://localhost:5000/image-generator?index=${index}`, { 
                 method: 'POST',
@@ -96,6 +98,7 @@ class MonsterService {
           for (let i = 0; i < 3; i++) {
             const name = await this.buscaNomeMonstro(theme);
             const newMonster = await this.criaMonstro(name);
+            console.log('Theme-:', theme);
             await this.criaImagem(theme, i);
             newMonsters[i] = newMonster;
           }

@@ -133,7 +133,9 @@ const TelaPrincipal = () => {
 
       const newMonster = await MonsterService.criaMonstro(name);
 
-      await MonsterService.criaImagem(theme, index);
+      const userTheme = await AuthServices.buscarTheme(user.uid);
+
+      await MonsterService.criaImagem(userTheme, index);
 
       const newMonsters = [...monsters];
 
