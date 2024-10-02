@@ -72,7 +72,6 @@ class Player {
                 this._money += 10;
             } else {
                 this._xp = 0; 
-                this._vida += 10;
                 this._level += 1;
                 this._money += 1;
                 this._xpToNextLevel = Player.calculateXpToNextLevel(this._level);

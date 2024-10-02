@@ -2,9 +2,7 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswor
 
 import { auth } from './FirebaseConfig.js';
 
-import { getAuth } from "firebase/auth";
-
-import { ref, set, get } from 'firebase/database';
+import { ref, set, get, update } from 'firebase/database';
 
 import { db } from "./FirebaseConfig.js";
 
@@ -74,7 +72,7 @@ class AuthServices {
     }
   }
 
-  async updateUserInDatabase(user) {
+  async setUserInDatabase(user) {
     try {
       const userRef = ref(db, `users/${user.uid}`);
       await set(userRef, {
@@ -88,6 +86,20 @@ class AuthServices {
       throw error;
     }
   }
+
+  async updateUserInDatabase(user) {
+    try {
+        const userRef = ref(db, `users/${user.uid}`);
+        await update(userRef, {
+            theme: user.theme,
+            color: user.color
+        });
+        console.log('Dados atualizados no Realtime Database com sucesso.');
+    } catch (error) {
+        console.error('Erro ao atualizar dados no Realtime Database:', error);
+        throw error;
+    }
+}
 
   async buscarTheme(userId) {
     const userRef = ref(db, `users/${userId}`);

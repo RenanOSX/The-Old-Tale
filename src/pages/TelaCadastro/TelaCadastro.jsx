@@ -68,7 +68,7 @@ const TelaCadastro = () => {
 
         // Atualizar dados no Realtime Database
         try {
-          await AuthServices.updateUserInDatabase(currentUser);
+          await AuthServices.setUserInDatabase(currentUser);
           console.log('Current user: ', currentUser);
           console.log('Dados atualizados no Realtime Database com sucesso.');
         } catch (error) {

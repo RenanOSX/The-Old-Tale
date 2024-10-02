@@ -5,6 +5,18 @@ import { db } from './FirebaseConfig';
 import { ref, set, get, child } from 'firebase/database';
 
 class MonsterService {
+    
+    async resetMonsters(userId, theme) {
+        const newMonsters = {};
+        for (let i = 0; i < 3; i++) {
+            const name = await this.buscaNomeMonstro(theme);
+            const newMonster = await this.criaMonstro(name);
+            newMonster.imagePath = await this.criaImagem(theme, i);
+            newMonsters[i] = newMonster;
+        }
+        await set(ref(db, `users/${userId}/monsters`), newMonsters);
+    }
+
     async buscaNomeMonstro(theme) {
         const inputText = `
         Generate a single name related to the theme "${theme}".

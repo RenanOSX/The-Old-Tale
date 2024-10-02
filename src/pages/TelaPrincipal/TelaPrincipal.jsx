@@ -105,17 +105,26 @@ const TelaPrincipal = () => {
 
   useEffect(() => {
     const applyTheme = async () => {
-      if (user && theme) {
-        setLoading(true); 
-        const updatedColor = await GameplayService.changeTheme(theme);
-        setColor(updatedColor);
-        user.theme = theme;
-        user.color = updatedColor;
-        await AuthServices.updateUserInDatabase(user);
-        initializeData()
-      }
-    };
+        if (user && theme) {
+            setLoading(true);
+            try {
+                const updatedColor = await GameplayService.changeTheme(theme);
+                setColor(updatedColor);
+                user.theme = theme;
+                user.color = updatedColor;
+                await AuthServices.updateUserInDatabase(user);
 
+                // Redefine os monstros
+                await MonsterService.resetMonsters(user.uid, theme);
+
+                initializeData();
+            } catch (error) {
+                console.error('Erro ao aplicar tema:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
     applyTheme();
   }, [theme]);
 
@@ -148,6 +157,8 @@ const TelaPrincipal = () => {
       updatedPlayer.addXP(raridade)
 
       updatedPlayer.earnMoney(1)
+
+      console.log('Player:', updatedPlayer);
 
       setPlayer(updatedPlayer);
 
