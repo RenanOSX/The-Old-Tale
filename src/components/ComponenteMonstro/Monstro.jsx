@@ -17,6 +17,8 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
     
     const [damagePosition, setDamagePosition] = useState({ top: 0, left: 0 });
 
+    const [loading, setLoading] = useState(true);
+
     const [image, setImage] = useState(null)
 
     const [currentMonster, setCurrentMonster] = useState(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
@@ -38,10 +40,18 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
 
     const fetchImage = async () => {
         try {
-            const response = await import(`../../assets/images/monsters/${index}.png`);
-            setImage(response.default);
+            // Força a atualização da imagem ao adicionar um parâmetro de tempo
+            const timestamp = new Date().getTime();
+            const imagePath = `/assets/images/monsters/${index}.png?timestamp=${timestamp}`;
+            const response = await fetch(imagePath);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            setImage(imagePath);
         } catch (err) {
             console.error('Error fetching image:', err);
+        } finally {
+            setLoading(false);
         }
     };
 

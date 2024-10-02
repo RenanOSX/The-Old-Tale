@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import AuthServices from '../../services/AuthServices';
 import './Header.css';
-import yinYang from '../../assets/images/yin_yang.png';
+import yinYang from '/assets/images/yin_yang.png';
 
 const Header = ({ user, color, textColor }) => {
   const navigate = useNavigate();

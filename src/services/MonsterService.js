@@ -66,12 +66,9 @@ class MonsterService {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
-
-            const timestamp = new Date().getTime();
-            const imagePath = `${data.imagePath}?timestamp=${timestamp}`;
     
-            console.log(imagePath);
-            return imagePath;
+            // Return the image path from the response
+            return data.imagePath;
         } catch (error) {
             console.error('Erro ao buscar dados da API:', error);
         }
@@ -99,7 +96,7 @@ class MonsterService {
           for (let i = 0; i < 3; i++) {
             const name = await this.buscaNomeMonstro(theme);
             const newMonster = await this.criaMonstro(name);
-            newMonster.imagePath = await this.criaImagem(theme, i);
+            await this.criaImagem(theme, i);
             newMonsters[i] = newMonster;
           }
           await set(ref(db, `users/${userId}/monsters`), newMonsters);

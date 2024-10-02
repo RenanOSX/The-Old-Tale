@@ -2,31 +2,31 @@ import React, { useEffect, useState } from 'react';
 
 import './JogadorInfo.css';
 
-import circleImpermanence from '../../assets/icons/circle_impermanence.png';
+import circleImpermanence from '/assets/icons/circle_impermanence.png';
 
-import euro from '../../assets/icons/euro_icon.png';
+import euro from '/assets/icons/euro_icon.png';
 
 import Player from '../../models/Player';
 
-import level01 from '../../assets/icons/level01.png';
+import level01 from '/assets/icons/level01.png';
 
-import level02 from '../../assets/icons/level02.png';
+import level02 from '/assets/icons/level02.png';
 
-import level03 from '../../assets/icons/level03.png';
+import level03 from '/assets/icons/level03.png';
 
-import level04 from '../../assets/icons/level04.png';
+import level04 from '/assets/icons/level04.png';
 
-import level05 from '../../assets/icons/level05.png';
+import level05 from '/assets/icons/level05.png';
 
-import level06 from '../../assets/icons/level06.png';
+import level06 from '/assets/icons/level06.png';
 
-import level07 from '../../assets/icons/level07.png';
+import level07 from '/assets/icons/level07.png';
 
-import level08 from '../../assets/icons/level08.png';
+import level08 from '/assets/icons/level08.png';
 
-import level09 from '../../assets/icons/level09.png';
+import level09 from '/assets/icons/level09.png';
 
-import level10 from '../../assets/icons/level10.png';
+import level10 from '/assets/icons/level10.png';
 
 const JogadorInfo = ({ jogador }) => {
   const levels = [

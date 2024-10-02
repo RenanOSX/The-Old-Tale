@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 import './BarraLateralDireita.css'
 
-import yinYangBtn from '../../assets/icons/yin_yang_button.png'
+import yinYangBtn from '/assets/icons/yin_yang_button.png'
 
-import arrowDown from '../../assets/icons/arrow_down.png'
+import arrowDown from '/assets/icons/arrow_down.png'
 
 import JogadorInfo from '../JogadorInfo/JogadorInfo';
 

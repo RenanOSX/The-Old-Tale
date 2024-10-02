@@ -4,15 +4,15 @@ import ItensBarraEsquerda from '../ItensBarraEsquerda/ItensBarraEsquerda';
 
 import './BarraLateralEsquerda.css';
 
-import btn from '../../assets/icons/button.png'
+import btn from '/assets/icons/button.png'
 
-import dano from '../../assets/icons/dano_icon.png';
+import dano from '/assets/icons/dano_icon.png';
 
-import defesa from '../../assets/icons/defesa_icon.png';
+import defesa from '/assets/icons/defesa_icon.png';
 
-import agilidade from '../../assets/icons/agilidade_icon.png';
+import agilidade from '/assets/icons/agilidade_icon.png';
 
-import vida from '../../assets/icons/heart.png';
+import vida from '/assets/icons/heart.png';
 
 const sidebarItems = [
   { icon: dano, text: "Dano" },

@@ -36,7 +36,7 @@ const TelaPrincipal = () => {
 
   const [player, setPlayer] = useState(null);
 
-  const [image, setImage] = useState([]);
+  const [image, setImage] = useState('');
   
   const [loading, setLoading] = useState(true);
   
@@ -74,13 +74,6 @@ const TelaPrincipal = () => {
         setCurrentLog('Buscando monstros...');
         const fetchedMonsters = await MonsterService.buscaMonstros(currentUser.uid, userTheme);
         setMonsters(fetchedMonsters);
-
-        let img = [];
-        for(let i = 0; i < 3; i++) {
-          img.push(fetchedMonsters[i].imagePath);
-          console.log('Image path: ', fetchedMonsters[i].imagePath);
-        }
-        setImage(img);
 
         setCurrentLog('Buscando dados do jogador...');
         const fetchedPlayerData = await PlayerService.buscaJogador(currentUser.uid);
