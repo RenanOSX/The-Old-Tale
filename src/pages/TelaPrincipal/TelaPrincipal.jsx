@@ -81,6 +81,7 @@ const TelaPrincipal = () => {
 
         const introductionShown = localStorage.getItem('introductionShown');
         console.log('IntroductionShown: ' + introductionShown, 'userTheme: ' + userTheme);
+        
         if (!introductionShown || introductionShown == null) {
           setCurrentLog('Gerando introdução...');
           const intro = await GameplayService.geraHistoria(userTheme, 'introducao');

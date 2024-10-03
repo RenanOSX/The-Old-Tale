@@ -1,16 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactPlayer from 'react-player';
 import './Terminal.css';
 import handleCommand from './commandHandler';
+
+const API_KEY = 'AIzaSyBx7vyaPYvBj_H_I6axliWpACT5Uxmq_7A';
 
 const Terminal = () => {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState([]);
   const [history, setHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const [videoId, setVideoId] = useState(''); // State to store the YouTube video ID
+  const [isPlayerReady, setIsPlayerReady] = useState(false);
+  const [volume, setVolume] = useState(50); // State to store the volume level
   const terminalRef = useRef(null);
   const inputRef = useRef(null);
   const playerRef = useRef(null);
-  const [isPlayerReady, setIsPlayerReady] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -36,33 +41,40 @@ const Terminal = () => {
       terminal.removeEventListener('click', handleFocus);
     };
   }, [input, history, historyIndex]);
-
+  
   useEffect(() => {
-    // Carregar a API do YouTube
+    // Load the YouTube IFrame API
     const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
+    tag.src = `https://www.youtube.com/iframe_api?key=${API_KEY}`;
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    // Inicializar o player quando a API estiver pronta
+    // Initialize the player when the API is ready
     window.onYouTubeIframeAPIReady = () => {
       playerRef.current = new window.YT.Player('youtube-player', {
         height: '0',
         width: '0',
         videoId: '',
+        playerVars: {
+          controls: 0, // Hide default controls
+          modestbranding: 1, // Hide YouTube logo
+          rel: 0, // Do not show related videos at the end
+          iv_load_policy: 3, // Hide video annotations
+        },
         events: {
           onReady: () => {
             setIsPlayerReady(true);
+            playerRef.current.setVolume(volume); // Set initial volume
           },
         },
       });
     };
-  }, []);
+  }, [volume]);
 
   const processCommand = (command) => {
     if (command.trim() === '') return;
 
-    const result = handleCommand(command, run);
+    const result = handleCommand(command, run, exit);
 
     if (result.type === 'clear') {
       setOutput([]);
@@ -93,17 +105,51 @@ const Terminal = () => {
       setInput(history[newIndex]);
     }
   };
-
+ 
+ 
   const run = (url) => {
+    const videoId = new URL(url).searchParams.get('v');
+    setVideoId(videoId);
     if (isPlayerReady && playerRef.current) {
-      playerRef.current.loadVideoByUrl(url);
-    } else {
-      console.error('YouTube player is not initialized.');
+      playerRef.current.loadVideoById(videoId);
+    }
+  };
+
+  const exit = () => {
+    setVideoId('');
+    if (isPlayerReady && playerRef.current) {
+      playerRef.current.stopVideo();
     }
   };
 
   const handleInputChange = (e) => {
     setInput(e.target.value);
+  };
+
+  const handlePlayButtonClick = () => {
+    if (isPlayerReady && playerRef.current) {
+      playerRef.current.playVideo();
+    }
+  };
+
+  const handlePauseButtonClick = () => {
+    if (isPlayerReady && playerRef.current) {
+      playerRef.current.pauseVideo();
+    }
+  };
+
+  const handleStopButtonClick = () => {
+    if (isPlayerReady && playerRef.current) {
+      playerRef.current.stopVideo();
+    }
+  };
+
+  const handleVolumeChange = (e) => {
+    const newVolume = e.target.value;
+    setVolume(newVolume);
+    if (isPlayerReady && playerRef.current) {
+      playerRef.current.setVolume(newVolume);
+    }
   };
 
   return (
@@ -129,7 +175,16 @@ const Terminal = () => {
           className="hidden-input"
         />
       </div>
-      <div id="youtube-player"></div>
+    {videoId && (
+        <div className="player-wrapper vintage">
+          <iframe
+            id="youtube-player"
+            type="text/html"
+            src={`https://www.youtube.com/embed/${videoId}?enablejsapi=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3`}
+            frameBorder="0"
+          ></iframe>
+        </div>
+      )}
     </div>
   );
 };
