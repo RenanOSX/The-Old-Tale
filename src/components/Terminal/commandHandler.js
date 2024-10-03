@@ -1,3 +1,5 @@
+import GameplayService from '../../services/GameplayService';
+
 const items = {
     'apple': {
       name: 'apple',
@@ -10,15 +12,15 @@ const items = {
     'orange': {
       name: 'orange',
       price: 0.4
-    }
-  };
-  
-  const commandHandler = {
-    help: () => ({ text: 'Available commands: help, echo, cls, date, shop, run, exit', type: 'success' }),
-    echo: (args) => ({ text: args.join(' '), type: 'success' }),
-    cls: () => ({ text: 'cls', type: 'clear' }), // Handle clear separately in the terminal component
-    date: () => ({ text: new Date().toLocaleString(), type: 'success' }),
-    shop: (args) => {
+  }
+}
+
+const commandHandler = {
+  help: () => ({ text: 'Available commands: help, echo, cls, date, shop, run, generate story (theme) (introducao, conflito, climax, conclusao) (short,medium,large)', type: 'success' }),
+  echo: (args) => ({ text: args.join(' '), type: 'success' }),
+  cls: () => ({ text: 'cls', type: 'clear' }), // Handle clear separately in the terminal component
+  date: () => ({ text: new Date().toLocaleString(), type: 'success' }),
+  shop: (args) => {
       // Verifica quantidade de argumentos
       if (args.length <= 0) {
         return { text: 'No argument added.', type: 'error' };
@@ -44,8 +46,31 @@ const items = {
           };
         }
       }
-    },
-    run: (args, run) => {
+  },
+  generate: async (args) => {
+    if (args.length < 3) {
+        return { text: 'No argument added.', type: 'error' };
+    } else {
+        if (args[0] === 'story') {
+            if (['introducao', 'conflito', 'climax', 'conclusao'].includes(args[2])) {
+                if (args[3] === 'short' || args[3] === 'medium' || args[3] === 'long') {
+                    try {
+                        const story = await GameplayService.geraHistoria(args[1], args[2], args[3]);
+                        return { text: JSON.stringify(story), type: 'success' };
+                    } catch (error) {
+                        console.error('Erro ao buscar dados da API:', error);
+                        return { text: 'Erro ao buscar dados da API.', type: 'error' };
+                    }
+                } else {
+                    return { text: 'Invalid story part.', type: 'error' };
+                }
+            } else {
+                return { text: 'Invalid command.', type: 'error' };
+            }
+        }
+    }
+  },
+  run: (args, run) => {
       if (args.length === 0) {
         return { text: 'Usage: run <YouTube URL>', type: 'error' };
       }

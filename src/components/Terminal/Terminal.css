@@ -165,3 +165,8 @@
   width: 100px;
   cursor: pointer;
 }
+
+.loading-message {
+  color: rgb(110, 110, 110);
+  margin-top: 10px;
+}
