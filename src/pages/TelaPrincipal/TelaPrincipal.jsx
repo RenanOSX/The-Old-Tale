@@ -139,7 +139,7 @@ const TelaPrincipal = () => {
     });
 
     try {
-      const name = await MonsterService.buscaNomeMonstro(theme);
+      const name = await MonsterService.buscaNomeMonstro(theme, user.uid);
 
       const newMonster = await MonsterService.criaMonstro(name);
 

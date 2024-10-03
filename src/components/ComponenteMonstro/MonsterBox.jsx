@@ -46,7 +46,7 @@ const MonsterBox = ({ currentMonster, image, isDamaged, showDamage, damageValue,
       <animated.div className="monster-box" style={{ ...damageAnimation, borderColor }} onClick={clickHandler}>
         <h1 className={currentMonster.rarity}>
           <div className="monster-name">
-            {currentMonster.name} {currentMonster.rarity} - {currentMonster.level}
+            {currentMonster.name} {currentMonster.rarity} - Lv {currentMonster.level}
           </div>
         </h1>
         <img style={monsterBoxStyle} srcSet={image} alt="Monster" />

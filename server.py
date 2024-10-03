@@ -18,7 +18,7 @@ model = OllamaLLM(model="llama3.1")
 @app.route('/image-generator', methods=['POST'])
 def get_image():
     try:
-        url = "http://127.0.0.1:7860"
+        url = "http://127.0.0.1:7861"
         
         payload = request.json
 
