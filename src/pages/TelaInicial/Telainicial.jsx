@@ -2,9 +2,9 @@ import React, { useState } from "react";
 
 import { useNavigate } from 'react-router-dom';
 
-import yinYang from '../../assets/images/yin_yang.png';
+import yinYang from '/assets/images/yin_yang.png';
 
-import circleRight from '../../assets/icons/arrow_circle_right.png';
+import circleRight from '/assets/icons/arrow_circle_right.png';
 
 import AuthServices from "../../services/AuthServices";
 

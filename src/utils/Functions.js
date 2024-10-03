@@ -1,4 +1,4 @@
-import audioFile from '../assets/mp3.mp3';
+import audioFile from '/assets/mp3.mp3';
 
 export const playMusic = (audio = audioFile) => {
     const music = new Audio(audio);

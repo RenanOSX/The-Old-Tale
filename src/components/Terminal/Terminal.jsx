@@ -1,20 +1,28 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactPlayer from 'react-player';
 import './Terminal.css';
 import handleCommand from './commandHandler';
+
+const API_KEY = 'AIzaSyBx7vyaPYvBj_H_I6axliWpACT5Uxmq_7A';
 
 const Terminal = () => {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState([]);
   const [history, setHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const [videoId, setVideoId] = useState(''); // State to store the YouTube video ID
+  const [isPlayerReady, setIsPlayerReady] = useState(false);
+  const [volume, setVolume] = useState(50); // State to store the volume level
+  const [isLoading, setIsLoading] = useState(false);
+  const [clearInputInterval, setClearInputInterval] = useState(null);
+  const [loadingDots, setLoadingDots] = useState('');
   const terminalRef = useRef(null);
   const inputRef = useRef(null);
   const playerRef = useRef(null);
-  const [isPlayerReady, setIsPlayerReady] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter' && !isLoading) {
         processCommand(input);
       } else if (e.key === 'ArrowUp') {
         navigateHistory(-1);
@@ -23,50 +31,101 @@ const Terminal = () => {
       }
     };
 
-    const handleFocus = () => {
-      inputRef.current.focus();
-    };
-
     const terminal = terminalRef.current;
     terminal.addEventListener('keydown', handleKeyDown);
-    terminal.addEventListener('click', handleFocus);
 
     return () => {
       terminal.removeEventListener('keydown', handleKeyDown);
-      terminal.removeEventListener('click', handleFocus);
     };
-  }, [input, history, historyIndex]);
+  
+  }, [input, history, historyIndex, isLoading]);
 
   useEffect(() => {
-    // Carregar a API do YouTube
+    // Load the YouTube IFrame API
     const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
+    tag.src = `https://www.youtube.com/iframe_api?key=${API_KEY}`;
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    // Inicializar o player quando a API estiver pronta
+    // Initialize the player when the API is ready
     window.onYouTubeIframeAPIReady = () => {
       playerRef.current = new window.YT.Player('youtube-player', {
         height: '0',
         width: '0',
         videoId: '',
+        playerVars: {
+          controls: 0, // Hide default controls
+          modestbranding: 1, // Hide YouTube logo
+          rel: 0, // Do not show related videos at the end
+          iv_load_policy: 3, // Hide video annotations
+        },
         events: {
           onReady: () => {
             setIsPlayerReady(true);
+            playerRef.current.setVolume(volume); // Set initial volume
           },
         },
       });
     };
+  }, [volume]);
+
+  useEffect(() => {
+    const handleClick = () => {
+      inputRef.current.focus();
+    };
+
+    const terminal = terminalRef.current;
+    terminal.addEventListener('click', handleClick);
+
+    return () => {
+      terminal.removeEventListener('click', handleClick);
+    };
   }, []);
 
-  const processCommand = (command) => {
+  useEffect(() => {
+    let intervalId;
+    if (isLoading) {
+      intervalId = setInterval(() => {
+        setLoadingDots((prevDots) => (prevDots.length < 3 ? prevDots + '.' : ''));
+      }, 500);
+    } else {
+      setLoadingDots('');
+    }
+    return () => clearInterval(intervalId);
+  }, [isLoading]);
+
+  const processCommand = async (command) => {
     if (command.trim() === '') return;
 
-    const result = handleCommand(command, run);
+    setIsLoading(true);
+
+    // Start interval to clear input every second
+    const intervalId = setInterval(() => {
+      setInput('');
+    }, 50);
+    setClearInputInterval(intervalId);
+
+    const result = await handleCommand(command, run, exit);
+
+    clearInterval(intervalId); // Clear the interval when done
+    setClearInputInterval(null);
+    setIsLoading(false);
+
+    if (!result) {
+      setOutput((prevOutput) => [
+        ...prevOutput,
+        { text: `root@linux:~$ ${command}`, type: 'command' },
+        { text: 'Unknown error occurred.', type: 'error' },
+      ]);
+      setInput('');
+      inputRef.current.focus(); // Ensure input is focused
+      return;
+    }
 
     if (result.type === 'clear') {
       setOutput([]);
       setInput('');
+      inputRef.current.focus(); // Ensure input is focused
       return;
     }
 
@@ -78,6 +137,7 @@ const Terminal = () => {
     setHistory((prevHistory) => [...prevHistory, command]);
     setHistoryIndex(-1);
     setInput('');
+    inputRef.current.focus(); // Ensure input is focused
   };
 
   const navigateHistory = (direction) => {
@@ -92,18 +152,53 @@ const Terminal = () => {
     } else {
       setInput(history[newIndex]);
     }
+    inputRef.current.focus(); // Ensure input is focused
+  };
+ 
+ 
+  const run = (url) => {
+    const videoId = new URL(url).searchParams.get('v');
+    setVideoId(videoId);
+    if (isPlayerReady && playerRef.current) {
+      playerRef.current.loadVideoById(videoId);
+    }
   };
 
-  const run = (url) => {
+  const exit = () => {
+    setVideoId('');
     if (isPlayerReady && playerRef.current) {
-      playerRef.current.loadVideoByUrl(url);
-    } else {
-      console.error('YouTube player is not initialized.');
+      playerRef.current.stopVideo();
     }
   };
 
   const handleInputChange = (e) => {
     setInput(e.target.value);
+  };
+
+  const handlePlayButtonClick = () => {
+    if (isPlayerReady && playerRef.current) {
+      playerRef.current.playVideo();
+    }
+  };
+
+  const handlePauseButtonClick = () => {
+    if (isPlayerReady && playerRef.current) {
+      playerRef.current.pauseVideo();
+    }
+  };
+
+  const handleStopButtonClick = () => {
+    if (isPlayerReady && playerRef.current) {
+      playerRef.current.stopVideo();
+    }
+  };
+
+  const handleVolumeChange = (e) => {
+    const newVolume = e.target.value;
+    setVolume(newVolume);
+    if (isPlayerReady && playerRef.current) {
+      playerRef.current.setVolume(newVolume);
+    }
   };
 
   return (
@@ -129,7 +224,23 @@ const Terminal = () => {
           className="hidden-input"
         />
       </div>
-      <div id="youtube-player"></div>
+      {videoId && (
+        <div className="player-wrapper vintage">
+          <div id="youtube-player">
+            <iframe
+              type="text/html"
+              src={`https://www.youtube.com/embed/${videoId}?enablejsapi=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3`}
+              frameBorder="0"
+            ></iframe>
+          </div>
+        </div>
+      )}
+      {isLoading && (
+        <div className="loading-message">
+          <div>Loading{loadingDots} Please wait.</div>
+          <div>Do not press Enter again or the process will be executed again.</div>
+        </div>
+      )}
     </div>
   );
 };
