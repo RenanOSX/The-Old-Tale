@@ -19,25 +19,41 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const handleLogin = async (email, password) => {
-    const response = await AuthServices.login(email, password);
-    if (response.success) {
-      setUser(response.user);
+    try {
+      const response = await AuthServices.login(email, password);
+      if (response.success) {
+        setUser(response.user);
+        localStorage.setItem('user', JSON.stringify(response.user)); // Store user in local storage
+      }
+      return response;
+    } catch (error) {
+      console.error('Error in handleLogin:', error);
+      return { success: false, error: error.message };
     }
-    return response;
   };
 
   const handleSignup = async (email, password, name) => {
-    const response = await AuthServices.register(email, password, name);
-    if (response.success) {
-      setUser(response.user);
+    try {
+      const response = await AuthServices.register(email, password, name);
+      if (response.success) {
+        setUser(response.user);
+        localStorage.setItem('user', JSON.stringify(response.user)); // Store user in local storage
+      }
+      return response;
+    } catch (error) {
+      console.error('Error in handleSignup:', error);
+      return { success: false, error: error.message };
     }
-    return response;
   };
 
   const handleLogout = async () => {
-    await AuthServices.logout();
-    setUser(null);
-    localStorage.removeItem('user');
+    try {
+      await AuthServices.logout();
+      setUser(null);
+      localStorage.removeItem('user');
+    } catch (error) {
+      console.error('Error in handleLogout:', error);
+    }
   };
 
   return (

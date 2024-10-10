@@ -82,13 +82,12 @@ const TelaPrincipal = () => {
         const introductionShown = localStorage.getItem('introductionShown');
         console.log('IntroductionShown: ' + introductionShown, 'userTheme: ' + userTheme);
         
-        if (!introductionShown || introductionShown == null) {
-          setCurrentLog('Gerando introdução...');
-          const intro = await GameplayService.geraHistoria(userTheme, 'introducao');
-          setIntroduction(intro);
-          setShowIntroduction(true);
-          localStorage.setItem('introductionShown', 'true');
-        }
+     
+        setCurrentLog('Gerando introdução...');
+        const intro = await GameplayService.buscaHistoria(currentUser.uid, userTheme, 'introducao');
+        setIntroduction(intro);
+        setShowIntroduction(true);
+  
       } else {
         setCurrentLog('Usuário não autenticado.');
       }
