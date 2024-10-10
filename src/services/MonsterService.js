@@ -9,7 +9,7 @@ class MonsterService {
     async resetMonsters(userId, theme) {
         const newMonsters = {};
         for (let i = 0; i < 3; i++) {
-            const name = await this.buscaNomeMonstro(theme);
+            const name = await this.buscaNomeMonstro(theme, userId);
             const newMonster = await this.criaMonstro(name);
             newMonster.imagePath = await this.criaImagem(theme, i);
             newMonsters[i] = newMonster;
@@ -17,12 +17,27 @@ class MonsterService {
         await set(ref(db, `users/${userId}/monsters`), newMonsters);
     }
 
-    async buscaNomeMonstro(theme) {
+    async buscaNomeMonstro(theme, userId) {
+        // Get the lastUsedMonsterNames and use it as a blacklist on the prompt
+        let lastNames = [];
+
+        // Get all the last names
+        const dbRef = ref(db);
+        const snapshot = await get(child(dbRef, `users/${userId}/monsters`));
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            lastNames = Object.values(data).map(monsterData => monsterData.name);
+        } else {
+            console.log('No monsters found for user:', userId);
+        }
+
+        console.log('Last used monster names:', lastNames);
+
         const inputText = `
-        Generate a single name related to the theme "${theme}".
+        Generate a single name related to the theme ((${theme})).
         The name should be one word, without repetitions,
         and can be inspired by various sources such as pop culture,
-        religions, movies, mythology, or any other relevant themes and should be real. 
+        religions, movies, mythology, or any other relevant themes, be creative. But remember to NOT USE the following names: ((${lastNames.join(', ')})) or any other similar name, do not even use the same starting letters as those ones.
         Avoid including quotes around the name and explications, give only the name.`;
         
         try {
@@ -108,7 +123,7 @@ class MonsterService {
         } else {
           const newMonsters = {};
           for (let i = 0; i < 3; i++) {
-            const name = await this.buscaNomeMonstro(theme);
+            const name = await this.buscaNomeMonstro(theme, userId);
             const newMonster = await this.criaMonstro(name);
             console.log('Theme-:', theme);
             await this.criaImagem(theme, i);
