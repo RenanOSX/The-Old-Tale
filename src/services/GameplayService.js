@@ -99,7 +99,7 @@ class GameplayService {
 
         switch(etapa) {
             case 'introducao':
-                inputText = `Generate the introduction, in Portuguese-BR, to a story set in 1800s England, where a young factory worker finds a cursed book. The story will revolve around the theme of ${theme}. As soon as he opens the book, strange things start happening, and he is pulled into the book’s narrative. The story should be tied to the theme and slowly reveal that the worker must survive through it. Keep the style atmospheric and foreboding. Don't give explications, I need only the text and nothing more.`;
+                inputText = `Generate the introduction, in Portuguese-BR, to a story set in 1800s England, where a young factory worker finds a cursed book. The story will revolve around the theme of ${theme}. As soon as he opens the book, strange things start happening, and he is pulled into the book’s narrative. The story should be tied to the theme and slowly reveal that the worker must survive through it. Keep the style atmospheric and foreboding. Don't give explications, I need only the text and nothing more. Only 6 lines of text.`;
                 break;
             case 'conflito':
                 inputText = `Write the next part of the story, in Portuguese-BR, where the young factory worker is now inside the book’s world, facing enemies and challenges directly related to the theme of ${theme}. The worker realizes that if he dies in the book, he will lose his life in the real world as well. Introduce the first major enemy, which is deeply related to the theme. Make the challenge feel dangerous, but give the worker a glimmer of hope.Don't give explications, I need only the text and nothing more.`;
@@ -133,10 +133,11 @@ class GameplayService {
                 }
     
                 const data = await response.json();
-                const newStory = data.story;
+
+                const formattedHistoria = data.story.split('. ').map(sentence => sentence.trim()).filter(sentence => sentence.length > 0);
     
-                await set(ref(db, `users/${userId}/story-introducao`), newStory);
-                return newStory;
+                await set(ref(db, `users/${userId}/story-introducao`), formattedHistoria);
+                return formattedHistoria;
             } catch (error) {
                 console.error('Erro ao gerar história:', error);
             }

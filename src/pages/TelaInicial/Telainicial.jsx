@@ -54,9 +54,8 @@ const TelaInicial = () => {
   };
 
   return (
-    <div className="tela-inicial">
+    <section className="tela-inicial">
       <div className="container-inicial">
-        <img className="yin-yang-inicial" alt="Yin yang" src={yinYang} />
         {error && <p className="error-message">{error}</p>}
         <InputGroup
           label="EMAIL"
@@ -74,7 +73,7 @@ const TelaInicial = () => {
         <div className="text-link" onClick={navegarRecSenha}>RECUPERAR SENHA</div>
         <img className="arrow-circle-right" alt="Arrow circle right" onClick={handleLoginClick} src={circleRight} />
       </div>
-    </div>
+    </section>
   );
 };
 

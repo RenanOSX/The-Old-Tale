@@ -1,9 +1,9 @@
 .input-group {
-    background-color: #d9d9d9;
+    background-color: #000000bd;
     width: 100%;
-    max-width: 425px;
-    margin: 10px 0;
-    padding: 10px;
+    max-width: 30rem;
+    margin: 1rem 0;
+    padding: 1rem;
     border-radius: 5px;
     position: relative;
     display: flex;
@@ -34,6 +34,7 @@
     position: relative;
     z-index: 1;
     font-family: "Outfit", Helvetica;
+    color: #FFFFFF;
 }
   
 .input:focus + .label,

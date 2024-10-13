@@ -16,7 +16,7 @@ import MonsterService from '../../services/MonsterService.js';
 
 import PlayerService from '../../services/PlayerService';
 
-import IntroductionScreen from '../IntroductionScreen/IntroductionScreen.jsx';
+import VisualNovelIntro from '../../components/VisualNovelIntro/VisualNovelIntro.jsx';
 
 import Player from '../../models/Player.js';
 
@@ -185,12 +185,16 @@ const TelaPrincipal = () => {
     return <LoadingScreen currentLog={currentLog} />;
   }
 
-  if (showIntroduction) {
-    return <IntroductionScreen introduction={introduction} onProceed={handleProceed} />;
-  }
+  // if (showIntroduction) {
+  //   return <IntroductionScreen introduction={introduction} onProceed={handleProceed} />;
+  // }
+  const handleCloseIntroduction = () => {
+    setShowIntroduction(false);
+  };
 
   return (
     <div className="first-screen">
+      {showIntroduction && <VisualNovelIntro introduction={introduction} onClose={handleCloseIntroduction} />}
       <Header user={user} textColor={color.textColor} color={color.headerColor}/>
       <div className="layout-container">
         <BarraLateralEsquerda userId={user.uid} player={player} color={color.headerColor}/>
