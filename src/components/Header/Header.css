@@ -20,6 +20,11 @@
     justify-content: space-between;
     padding: 0 2rem;
     box-sizing: border-box;
+    border-width: 20px 0;
+    border-style: solid;
+    border-image-source: url('/assets/icons/border-header.png');
+    border-image-slice: 1000 900 fill; /* Define a largura da borda da imagem e preenche o centro */
+    
   }
 
   .crown {

@@ -35,8 +35,6 @@ const TelaPrincipal = () => {
   const [theme, setTheme] = useState('');
 
   const [player, setPlayer] = useState(null);
-
-  const [image, setImage] = useState('');
   
   const [loading, setLoading] = useState(true);
   
@@ -175,10 +173,6 @@ const TelaPrincipal = () => {
         return newLoadingMonsters;
       });
     }
-  };
-
-  const handleProceed = () => {
-    setShowIntroduction(false);
   };
 
   if (loading) {
