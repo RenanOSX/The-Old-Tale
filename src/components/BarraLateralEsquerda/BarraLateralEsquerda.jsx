@@ -50,10 +50,6 @@ function BarraLateralEsquerda({player, color, userId}) {
       <animated.div style={errorAnimation} className="error-message">
         {errorMessage}
       </animated.div>
-
-      <div className='version'>
-        ALPHA VERSION 0.1
-      </div>
     </aside>
   );
 }

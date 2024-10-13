@@ -99,14 +99,7 @@ const TelaCadastro = () => {
 
   return (
     <div className="cadastro">
-      <img
-        className="arrow-circle-left"
-        alt="Arrow circle left"
-        src={arrowLeft}
-        onClick={handleBackClick}
-      />
       <div className="container-cadastro">
-        <div className="text-wrapper-2">CADASTRO</div>
         { loading ? (
           <Spinner />
         ) : (
@@ -142,12 +135,20 @@ const TelaCadastro = () => {
               value={theme}
               onChange={(e) => setTheme(e.target.value)}
             />
-            <img
-              className="arrow-circle-right"
-              alt="Arrow circle right"
-              src={circleRight}
-              onClick={handleSignupSubmit}
-            />
+            <div className="button-return">
+              <img
+                className="arrow-circle-left"
+                alt="Arrow circle left"
+                src={arrowLeft}
+                onClick={handleBackClick}
+              />
+              <img
+                className="arrow-circle-right"
+                alt="Arrow circle right"
+                src={circleRight}
+                onClick={handleSignupSubmit}
+              />
+            </div>
           </>
         )}
       </div>
