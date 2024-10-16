@@ -63,8 +63,8 @@ class MonsterService {
 
     async criaImagem(theme, index) {
         const payload = {
-            "prompt": `(masterpiece:1.1, good quality, high quality),<lora:add_detail:1>, (${theme}:1), (opponent, enemy:1), vibrant colors, saturated colors`,
-            "negative_prompt": "bad quality, worse quality:1, medium quality, distorted, foggy, mutated, overexposure, (background:1.2, sole objects, only objects)",
+            "prompt": `(masterpiece:1.1, good quality, high quality), (A drawing of ${theme}:1), (opponent, enemy:1),  <lora:J_ancient_sketch:1>,  pen sketch:1, j_ancient_sketch, black and white, black paint, on paper, paper background, sketch, <lora:add_detail:0.5>, full body shot`,
+            "negative_prompt": "bad quality, worse quality:1, medium quality, distorted, foggy, mutated, overexposure, (background:1.2, sole objects, only objects), colorful",
             "steps": 10,
             "batch_size": 1,
             "cfg_scale": 7,

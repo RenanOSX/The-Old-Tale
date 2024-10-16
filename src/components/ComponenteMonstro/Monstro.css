@@ -19,8 +19,9 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 1.2rem;
+  font-size: 2rem;
   max-width: 100%;
+  font-family: 'Paint Brush Script', sans-serif;;
 }
 
 .monster-box h1 {

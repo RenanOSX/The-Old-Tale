@@ -38,7 +38,7 @@ function BarraLateralEsquerda({player, color, userId}) {
   });
 
   return (
-    <aside className="sidebar" style={{ background: `linear-gradient(180deg, #070707 99%,  ${subtleColor} 100%)` }}>
+    <aside className="sidebar">
       <div className="sidebar-section-combat" >
         COMBAT
       </div>

@@ -28,12 +28,12 @@
     flex-direction: row;
     gap: 1rem;
     color: #766404;
-    font-size: 0.875rem;
     align-items: center;
+    justify-content: center;
     font-weight: bold;
     align-self: left;
-    margin-left: 2rem;
-    margin-top: 2rem;
+    font-family: 'Paint Brush Script', sans-serif;
+    font-size: 1.5rem;
   }
   
   .atributos-player {
@@ -47,28 +47,30 @@
   }
 
   .level-icons {
-    margin-left: 8rem;
     margin-top: 2rem;
+    align-items: center;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 1rem;
+
   }
   
   .level-icon {
     display: flex;
     flex-direction: column;
-    align-items: center;
   }
   
   .level-icon img {
-    width: 4rem; 
-    height: 4rem;
+    width: 10rem;
+    height: 10rem;
+    align-self: center;
   }
   
   .level-icon p {
     margin-top: 0.5rem;
-    font-size: 1rem;
+    font-size: 2rem;
+    align-self: center;
+    font-family: 'Paint Brush Script', sans-serif;
   }
 
   .xp-bar-container {
@@ -92,6 +94,8 @@
     margin-top: 0.5rem;
     width: 90%;
     margin-bottom: 2rem;
+    color: black;
+    font-family: 'Paint Brush Script', sans-serif;
   }
 
   .vida-bar-container {

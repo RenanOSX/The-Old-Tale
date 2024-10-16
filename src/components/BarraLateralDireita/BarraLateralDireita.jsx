@@ -49,9 +49,10 @@ function BarraLateralDireita({ player, setTheme, color }) {
   const subtleColor = hexToRgba(color, 0.5);
 
   return (
-    <aside className="stats-info"  style={{ background: `linear-gradient(180deg, #070707 99%,  ${subtleColor} 100%)` }}>
+    <aside className="stats-info" >
+      <JogadorInfo jogador={player} />
       <div className='title-gerar-mundo'>
-        "GERE UM NOVO TEMA"
+        "Reimaginar o mundo
       </div>
         
       <img src={arrowDown} className='arrow-down' alt="Arrow Down"/>
@@ -68,8 +69,6 @@ function BarraLateralDireita({ player, setTheme, color }) {
         {errorMessage}
       </animated.div>
     
-      <JogadorInfo jogador={player} />
-
       <Popup
         isVisible={isPopupVisible}
         onClose={handleClosePopup}

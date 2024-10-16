@@ -2,12 +2,14 @@
 .stats-info {
   display: flex;
   flex-direction: column;
-  width: 25%; 
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0);
-  font-size: 1.5rem; 
-  font-weight: bold;
-  color: white;
-  background-color: #000000; 
+  width: 25%;
+  background-image: url('/assets/images/background-paper.png'); /* Caminho para a imagem da mesa de trabalho */
+  background-size: cover; /* Ajusta a imagem para cobrir toda a célula */
+  background-position: center; /* Centraliza a imagem */
+  border: 1rem solid #00000010;
+  border-image-source: url('/assets/images/floral-border.png');
+  border-image-slice: 50 200; /* Define a largura da borda da imagem e preenche o centro */
+  border-image-repeat: round;
 }
 
 .error-message {
@@ -84,11 +86,12 @@
 }
 
 .title-gerar-mundo {
-  font-size: 1rem;
-  font-weight: bold;
-  color: white;
+  font-size: 2rem;
+ 
+  color: #766404;
   margin-top: 3rem;
   text-align: center;
+  font-family: 'Paint Brush Script', sans-serif;
 }
 
 .theme-input {
