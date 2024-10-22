@@ -10,6 +10,12 @@ import placeHolder from '/public/assets/images/monster.png';
 
 import { GameContext } from '../../context/GameContext.jsx';
 
+import anelPng from '/public/assets/icons/anel-pristino.png';
+
+import grimorio from '/public/assets/icons/grimorio-sombrio.png';
+
+import marcador from '/public/assets/icons/marcador-de-tempo-quantico.png';
+
 function ComponenteCentral({ onMonsterUpdate }) {
   const {
     monsters,
@@ -42,6 +48,11 @@ function ComponenteCentral({ onMonsterUpdate }) {
     backgroundColor: 'rgba(0, 0, 0, 0)',
     transform: 'scale(1)',
     boxShadow: 'rgba(0, 0, 0, 0.1) 0px 0px 10px'
+  };
+
+  const handleImageClick = (itemName) => {
+    console.log(`Item ${itemName} clicado`);
+    // Adicione a lógica que você deseja executar ao clicar na imagem
   };
 
   return (
@@ -89,11 +100,40 @@ function ComponenteCentral({ onMonsterUpdate }) {
               className={`shelf-craft-cell`}
             />
           </div>
+          <div className='coletaveis'>
+            <img
+              src={anelPng}
+              alt="Anel Pristino"
+              className="anel-pristino"
+              data-tooltip-id="tooltip-anel"
+              data-tooltip-content="Anel Pristíno"
+              onClick={() => handleImageClick('Anel Pristino')}
+            />
+            <img
+              src={grimorio}
+              alt="Grimório Sombrio"
+              className="grimorio-sombrio"
+              data-tooltip-id="tooltip-grimorio"
+              data-tooltip-content="Grimório Sombrio"
+              onClick={() => handleImageClick('Grimório Sombrio')}
+            />
+            <img
+              src={marcador}
+              alt="Marcador de Tempo Quântico"
+              className="marcador-de-tempo"
+              data-tooltip-id="tooltip-marcador"
+              data-tooltip-content="Marcador de Tempo Quântico"
+              onClick={() => handleImageClick('Marcador de Tempo Quântico')}
+            />
+          </div>
         </div>
       </div>
       {items.map((item, index) => (
         <ReactTooltip id={`tooltip-${index}`} key={index} className="custom-tooltip" place="top" />
       ))}
+      <ReactTooltip id="tooltip-anel" className="custom-tooltip" place="top" />
+      <ReactTooltip id="tooltip-grimorio" className="custom-tooltip" place="top" />
+      <ReactTooltip id="tooltip-marcador" className="custom-tooltip" place="top" />
     </main>
   );
 }

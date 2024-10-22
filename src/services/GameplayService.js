@@ -49,6 +49,43 @@ class GameplayService {
         }
     }
 
+    async buscaInventario(userId) {
+        const dbRef = ref(db);
+        const snapshot = await get(child(dbRef, `users/${userId}/inventory`));
+    
+        if (snapshot.exists()) {
+            console.log('Inventário encontrado:', snapshot.val());
+            return snapshot.val();
+        } else {
+            console.log('Inventário não encontrado. Criando novo inventário...');
+            const initialInventory = {
+                regiao1: '',
+                regiao2: '',
+                regiao3: ''
+            };
+            await set(ref(db, `users/${userId}/inventory`), initialInventory);
+            return initialInventory;
+        }
+    }
+    
+    async adicionaItemAoInventario(userId, regiao, item) {
+        try {
+            const dbRef = ref(db, `users/${userId}/inventory`);
+            const snapshot = await get(dbRef);
+    
+            if (snapshot.exists()) {
+                const inventory = snapshot.val();
+                inventory[`regiao${regiao}`] = item;
+                await update(dbRef, inventory);
+                console.log(`Item ${item} adicionado ao inventário na região ${regiao}`);
+            } else {
+                console.error('Inventário não encontrado.');
+            }
+        } catch (error) {
+            console.error('Erro ao adicionar item ao inventário:', error);
+        }
+    }
+
     async setRegiaoAtual(userId, regiao) {
         try {
             await set(ref(db, `users/${userId}/currentRegion`), regiao);
@@ -65,13 +102,13 @@ class GameplayService {
 
         switch(regiao) {
             case 'regiao1':
-                inputText = `Generate the introduction, in Portuguese-BR, to a story set in 1900s England, where a young depressive factory worker finds a cursed book. The story will revolve around the theme of ${theme}. As soon as he opens the book, strange things start happening, and he is pulled into the book’s narrative. Describe the eerie and foreboding atmosphere of the factory and its surroundings. The story should be tied to the theme and slowly reveal that the worker must survive through it. Keep the style atmospheric and foreboding. Don't give explications, I need only the text and nothing more. Only 6 lines of text.`               
+                inputText = `Create a plot for the first region called 'Twilight Library', in Portuguese-BR, taking into account the player's chosen theme: ${theme}. Describe the setting as a vast, mysterious library where towering shelves stretch endlessly into the shadows, and the perpetual twilight casts an eerie, timeless glow. The library’s ancient walls are filled with secrets from a forgotten era, reflecting the theme in subtle yet powerful ways. Reveal hints of the library’s dark or glorious past that tie into the theme, as the character begins their journey of discovery. They navigate the dusty corridors and ancient tomes, unaware of the full scope of the challenges ahead. The difficulty should be light, offering a sense of mystery and foreboding, while preparing the player for more intense trials to come. Only 6 lines of text, with no additional explanations. The text should be in Portuguese-BR`
                 break;
             case 'regiao2':
-                inputText = `Write the next part of the story, in Portuguese-BR, where the young depressive factory worker is now inside the book’s world, facing enemies and challenges directly related to the theme of ${theme}. The worker realizes that if he dies in the book, he will lose his life in the real world as well. Introduce the first major enemy, which is deeply related to the theme. Describe the dangerous and mysterious region the worker finds himself in, detailing the environment and the challenges it presents. Make the challenge feel dangerous, but give the worker a glimmer of hope. Don't give explications, I need only the text and nothing more. Only 6 lines of text.`         
+                inputText = `Develop a plot for the second region called 'Archive of Lost Souls', in Portuguese-BR, based on the player's chosen theme: ${theme}. This region is a dark, oppressive archive where towering shelves hold more than just ancient texts—they imprison the souls of those who dared to seek the forbidden knowledge within. The air is thick with dread, and the environment feels increasingly claustrophobic, reflecting the growing danger and the weight of the secrets buried here. Mysteries deepen, and the connection between the archive’s dark history and the theme becomes more pronounced, hinting at the character’s own fate. The difficulty should escalate, as the player faces mounting threats and complex puzzles tied to the theme. Only 6 lines of text, with no additional explanations. The text should be in Portuguese-BR`
                 break;
             case 'regiao3':
-                inputText = `The young depressive factory worker is nearing the end of the book’s story, and the final challenge emerges. Write, in Portuguese-BR, the climactic confrontation with the main antagonist or obstacle, related to the theme of ${theme}. Describe the final region in vivid detail, making it clear how it relates to the theme. Make it a high-stakes battle or puzzle that seems nearly impossible, but leave room for a clever resolution. Make sure the tension peaks here, and show the worker’s desperation and determination. Don't give explications, I need only the text and nothing more. Only 6 lines of text.`               
+                inputText = `Write a plot for the third region called 'The Great Library of Aether', in Portuguese-BR, centered around the player's chosen theme: ${theme}. This region represents the culmination of the journey, an awe-inspiring, boundless library where books are not mere repositories of stories—they actively shape and alter realities. Describe how this library transcends both space and time, with its secrets dynamically adapting to the chosen theme. The atmosphere should evoke a sense of urgency and finality, as the character approaches the climax of their quest. The environment must feel vast, majestic, and deeply enigmatic, presenting intricate challenges that reflect the theme and push the character to their limits. Only 6 lines of text, with no additional explanations. The text should be in Portuguese-BR`
                 break;
             default:
                 inputText = '';

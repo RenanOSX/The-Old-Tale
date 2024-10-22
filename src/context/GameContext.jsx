@@ -1,61 +1,64 @@
 // src/context/GameContext.jsx
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import AuthServices from '../services/AuthServices';
 import MonsterService from '../services/MonsterService';
 import PlayerService from '../services/PlayerService';
 import GameplayService from '../services/GameplayService';
 import Player from '../models/Player';
+import { AuthContext } from './AuthContext';
 
 export const GameContext = createContext();
 
 export const GameProvider = ({ children }) => {
   const [monsters, setMonsters] = useState([]);
-  const [user, setUser] = useState(null);
   const [theme, setTheme] = useState('');
   const [player, setPlayer] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadingMonsters, setLoadingMonsters] = useState([]);
-  const [color, setColor] = useState('');
   const [currentLog, setCurrentLog] = useState('');
   const [showIntroduction, setShowIntroduction] = useState(false);
   const [introduction, setIntroduction] = useState('');
   const [currentRegion, setCurrentRegion] = useState(1);
+  const [inventory, setInventory] = useState({ regiao1: null, regiao2: null, regiao3: null });
+
+  const { user } = useContext(AuthContext)
 
   const initializeData = async () => {
     try {
       setLoading(true);
 
-      const currentUser = await AuthServices.getCurrentUser();
-      setUser(currentUser);
-
-      if (currentUser) {
+      if (user) {
         setCurrentLog('Buscando temas...');
-        const userTheme = await AuthServices.buscarTheme(currentUser.uid);
+        const userTheme = await AuthServices.buscarTheme(user.uid);
 
-        setCurrentLog('Buscando cores...');
-        const color = await AuthServices.buscarColor(currentUser.uid);
+        // setCurrentLog('Buscando cores...');
+        // const color = await AuthServices.buscarColor(user.uid);
 
-        if (color) {
-          setColor(color);
-          console.log(`Received color: ${color}`);
-        } else {
-          console.error('Failed to receive a valid color from the API');
-        }
+        // if (color) {
+        //   setColor(color);
+        //   console.log(`Received color: ${color}`);
+        // } else {
+        //   console.error('Failed to receive a valid color from the API');
+        // }
 
         setCurrentLog('Buscando monstros...');
-        const fetchedMonsters = await MonsterService.buscaMonstros(currentUser.uid, userTheme);
+        const fetchedMonsters = await MonsterService.buscaMonstros(user.uid, userTheme);
         setMonsters(fetchedMonsters);
 
         setCurrentLog('Buscando dados do jogador...');
-        const fetchedPlayerData = await PlayerService.buscaJogador(currentUser.uid);
+        const fetchedPlayerData = await PlayerService.buscaJogador(user.uid);
         setPlayer(fetchedPlayerData);
 
         setCurrentLog('Buscando região atual...');
-        const region = await GameplayService.buscaRegiaoAtual(currentUser.uid);
+        const region = await GameplayService.buscaRegiaoAtual(user.uid);
         setCurrentRegion(region);
 
+        setCurrentLog('Buscando inventário...');
+        const fetchedInventory = await GameplayService.buscaInventario(user.uid);
+        setInventory(fetchedInventory);
+
         setCurrentLog('Gerando história...');
-        const intro = await GameplayService.buscaHistoria(currentUser.uid, userTheme, `regiao${region}`);
+        const intro = await GameplayService.buscaHistoria(user.uid, userTheme, `regiao${region}`);
         setIntroduction(intro);
         setShowIntroduction(true);
 
@@ -71,18 +74,18 @@ export const GameProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    initializeData();
-  }, []);
+    if (user) {
+      setLoading(true);
+      initializeData();
+    }
+  }, [user]);
 
   useEffect(() => {
     const applyTheme = async () => {
       if (user && theme) {
         setLoading(true);
         try {
-          const updatedColor = await GameplayService.changeTheme(theme);
-          setColor(updatedColor);
           user.theme = theme;
-          user.color = updatedColor;
           await AuthServices.updateUserInDatabase(user);
 
           // Redefine os monstros
@@ -149,6 +152,21 @@ export const GameProvider = ({ children }) => {
     }
   };
 
+  const addItemToInventory = async (regiao, item) => {
+    if (user) {
+      try {
+        await GameplayService.adicionaItemAoInventario(user.uid, regiao, item);
+        setInventory((prevInventory) => ({
+          ...prevInventory,
+          [`regiao${regiao}`]: item
+        }));
+        console.log(`Item ${item} adicionado ao inventário na região ${regiao}`);
+      } catch (error) {
+        console.error('Erro ao adicionar item ao inventário:', error);
+      }
+    }
+  };
+
   return (
     <GameContext.Provider
       value={{
@@ -158,11 +176,11 @@ export const GameProvider = ({ children }) => {
         player,
         loading,
         loadingMonsters,
-        color,
         currentLog,
         showIntroduction,
         introduction,
         currentRegion,
+        inventory,
         setTheme,
         handleMonsterUpdate,
         setShowIntroduction,
@@ -171,7 +189,8 @@ export const GameProvider = ({ children }) => {
         setCurrentLog,
         setPlayer,
         setCurrentRegion, 
-        updateRegion 
+        updateRegion,
+        addItemToInventory
       }}
     >
       {children}

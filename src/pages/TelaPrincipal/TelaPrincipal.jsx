@@ -16,6 +16,8 @@ import LoadingScreen from '../LoadingScreen/LoadingScreen.jsx';
 
 import { GameContext } from '../../context/GameContext.jsx';
 
+import { AuthContext } from '../../context/AuthContext.jsx';
+
 const TelaPrincipal = () => {
 
   const {
@@ -23,11 +25,15 @@ const TelaPrincipal = () => {
     loading,
     showIntroduction,
     introduction,
-    color,
-    user,
     handleMonsterUpdate,
     currentLog
   } = useContext(GameContext)
+
+  console.log('EU QUERO VER: ', loading)
+
+  const {
+    user
+  } = useContext(AuthContext)
 
   if (loading) {
     return <LoadingScreen currentLog={currentLog} />;
@@ -44,12 +50,12 @@ const TelaPrincipal = () => {
   return (
     <div className="first-screen">
       {showIntroduction && <VisualNovelIntro introduction={introduction} onClose={handleCloseIntroduction} />}
-      <Header user={user} textColor={color.textColor} color={color.headerColor}/>
+      <Header user={user}/>
       <div className="layout-container">
-        <BarraLateralEsquerda userId={user.uid} color={color.headerColor}/>
+        <BarraLateralEsquerda userId={user.uid}/>
         <ComponenteCentral onMonsterUpdate={handleMonsterUpdate}
         />
-        <BarraLateralDireita color={color.headerColor}/>
+        <BarraLateralDireita/>
       </div>
     </div>
   );

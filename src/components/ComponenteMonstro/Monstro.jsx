@@ -88,7 +88,7 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
     }, [showDamage]);
 
     const clickHandler = () => {
-        const damage = currentPlayer._dano;
+        const damage = currentPlayer._dano * currentPlayer._agilidade;
 
         const updatedMonster = new Monster(currentMonster.name, currentMonster.rarity, currentMonster.level, currentMonster.health - damage, currentMonster.maxHealth);
 

@@ -27,6 +27,48 @@ html, body {
   overflow: hidden; /* Evita scroll no conteúdo */
 }
 
+.coletaveis {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+  gap: 3rem;
+  height: 100%;
+  width: 30%;
+}
+
+.marcador-de-tempo {
+  height: 5rem;
+  width: 5rem;
+  box-shadow: 0 0 20px 10px #531286; /* Adiciona um brilho dourado ao redor do item */
+  border-radius: 50%; /* Adiciona bordas arredondadas para combinar com a forma do anel */
+  cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.grimorio-sombrio {
+  height: 5rem;
+  width: 5rem;
+  box-shadow: 0 0 20px 10px #3EDD86; /* Adiciona um brilho dourado ao redor do item */
+  border-radius: 50%; /* Adiciona bordas arredondadas para combinar com a forma do anel */
+  cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.anel-pristino {
+  height: 5rem;
+  width: 5rem;
+  box-shadow: 0 0 20px 10px rgba(255, 215, 0, 0.8); /* Adiciona um brilho dourado ao redor do item */
+  border-radius: 50%; /* Adiciona bordas arredondadas para combinar com a forma do anel */
+  cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.anel-pristino:hover, .grimorio-sombrio:hover, .marcador-de-tempo:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
 .header-title {
   font-size: 2rem;
   font-weight: bold;

@@ -27,10 +27,10 @@ function BarraLateralEsquerda({ color }) {
       { 
         showIntroduction == false ?
         [
-          <div className="npc-image-esquerda">
+          <div key='npc-image' className="npc-image-esquerda">
             <img src={karmalumia} alt="NPC" />
           </div>,
-          <div className='region-title'>
+          <div key='region-title' className='region-title'>
             {`Região ${currentRegion}`}
           </div>
         ] : null
