@@ -54,12 +54,12 @@
 .money-right {
   margin-top: 10%;
   text-align: center;
-  color: #766404;
-  font-size: 0.875rem;
-  font-weight: bold;
+  color: #311603;
+  font-size: 2rem;
+  font-family: 'Paint Brush Script', sans-serif;
 }
 
-.yin-yang-btn {
+.pen-btn {
   background: none;
   border: none;
   cursor: pointer;
@@ -67,9 +67,9 @@
   padding: 0;
 }
 
-.yin-yang-btn img {
-  width: 2rem; 
-  height: 2rem;
+.pen-btn img {
+  width: 5rem; 
+  height: 5rem;
   transition: transform 0.3s ease;
 }
 
@@ -87,8 +87,7 @@
 
 .title-gerar-mundo {
   font-size: 2rem;
- 
-  color: #766404;
+  color: #311603;
   margin-top: 3rem;
   text-align: center;
   font-family: 'Paint Brush Script', sans-serif;

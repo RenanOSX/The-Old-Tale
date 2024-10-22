@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { useSpring, animated } from '@react-spring/web';
 
 import './BarraLateralDireita.css'
 
-import yinYangBtn from '/assets/icons/yin_yang_button.png'
+import pen from '/assets/icons/pen.png'
 
 import arrowDown from '/assets/icons/arrow_down.png'
 
@@ -12,9 +12,17 @@ import JogadorInfo from '../JogadorInfo/JogadorInfo';
 
 import Popup from '../PopUpInputTheme.jsx/PopUpInputTheme';
 
-function BarraLateralDireita({ player, setTheme, color }) {
+import { GameContext } from '../../context/GameContext';
+
+function BarraLateralDireita({ color }) {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+
   const [errorMessage, setErrorMessage] = useState('');
+
+  const {
+    player,
+    setTheme
+  } = useContext(GameContext)
 
   const handleYinYangClick = () => {
     if (player.moedas >= 200) {
@@ -33,32 +41,23 @@ function BarraLateralDireita({ player, setTheme, color }) {
     setIsPopupVisible(false); 
   };
 
-  const hexToRgba = (hex, alpha) => {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-  };
-
   const errorAnimation = useSpring({
     opacity: errorMessage ? 1 : 0,
     transform: errorMessage ? 'translateY(0)' : 'translateY(-20px)',
     config: { duration: 300 },
   });
 
-  const subtleColor = hexToRgba(color, 0.5);
-
   return (
     <aside className="stats-info" >
       <JogadorInfo jogador={player} />
       <div className='title-gerar-mundo'>
-        "Reimaginar o mundo
+        "Reimaginar o mundo"
       </div>
         
       <img src={arrowDown} className='arrow-down' alt="Arrow Down"/>
 
-      <button className='yin-yang-btn' onClick={handleYinYangClick}>
-        <img src={yinYangBtn} alt="Yin Yang Button"/>
+      <button className='pen-btn' onClick={handleYinYangClick}>
+        <img src={pen} alt="Pen Button"/>
       </button>
 
       <div className="money-right">

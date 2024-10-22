@@ -2,11 +2,15 @@ import React from 'react';
 
 import ReactDOM from 'react-dom';
 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+
+import { GameContext } from '../../context/GameContext';
 
 import './PopUpInputTheme.css';
 
 const Popup = ({ isVisible, onClose, onSubmit, setThemeInput }) => {
+    const {player, setPlayer, user} = useContext(GameContext);
+    
     const [localThemeInput, setLocalThemeInput] = useState('');
 
     if (!isVisible) return null;
@@ -15,7 +19,20 @@ const Popup = ({ isVisible, onClose, onSubmit, setThemeInput }) => {
         setLocalThemeInput(event.target.value);
     };
 
-    const handleFormSubmit = (event) => {
+    const handleFormSubmit = async (event) => {
+        const updatedPlayer = { ...player };
+
+        updatedPlayer._money -= 200;
+
+        setPlayer({...updatedPlayer});
+
+        try {
+          await PlayerService.salvaJogador(user.uid, updatedPlayer);
+          setErrorMessage('');
+        } catch (error) {
+          console.error('Erro ao atualizar o jogador no Firebase:', error);
+          setErrorMessage('Erro ao atualizar o jogador.');
+        }
         event.preventDefault();
         setThemeInput(localThemeInput); 
         onSubmit();

@@ -2,51 +2,48 @@
 .sidebar-item {
   display: flex;
   flex-direction: row;
-  gap: 14px;
   height: 2.5rem;
-  margin-left: 5%;
-  color: #ffffff;
+  width: 100%;
   white-space: nowrap;
+  background-image: url('../../../assets/images/background_button.png'); /* Caminho para a imagem de fundo */
+  background-size: 30rem 30rem; /* Ajusta a imagem para cobrir toda a área */
+  background-position: center; /* Centraliza a imagem */
 }
 
 .container {
   display: flex;
   flex-direction: column;
   height: 8rem;
+  margin-top: 4rem;
   gap: 0.5rem;
   align-items: center;
   justify-content: center;
 }
 
 .container .atributos {
-  color: #ffffff;
-  font-size: 1rem;
+  font-size: 2rem;
+  color: #311603;
   width: 100%;
   align-items: center;
   justify-content: center;
   text-align: center;
-  font-family: "Outfit", Helvetica;
-  font-weight: bold;
+  font-family: 'Paint Brush Script', sans-serif;
 }
 
 .sidebar-item .overlap-group {
   display: flex;
-  align-items: center;
   justify-content: center;
-  background-color: #ffffff;
-  border: 5px solid #000000;
-  font-size: 1rem;
-  color: #000000;
-  font-family: "Outfit", Helvetica;
-  font-weight: bold;
+  font-size: 2rem;
+  padding-left: 30%;
+  color: #DDCDAB;
+  font-family: 'Paint Brush Script', sans-serif;
   height: 100%;
   width: 12rem;
+  
 }
 
 .sidebar-item .text-wrapper {
   display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100%;
   height: 100%;
   font-size: 1rem;
@@ -56,8 +53,15 @@
 .sidebar-item img {
   object-fit: contain;
   flex-shrink: 0;
+  margin-left: 2%;
   width: 20px; /* w-5 */
   aspect-ratio: 0.83 / 1;
+}
+
+.sidebar-item-icon:hover {
+  transform: scale(1.2);
+  opacity: 0.8;
+  
 }
 
 .sidebar-item-text {

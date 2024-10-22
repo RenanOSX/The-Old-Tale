@@ -29,7 +29,7 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
 
     const [currentMonster, setCurrentMonster] = useState(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
 
-    const [currentPlayer, setCurrentPlayer] = useState(new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._dano, player._defesa, player._agilidade));
+    const [currentPlayer, setCurrentPlayer] = useState(new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._dano, player._agilidade));
 
     const damageAnimation = useSpring({
         backgroundColor: isDamaged ? 'rgba(255, 0, 0, 0.5)' : 'transparent',
@@ -65,7 +65,7 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
         
         setCurrentMonster(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
        
-        setCurrentPlayer(new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._dano, player._defesa, player._agilidade));
+        setCurrentPlayer(new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._dano, player._agilidade));
     
         fetchImage()
 

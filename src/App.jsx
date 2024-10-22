@@ -6,6 +6,8 @@ import { AuthContext, AuthProvider } from './context/AuthContext';
 
 import LoadingScreen from './pages/LoadingScreen/LoadingScreen';
 
+import { GameProvider } from './context/GameContext';
+
 const TelaInicial = React.lazy(() => import('./pages/TelaInicial/Telainicial'));
 
 const TelaPrincipal = React.lazy(() => import('./pages/TelaPrincipal/TelaPrincipal'));
@@ -32,9 +34,11 @@ const AppRoutes = () => {
 
 const App = () => (
   <AuthProvider>
-    <Router>
-      <AppRoutes />
-    </Router>
+    <GameProvider>
+      <Router>
+        <AppRoutes />
+      </Router>
+    </GameProvider>
   </AuthProvider>
 );
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import './ComponenteCentral.css';
 
@@ -8,7 +8,14 @@ import ComponenteMonstro from '../ComponenteMonstro/Monstro.jsx';
 
 import placeHolder from '/public/assets/images/monster.png';
 
-function ComponenteCentral({ monsters, player, loadingMonsters, onMonsterUpdate }) {
+import { GameContext } from '../../context/GameContext.jsx';
+
+function ComponenteCentral({ onMonsterUpdate }) {
+  const {
+    monsters,
+    loadingMonsters,
+    player
+  } = useContext(GameContext);
 
   const [items, setItems] = useState(Array(9).fill(null)); 
 
@@ -45,7 +52,7 @@ function ComponenteCentral({ monsters, player, loadingMonsters, onMonsterUpdate 
             loadingMonsters[index] ? (
               <div key={index} className="monster-container">
                 <div className="monster-box" style={placeHolderStyle}>
-                    <div class="monster-name">
+                    <div className="monster-name">
                       <h1>‎</h1>
                     </div>
                     <img src={placeHolder}/>
@@ -55,9 +62,9 @@ function ComponenteCentral({ monsters, player, loadingMonsters, onMonsterUpdate 
             ) : (
               <ComponenteMonstro
                 key={index}
+                index={index}
                 monster={monster}
                 player={player}
-                index={index}
                 onMonsterUpdate={onMonsterUpdate}
               />
             )
