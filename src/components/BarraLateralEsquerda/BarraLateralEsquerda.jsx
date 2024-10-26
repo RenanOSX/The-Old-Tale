@@ -12,12 +12,46 @@ import { GameContext } from '../../context/GameContext';
 
 import karmalumia from '/assets/images/karma-lumia.png';
 
+const objectives = [
+  [
+    "Chegue ao nível 3 para desbloquear a região 2",
+    "Colete 3 itens para mim, eles serão importantes: ",
+    "Fragmento de Pureza Imaculada",
+    "Essência do Crepúsculo Sagrado",
+    "Gema do Destino Intocado"
+  ],
+  [
+    "Chegue ao nível 6 para desbloquear a região 3",
+    "Colete 3 itens para mim, eles serão importantes: ",
+    "Página Perdida de Noite Eterna",
+    "Cálice de Sangue Enfeitiçado",
+    "Símbolo Esquecido de Umbra Profunda"
+  ],
+  [
+    "Chegue ao nível 10 e descubra o que acontece",
+    "Colete 3 itens para mim, eles serão importantes: ",
+    "Partícula de Fluxo Temporal",
+    "Relicário da Eternidade Fragmentada",
+    "Cifra do Horizonte Quântico"
+  ]
+]
+
 function BarraLateralEsquerda({ color }) {
   const {showIntroduction, currentRegion} = useContext(GameContext)
+  const [showObjectives, setShowObjectives] = useState(false);
+
   const sidebarItems = [
     { icon: dano, text: "Dano", attribute:'_dano' },
     { icon: agilidade, text: "Agilidade", attribute:'_agilidade' },
   ];
+
+  const handleMouseEnter = () => {
+    setShowObjectives(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowObjectives(false);
+  };
 
   return (
     <aside className="sidebar">    
@@ -27,8 +61,18 @@ function BarraLateralEsquerda({ color }) {
       { 
         showIntroduction == false ?
         [
-          <div key='npc-image' className="npc-image-esquerda">
+          <div key='npc-image' className="npc-image-esquerda" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <img src={karmalumia} alt="NPC" />
+            {showObjectives && (
+                <div className="objectives-tooltip">
+                  <h4>Objetivos da Região {currentRegion}</h4>
+                  <ul>
+                    {objectives[currentRegion - 1].map((objective, index) => (
+                      <li key={index}>{objective}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
           </div>,
           <div key='region-title' className='region-title'>
             {`Região ${currentRegion}`}

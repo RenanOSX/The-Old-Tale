@@ -25,6 +25,8 @@ function ComponenteCentral({ onMonsterUpdate }) {
 
   const [items, setItems] = useState(Array(9).fill(null)); 
 
+  
+
   const [selectedCells, setSelectedCells] = useState([]); // Estado para armazenar as células selecionadas
 
   const handleItemClick = (index) => {

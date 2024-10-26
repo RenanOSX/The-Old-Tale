@@ -30,17 +30,7 @@ export const GameProvider = ({ children }) => {
       if (user) {
         setCurrentLog('Buscando temas...');
         const userTheme = await AuthServices.buscarTheme(user.uid);
-
-        // setCurrentLog('Buscando cores...');
-        // const color = await AuthServices.buscarColor(user.uid);
-
-        // if (color) {
-        //   setColor(color);
-        //   console.log(`Received color: ${color}`);
-        // } else {
-        //   console.error('Failed to receive a valid color from the API');
-        // }
-
+        
         setCurrentLog('Buscando monstros...');
         const fetchedMonsters = await MonsterService.buscaMonstros(user.uid, userTheme);
         setMonsters(fetchedMonsters);

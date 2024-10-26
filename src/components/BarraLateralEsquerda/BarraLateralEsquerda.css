@@ -65,6 +65,38 @@
     transition: background-color 0.3s ease;
   }
 
+  .objectives-tooltip {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 1rem;
+    gap: 1rem;
+    border-radius: 1rem;
+    z-index: 10;
+    width: 20rem;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+  }
+  
+  .objectives-tooltip h4 {
+    font-size: 1.3rem;
+  }
+  
+  .objectives-tooltip ul {
+    list-style: symbols(circled);
+    padding-left: 1rem;
+    margin: 0;
+  }
+  
+  .objectives-tooltip li {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+
   .region-title {
     font-size: 2rem;
     color: #311603;
