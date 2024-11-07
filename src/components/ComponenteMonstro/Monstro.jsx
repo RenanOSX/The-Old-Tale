@@ -8,6 +8,10 @@ import Monster from '../../models/Monster';
 
 import Player from '../../models/Player';
 
+import slashAudio from '/assets/slash-audio.mp3';
+
+import slashImage from '/assets/images/slash.png';
+
 function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
     const [isDamaged, setIsDamaged] = useState(false);
     
@@ -19,11 +23,13 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
 
     const [loading, setLoading] = useState(true);
 
+    const [isAttacking, setIsAttacking] = useState(false); // Estado para controlar a animação de ataque
+
     const [image, setImage] = useState(null)
 
     const [currentMonster, setCurrentMonster] = useState(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
 
-    const [currentPlayer, setCurrentPlayer] = useState(new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._dano, player._defesa, player._agilidade));
+    const [currentPlayer, setCurrentPlayer] = useState(new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._dano, player._agilidade));
 
     const damageAnimation = useSpring({
         backgroundColor: isDamaged ? 'rgba(255, 0, 0, 0.5)' : 'transparent',
@@ -59,11 +65,9 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
         
         setCurrentMonster(new Monster(monster.name, monster.rarity, monster.level, monster.health, monster.maxHealth));
        
-        setCurrentPlayer(new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._dano, player._defesa, player._agilidade));
+        setCurrentPlayer(new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._dano, player._agilidade));
     
         fetchImage()
-
-        console.log('Monster index: ', index);
 
     }, [monster, player]);
 
@@ -82,7 +86,7 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
     }, [showDamage]);
 
     const clickHandler = () => {
-        const damage = currentPlayer._dano;
+        const damage = currentPlayer._dano * currentPlayer._agilidade;
 
         const updatedMonster = new Monster(currentMonster.name, currentMonster.rarity, currentMonster.level, currentMonster.health - damage, currentMonster.maxHealth);
 
@@ -93,6 +97,15 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
         setIsDamaged(true);
 
         setShowDamage(true);
+
+        setIsAttacking(true); // Ativa a animação de ataque
+
+        const audio = new Audio(slashAudio);
+
+        audio.play();
+        setTimeout(() => {
+            setIsAttacking(false); // Desativa a animação de ataque após 500ms
+        }, 200);
 
         if (updatedMonster.health <= 0) {
             onMonsterUpdate(index, updatedMonster.rarity);
@@ -140,6 +153,9 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
                 +{damageValue}
                 </animated.div>
             )}
+            <div className={`slash-effect ${isAttacking ? 'active' : ''}`}>
+                <img src={slashImage} alt="Slash Effect" />
+            </div>
         </div>
     );
 }

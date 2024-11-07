@@ -27,6 +27,48 @@ html, body {
   overflow: hidden; /* Evita scroll no conteúdo */
 }
 
+.coletaveis {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+  gap: 3rem;
+  height: 100%;
+  width: 30%;
+}
+
+.marcador-de-tempo {
+  height: 5rem;
+  width: 5rem;
+  box-shadow: 0 0 20px 10px #531286; /* Adiciona um brilho dourado ao redor do item */
+  border-radius: 50%; /* Adiciona bordas arredondadas para combinar com a forma do anel */
+  cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.grimorio-sombrio {
+  height: 5rem;
+  width: 5rem;
+  box-shadow: 0 0 20px 10px #3EDD86; /* Adiciona um brilho dourado ao redor do item */
+  border-radius: 50%; /* Adiciona bordas arredondadas para combinar com a forma do anel */
+  cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.anel-pristino {
+  height: 5rem;
+  width: 5rem;
+  box-shadow: 0 0 20px 10px rgba(255, 215, 0, 0.8); /* Adiciona um brilho dourado ao redor do item */
+  border-radius: 50%; /* Adiciona bordas arredondadas para combinar com a forma do anel */
+  cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.anel-pristino:hover, .grimorio-sombrio:hover, .marcador-de-tempo:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
 .header-title {
   font-size: 2rem;
   font-weight: bold;
@@ -44,7 +86,7 @@ html, body {
 }
 
 .main-section-content {
-  background-color: #d4d4d8;
+  background-image: url("../../assets/images/background-paper.png");
   width: 100%;
   align-self: center;
   display: flex;
@@ -70,13 +112,89 @@ html, body {
 
 .logs-content {
   display: flex;
-  margin-top: 0.2rem; 
-  background-color: #000000;
+  flex-direction: row;
+  padding: 1rem;
+  background-image: url("../../assets/images/background-paper.png");
+  border: 2rem solid;
+  border-image-source: url('/assets/images/floral-border.png');
+  border-image-slice: 150 200; /* Define a largura da borda da imagem e preenche o centro */
+  border-image-repeat: round;
   width: 100%;
   flex-grow: 1;
   overflow-y: auto;
   scrollbar-width: none;
+ }
+
+ .tooltip {
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
 }
+
+.shelf {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 0.5rem;
+  width: 25%;
+  height: 25rem;
+}
+
+.shelf-craft {
+  display: flex;
+  width: 50%;
+  height: 25rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.shelf-craft-cell {
+  display: flex;
+  width: 7rem;
+  height: 7rem;
+  justify-content: center;
+  align-items: center;
+  border: 0.4rem solid #00000069;
+  background-image: url('/assets/images/header-background.png'); /* Caminho para a imagem da mesa de trabalho */
+  background-size: cover; /* Ajusta a imagem para cobrir toda a célula */
+  background-position: center; /* Centraliza a imagem */
+}
+
+.shelf-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 7rem;
+  width: 7rem;
+  border: 0.4rem solid #00000069;
+  cursor: pointer;
+  background-image: url('/assets/images/header-background.png'); /* Caminho para a imagem da mesa de trabalho */
+  background-size: cover; /* Ajusta a imagem para cobrir toda a célula */
+  background-position: center; /* Centraliza a imagem */
+}
+
+.shelf-cell.selected {
+  border-color: #ffcc0080; /* Cor da borda para células selecionadas */
+  background-color: rgba(255, 204, 0, 0.3); /* Cor de fundo para células selecionadas */
+  opacity: 0.9; /* Opacidade da imagem de fundo */
+}
+
+.shelf-cell img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.custom-tooltip {
+  background-color: #333; /* Background color */
+  color: #fff; /* Text color */
+  padding: 5px 10px; /* Padding */
+  border-radius: 4px; /* Border radius */
+  font-size: 14px; /* Font size */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Box shadow */
+}
+
 
 /* Media Queries para Responsividade */
 @media (max-width: 768px) {

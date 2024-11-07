@@ -12,12 +12,12 @@ import arrowLeft from '/assets/icons/arrow_circle_left.png';
 
 import circleRight from '/assets/icons/arrow_circle_right.png';
 
+import InputGroup from "../../components/InputGroup/InputGroup";
+
 const TelaRecuperarSenha = () => {  
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
-
-  const [emailFocused, setEmailFocused] = useState(false);
 
   const handleBackClick = () => {
     navigate('/');
@@ -34,27 +34,27 @@ const TelaRecuperarSenha = () => {
 
   return (
     <div className="recSenha">
-      <img
-        className="arrow-circle-left"
-        alt="Arrow circle left"
-        src={arrowLeft}
-        onClick={handleBackClick}
-      />
       <div className="container-recSenha">
-        <div className="text-wrapper-2">RECUPERAR SENHA</div>
-        
-        <div className="input-group">
-          <label className={`label ${emailFocused ? 'focused' : ''}`}>EMAIL</label>
-          <input
-            type="email"
-            className="input"
-            onChange={(e) => setEmail(e.target.value)}
-            onFocus={() => setEmailFocused(true)}
-            onBlur={(e) => setEmailFocused(e.target.value !== '')}
-          />
-        </div>
-
-        <img className="arrow-circle-right" alt="Arrow circle right"  onClick={recuperarSenha} src={circleRight} />
+          <InputGroup
+              label="EMAIL"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          <div className="button-return">
+            <img
+              className="arrow-circle-left"
+              alt="Arrow circle left"
+              src={arrowLeft}
+              onClick={handleBackClick}
+            />
+            <img
+              className="arrow-circle-right"
+              alt="Arrow circle right"
+              src={circleRight}
+              onClick={recuperarSenha}
+            />
+          </div>
       </div>
     </div>
   );

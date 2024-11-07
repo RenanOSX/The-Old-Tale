@@ -12,13 +12,13 @@ import circleRight from '/assets/icons/arrow_circle_right.png';
 
 import InputGroup from '../../components/InputGroup/InputGroup';
 
-import { handleAuthErrorCadastro, playMusic } from "../../utils/Functions";
-
-import GameplayService from "../../services/GameplayService";
-
 import { AuthContext } from "../../context/AuthContext";
 
 import Spinner from "../../components/Spinner/Spinner";
+
+import { GameContext } from "../../context/GameContext";
+
+import PlayerService from "../../services/PlayerService";
 
 const TelaCadastro = () => {  
   const navigate = useNavigate();
@@ -35,6 +35,8 @@ const TelaCadastro = () => {
 
   const { handleSignup }  = useContext(AuthContext);
 
+  const { setLoading: setGameLoading, loading: LoadingGame } = useContext(GameContext)
+
   const [theme, setTheme] = useState('');
 
   const [error, setError] = useState('');
@@ -46,10 +48,12 @@ const TelaCadastro = () => {
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
     setLoading(true); // Ativar loading
+    setGameLoading(true);
 
     if (password !== confirmPassword) {
       setError('As senhas não correspondem.');
       setLoading(false); // Desativar loading
+      setGameLoading(false);
       return;
     }
 
@@ -59,9 +63,6 @@ const TelaCadastro = () => {
         const currentUser = result.user;
         currentUser.theme = theme;
 
-        const color = await GameplayService.changeTheme(theme);
-        currentUser.color = color;
-
         try {
           await AuthServices.updateAuthProfile(currentUser);
           console.log('Current user: ', currentUser);
@@ -70,6 +71,7 @@ const TelaCadastro = () => {
           console.error('Erro ao atualizar perfil de autenticação:', error);
           setError('Erro ao atualizar perfil de autenticação.');
           setLoading(false); // Desativar loading
+          setGameLoading(false);
           return;
         }
 
@@ -82,10 +84,25 @@ const TelaCadastro = () => {
           console.error('Erro ao atualizar dados no Realtime Database:', error);
           setError('Erro ao atualizar dados no Realtime Database.');
           setLoading(false); // Desativar loading
+          setGameLoading(false);
           return;
         }
 
-        navigate(-1);
+        const initialPlayerData = {
+          _name: name,
+          _money: 0,
+          _xp: 0,
+          _xpToNextLevel: 100,
+          _level: 1,
+          _dano: 0,
+          _agilidade: 0
+        };
+        await PlayerService.salvaJogador(currentUser.uid, initialPlayerData);
+
+
+        setGameLoading(true);
+
+        navigate('/telaPrincipal');
       } else {
         setError('Erro ao criar conta.');
       }
@@ -99,14 +116,7 @@ const TelaCadastro = () => {
 
   return (
     <div className="cadastro">
-      <img
-        className="arrow-circle-left"
-        alt="Arrow circle left"
-        src={arrowLeft}
-        onClick={handleBackClick}
-      />
       <div className="container-cadastro">
-        <div className="text-wrapper-2">CADASTRO</div>
         { loading ? (
           <Spinner />
         ) : (
@@ -142,12 +152,20 @@ const TelaCadastro = () => {
               value={theme}
               onChange={(e) => setTheme(e.target.value)}
             />
-            <img
-              className="arrow-circle-right"
-              alt="Arrow circle right"
-              src={circleRight}
-              onClick={handleSignupSubmit}
-            />
+            <div className="button-return">
+              <img
+                className="arrow-circle-left"
+                alt="Arrow circle left"
+                src={arrowLeft}
+                onClick={handleBackClick}
+              />
+              <img
+                className="arrow-circle-right"
+                alt="Arrow circle right"
+                src={circleRight}
+                onClick={handleSignupSubmit}
+              />
+            </div>
           </>
         )}
       </div>

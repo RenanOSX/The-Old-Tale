@@ -30,16 +30,16 @@ import level10 from '/assets/icons/level10.png';
 
 const JogadorInfo = ({ jogador }) => {
   const levels = [
-    { icon: level01, text: "Level 01" },
-    { icon: level02, text: "Level 02" },
-    { icon: level03, text: "Level 03" },
-    { icon: level04, text: "Level 04" },
-    { icon: level05, text: "Level 05" },
-    { icon: level06, text: "Level 06" },
-    { icon: level07, text: "Level 07" },
-    { icon: level08, text: "Level 08" },
-    { icon: level09, text: "Level 09" },
-    { icon: level10, text: "Level 10" },
+    { icon: level01, text: "Nível 01" },
+    { icon: level02, text: "Nível 02" },
+    { icon: level03, text: "Nível 03" },
+    { icon: level04, text: "Nível 04" },
+    { icon: level05, text: "Nível 05" },
+    { icon: level06, text: "Nível 06" },
+    { icon: level07, text: "Nível 07" },
+    { icon: level08, text: "Nível 08" },
+    { icon: level09, text: "Nível 09" },
+    { icon: level10, text: "Nível 10" },
   ];
   if (!jogador) {
     return <div style={{alignSelf:'center'}}>No player data available</div>;
@@ -55,13 +55,21 @@ const JogadorInfo = ({ jogador }) => {
 
   return (
     <div>
-      <div className='group-profile'>
-        <img src={circleImpermanence} className='circle-impermanence' alt="Circle Impermanence"/>
-        <div className='profile-name'>
-          Jogador
-        </div>
+      <div className="level-icons">
+        {levels.map((level, index) => (
+          <div key={index + 1} className="level-icon">
+            {
+              currentPlayer._level === index + 1
+                ?  [
+                  <React.Fragment key={index}>
+                    <img src={level.icon} alt={level.text} />
+                    <p>{level.text}</p>
+                  </React.Fragment>
+                ] : null
+            }
+          </div>
+        ))}
       </div>
-
       <div className="atributos-player">
         <div className="xp-bar-container">
           <div className="xp-bar" style={{ width: `${xpPercentage}%` }}></div>
@@ -69,29 +77,10 @@ const JogadorInfo = ({ jogador }) => {
         <div className="xp-text">
           XP - {currentPlayer._xp} / {currentPlayer._xpToNextLevel}
         </div>
-  
       </div>
-
-      <div className="level-icons">
-          {levels.map((level, index) => (
-            <div key={index + 1} className="level-icon">
-              {
-                currentPlayer._level === index + 1
-                  ?  [
-                    <React.Fragment key={index}>
-                      <img src={level.icon} alt={level.text} />
-                      <p>{level.text}</p>
-                    </React.Fragment>
-                  ] : null
-              }
-            </div>
-          ))}
-        </div>
-
-        <div className="carteira">
-          <img src={euro} alt="Euro"/>
-          {currentPlayer._money} GC
-        </div>
+      <div className="carteira">
+        {currentPlayer._money} Gold Coins
+      </div>
     </div>
   );
 }

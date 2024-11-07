@@ -18,27 +18,16 @@ class MonsterService {
     }
 
     async buscaNomeMonstro(theme, userId) {
-        // Get the lastUsedMonsterNames and use it as a blacklist on the prompt
-        let lastNames = [];
-
-        // Get all the last names
         const dbRef = ref(db);
         const snapshot = await get(child(dbRef, `users/${userId}/monsters`));
+
         if (snapshot.exists()) {
             const data = snapshot.val();
-            lastNames = Object.values(data).map(monsterData => monsterData.name);
         } else {
             console.log('No monsters found for user:', userId);
         }
 
-        console.log('Last used monster names:', lastNames);
-
-        const inputText = `
-        Generate a single name related to the theme ((${theme})).
-        The name should be one word, without repetitions,
-        and can be inspired by various sources such as pop culture,
-        religions, movies, mythology, or any other relevant themes, be creative. But remember to NOT USE the following names: ((${lastNames.join(', ')})) or any other similar name, do not even use the same starting letters as those ones.
-        Avoid including quotes around the name and explications, give only the name.`;
+        const inputText = `Generate a single name related to the theme ${theme}. The name should be one word, without repetitions, and can be inspired by various sources such as pop culture, religions, movies, mythology, or any other relevant themes, be creative. Avoid including quotes around the name and explications, give only the name.`;
         
         try {
             const response = await fetch('http://localhost:5000/names-generator', { 
@@ -63,8 +52,8 @@ class MonsterService {
 
     async criaImagem(theme, index) {
         const payload = {
-            "prompt": `(masterpiece:1.1, good quality, high quality),<lora:add_detail:1>, (${theme}:1), (opponent, enemy:1), vibrant colors, saturated colors`,
-            "negative_prompt": "bad quality, worse quality:1, medium quality, distorted, foggy, mutated, overexposure, (background:1.2, sole objects, only objects)",
+            "prompt": `(masterpiece:1.1, good quality, high quality), (A drawing of ${theme}:1), (opponent, enemy:1),  <lora:J_ancient_sketch:1>,  pen sketch:1, j_ancient_sketch, black and white, black paint, on paper, paper background, sketch, <lora:add_detail:0.5>, full body shot`,
+            "negative_prompt": "bad quality, worse quality:1, medium quality, distorted, foggy, mutated, overexposure, (background:1.2, sole objects, only objects), colorful",
             "steps": 10,
             "batch_size": 1,
             "cfg_scale": 7,
@@ -102,8 +91,8 @@ class MonsterService {
             console.error('Erro ao buscar dados da API:', error);
         }
     }
-    async criaMonstro(name) {
-        return Monster.createNew(name); 
+    async criaMonstro(name, regiao = 1) {
+        return Monster.createNew(name, regiao); 
     }
 
     async buscaMonstros(userId, theme) { 

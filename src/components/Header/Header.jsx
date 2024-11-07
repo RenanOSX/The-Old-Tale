@@ -1,10 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import AuthServices from '../../services/AuthServices';
-import './Header.css';
-import yinYang from '/assets/images/yin_yang.png';
+import React from "react";
 
-const Header = ({ user, color, textColor }) => {
+import { useNavigate } from 'react-router-dom';
+
+import AuthServices from '../../services/AuthServices';
+
+import './Header.css';
+
+import logo from '/assets/icons/logo.png';
+
+import stars from '/assets/icons/stars.png';
+
+const Header = ({ user }) => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -17,26 +23,16 @@ const Header = ({ user, color, textColor }) => {
     }
   };
 
-  const hexToRgba = (hex, alpha) => {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-  };
-
-  const subtleColor = hexToRgba(color, 0.5);
-
   return (
     <div className="box">
       <header className="header">
-      <div className="overlap-group" style={{ background: `linear-gradient(180deg, #383838 90%,  ${subtleColor} 100%)` }}>
-          <div className="left-group">
-            <img className="yin-yang" alt="Yin yang" src={yinYang} />
-            <div className="div">Praecantatio Idle</div>
-          </div>
-          <div className="text-wrapper"  style={{ color: '#FFFFFF', textShadow: `0 0 2px ${textColor}, 0 0 5px ${textColor}, 0 0 10px ${textColor}` }}>Bem-vindo, {user ? user.displayName : 'Usuário'}</div>
-          {user && <button className="button-exit" onClick={handleLogout}>Sair</button>}
+        {/* <img className="crown" alt="Crown" src={crown} /> {/* Adicione a imagem da coroa */}
+        <div className="left-group">
+          <img className="stars" alt="Stars" src={stars} />
+          <img className="logo" alt="logo" src={logo} />
         </div>
+        <div className="text-wrapper">Bem-vindo, {user ? user.displayName : 'Usuário'}</div>
+        {user && <button className="button-exit" onClick={handleLogout}>Sair</button>}
       </header>
     </div>
   );

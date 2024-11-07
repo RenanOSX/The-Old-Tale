@@ -31,7 +31,7 @@ class AuthServices {
       
       await updateProfile(user, { displayName: name });
       
-      localStorage.setItem('user', JSON.stringify({ ...user, displayName: name }));
+      localStorage.setItem('user', JSON.stringify(user));
       
       return { success: true, user };
     } catch (error) {
@@ -77,8 +77,7 @@ class AuthServices {
       const userRef = ref(db, `users/${user.uid}`);
       await set(userRef, {
         displayName: user.displayName,
-        theme: user.theme,
-        color: user.color
+        theme: user.theme
       });
       console.log('Dados atualizados no Realtime Database com sucesso.');
     } catch (error) {
@@ -91,8 +90,7 @@ class AuthServices {
     try {
         const userRef = ref(db, `users/${user.uid}`);
         await update(userRef, {
-            theme: user.theme,
-            color: user.color
+            theme: user.theme
         });
         console.log('Dados atualizados no Realtime Database com sucesso.');
     } catch (error) {

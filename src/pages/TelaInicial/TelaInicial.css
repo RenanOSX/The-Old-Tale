@@ -1,23 +1,31 @@
 /* Estilos gerais */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
 .tela-inicial {
-  background-image: url("../../assets/images/ed.jpg");
+  background-image: url("../../assets/images/background_menu.jpg");
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: cover; /* Garante que a imagem cubra todo o fundo */
+  background-position: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  padding: 2rem;
+  min-height: 100vh; /* Usar min-height para preencher a altura da janela */
+  width: 100vw; /* Garante que a tela cubra toda a largura da janela */
   box-sizing: border-box;
-}
+  position: relative; /* Adiciona posição relativa */
+ }
 
 .container-inicial {
-  background: black;
-  border-radius: 3.4375rem; /* 55px */
+  background: transparent;
+  margin-top: 10%;
   opacity: 85%;
   width: 100%;
   max-width: 90rem; /* 1440px */
-  padding: 1.25rem; /* 20px */
   box-sizing: border-box;
   position: relative;
   display: flex;
@@ -37,7 +45,7 @@
 }
 
 .text-link {
-  color: #ffffff;
+  color: #FFFFFF;;
   font-family: "Outfit", Helvetica;
   font-size: 1.2rem;
   font-weight: 700;
@@ -49,7 +57,6 @@
 .arrow-circle-right {
   width: 3.125rem; /* 50px */
   height: 3.125rem; /* 50px */
-  margin-top: 1.25rem; /* 20px */
   cursor: pointer;
   transition: transform 0.2s;
 }
@@ -58,21 +65,19 @@
   transform: scale(1.1);
 }
 
-/* Media queries para responsividade */
-@media (max-width: 768px) {
-  .tela-inicial {
-    padding: 1rem;
-  }
 
+/* Media Queries para responsividade */
+@media (max-width: 768px) {
   .container-inicial {
-    padding: 1rem;
+    padding: 1rem; /* Reduz o padding em telas menores */
   }
 
   .yin-yang-inicial {
-    width: 12.5rem; /* 20rem */
-    height: 12.5rem; /* 20rem */
+    width: 12.5rem; /* 200px */
+    height: 12.5rem; /* 200px */
   }
 
+  .arrow-circle-left,
   .arrow-circle-right {
     width: 2rem;
     height: 2rem;

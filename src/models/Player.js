@@ -8,7 +8,6 @@ class Player {
         xpToNextLevel = 100,
         level = 1,
         dano = 1,
-        defesa = 1,
         agilidade = 1
     ) {
         this._name = name;
@@ -17,7 +16,6 @@ class Player {
         this._xpToNextLevel = xpToNextLevel || this.calculateXpToNextLevel(level);
         this._level = level;
         this._dano = dano;
-        this._defesa = defesa;
         this._agilidade = agilidade;
     }
 

@@ -6,6 +6,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loadingAuth, setLoadingAuth] = useState(true);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -13,6 +14,7 @@ export const AuthProvider = ({ children }) => {
       if (storedUser) {
         setUser(JSON.parse(storedUser));
       }
+      setLoadingAuth(false);
     };
 
     checkUser();
@@ -37,7 +39,6 @@ export const AuthProvider = ({ children }) => {
       const response = await AuthServices.register(email, password, name);
       if (response.success) {
         setUser(response.user);
-        localStorage.setItem('user', JSON.stringify(response.user)); // Store user in local storage
       }
       return response;
     } catch (error) {
@@ -57,7 +58,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, handleLogin, handleLogout, handleSignup }}>
+    <AuthContext.Provider value={{ user, handleLogin, handleLogout, handleSignup, loadingAuth }}>
       {children}
     </AuthContext.Provider>
   );
