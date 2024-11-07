@@ -26,10 +26,9 @@ const TelaPrincipal = () => {
     showIntroduction,
     introduction,
     handleMonsterUpdate,
-    currentLog
+    currentLog,
+    isFirstLogin
   } = useContext(GameContext)
-
-  console.log('EU QUERO VER: ', loading)
 
   const {
     user
@@ -39,17 +38,13 @@ const TelaPrincipal = () => {
     return <LoadingScreen currentLog={currentLog} />;
   }
 
-  // if (showIntroduction) {
-  //   return <IntroductionScreen introduction={introduction} onProceed={handleProceed} />;
-  // }
-
   const handleCloseIntroduction = () => {
     setShowIntroduction(false);
   };
 
   return (
     <div className="first-screen">
-      {showIntroduction && <VisualNovelIntro introduction={introduction} onClose={handleCloseIntroduction} />}
+      {showIntroduction && !isFirstLogin && <VisualNovelIntro introduction={introduction} onClose={handleCloseIntroduction} />}
       <Header user={user}/>
       <div className="layout-container">
         <BarraLateralEsquerda userId={user.uid}/>

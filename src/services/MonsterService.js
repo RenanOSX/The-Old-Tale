@@ -91,8 +91,8 @@ class MonsterService {
             console.error('Erro ao buscar dados da API:', error);
         }
     }
-    async criaMonstro(name) {
-        return Monster.createNew(name); 
+    async criaMonstro(name, regiao = 1) {
+        return Monster.createNew(name, regiao); 
     }
 
     async buscaMonstros(userId, theme) { 

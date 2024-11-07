@@ -12,6 +12,8 @@ import { GameContext } from '../../context/GameContext';
 
 import karmalumia from '/assets/images/karma-lumia.png';
 
+import { Tooltip as ReactTooltip } from 'react-tooltip'; // Correct import statement
+
 const objectives = [
   [
     "Chegue ao nível 3 para desbloquear a região 2",
@@ -37,8 +39,11 @@ const objectives = [
 ]
 
 function BarraLateralEsquerda({ color }) {
-  const {showIntroduction, currentRegion} = useContext(GameContext)
+  const {showIntroduction, currentRegion, player , updateRegion } = useContext(GameContext)
+
   const [showObjectives, setShowObjectives] = useState(false);
+
+  const regionUp = [3, 6, 10]
 
   const sidebarItems = [
     { icon: dano, text: "Dano", attribute:'_dano' },
@@ -51,6 +56,12 @@ function BarraLateralEsquerda({ color }) {
 
   const handleMouseLeave = () => {
     setShowObjectives(false);
+  };
+
+  const handleRegionClick = () => {
+    if (player._level >= regionUp[currentRegion - 1]) {
+      updateRegion(currentRegion + 1);
+    }
   };
 
   return (
@@ -74,9 +85,23 @@ function BarraLateralEsquerda({ color }) {
                 </div>
               )}
           </div>,
-          <div key='region-title' className='region-title'>
+        player._level >= regionUp[currentRegion - 1] ? (
+          <div
+            key='region-title'
+            className='region-title clickable'
+            onClick={handleRegionClick}
+            data-tooltip-id="regionTooltip"
+          >
             {`Região ${currentRegion}`}
-          </div>
+         </div>
+          ) : (
+            <div key='region-title' className='region-title'>
+              {`Região ${currentRegion}`}
+            </div>
+          ),
+          <ReactTooltip id="regionTooltip" place="right" effect="solid">
+            Clique para atualizar a região
+          </ReactTooltip>
         ] : null
       }
     </aside>

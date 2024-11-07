@@ -21,8 +21,14 @@ class Monster {
       this.health = health !== null ? health : this.maxHealth;
     }
   
-    static buscarRaridadeAleatoria() {
-      const pesoTotal = Object.values(PesoDeRaridade).reduce((somador, peso) => somador + peso, 0);
+    static buscarRaridadeAleatoria(regiao) {
+      const pesos = {...PesoDeRaridade};
+
+      for (let key in PesoDeRaridade) {
+        pesos[key] = PesoDeRaridade[key] / regiao;
+      }
+
+      const pesoTotal = Object.values(pesos).reduce((somador, peso) => somador + peso, 0);
       let pesoAleatorio = Math.random() * pesoTotal;
   
       for (let key in PesoDeRaridade) {
@@ -63,8 +69,8 @@ class Monster {
       }
     }
   
-    static createNew(name) {
-      const rarityKey = this.buscarRaridadeAleatoria();
+    static createNew(name, regiao) {
+      const rarityKey = this.buscarRaridadeAleatoria(regiao);
       const rarity = ListaDeRaridades[rarityKey];
       const level = this.buscarNivelAleatorio(rarityKey);
   

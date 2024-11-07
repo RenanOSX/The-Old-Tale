@@ -105,6 +105,18 @@
     font-family: 'Paint Brush Script', sans-serif;
   }
 
+  .region-title.clickable {
+    cursor: pointer;
+    background-color: #f825003d; /* Fundo chamativo */
+    border-radius: 10px;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .region-title.clickable:hover {
+    background-color: #b89910; /* Fundo mais escuro ao passar o mouse */
+  }
+
   .npc-image-esquerda {
     width: 15rem;
     height: auto;

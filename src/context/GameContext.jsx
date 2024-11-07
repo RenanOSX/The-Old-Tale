@@ -1,11 +1,19 @@
 // src/context/GameContext.jsx
 import React, { createContext, useState, useEffect, useContext } from 'react';
+
 import AuthServices from '../services/AuthServices';
+
 import MonsterService from '../services/MonsterService';
+
 import PlayerService from '../services/PlayerService';
+
 import GameplayService from '../services/GameplayService';
+
 import Player from '../models/Player';
+
 import { AuthContext } from './AuthContext';
+
+import { itensColetaveis } from '../constants/ItensColetaveis'
 
 export const GameContext = createContext();
 
@@ -19,7 +27,9 @@ export const GameProvider = ({ children }) => {
   const [showIntroduction, setShowIntroduction] = useState(false);
   const [introduction, setIntroduction] = useState('');
   const [currentRegion, setCurrentRegion] = useState(1);
-  const [inventory, setInventory] = useState({ regiao1: null, regiao2: null, regiao3: null });
+  const [inventory, setInventory] = useState({ regiao1: [], regiao2: [], regiao3: [] });
+  const [coletaveis, setColetaveis] = useState([]);
+  const [isFirstLogin, setIsFirstLogin] = useState(false);
 
   const { user } = useContext(AuthContext)
 
@@ -28,9 +38,14 @@ export const GameProvider = ({ children }) => {
       setLoading(true);
 
       if (user) {
+        const firstLogin = localStorage.getItem('firstLogin');
+        if (!firstLogin) {
+          setIsFirstLogin(true);
+          localStorage.setItem('firstLogin', 'true');
+        }
         setCurrentLog('Buscando temas...');
         const userTheme = await AuthServices.buscarTheme(user.uid);
-        
+
         setCurrentLog('Buscando monstros...');
         const fetchedMonsters = await MonsterService.buscaMonstros(user.uid, userTheme);
         setMonsters(fetchedMonsters);
@@ -46,6 +61,10 @@ export const GameProvider = ({ children }) => {
         setCurrentLog('Buscando inventário...');
         const fetchedInventory = await GameplayService.buscaInventario(user.uid);
         setInventory(fetchedInventory);
+
+        setCurrentLog('Buscando coletáveis...');
+        const fetchedColetaveis = await GameplayService.buscaColetaveis(user.uid);
+        setColetaveis(fetchedColetaveis);
 
         setCurrentLog('Gerando história...');
         const intro = await GameplayService.buscaHistoria(user.uid, userTheme, `regiao${region}`);
@@ -68,7 +87,7 @@ export const GameProvider = ({ children }) => {
       setLoading(true);
       initializeData();
     }
-  }, [user]);
+  }, [user, currentRegion]);
 
   useEffect(() => {
     const applyTheme = async () => {
@@ -101,7 +120,7 @@ export const GameProvider = ({ children }) => {
 
     try {
       const name = await MonsterService.buscaNomeMonstro(theme, user.uid);
-      const newMonster = await MonsterService.criaMonstro(name);
+      const newMonster = await MonsterService.criaMonstro(name, currentRegion);
       const userTheme = await AuthServices.buscarTheme(user.uid);
       await MonsterService.criaImagem(userTheme, index);
 
@@ -112,8 +131,33 @@ export const GameProvider = ({ children }) => {
       const updatedPlayer = new Player(player._name, player._money, player._xp, player._xpToNextLevel, player._level, player._dano, player._agilidade);
       updatedPlayer.addXP(raridade);
       updatedPlayer.earnMoney(1);
-      console.log('Player:', updatedPlayer);
       setPlayer(updatedPlayer);
+
+      const dropChance = Math.random();
+
+      if (dropChance < 1) {
+        const itensRegiao = itensColetaveis[currentRegion - 1];
+
+        console.log('itensRegiao:', itensRegiao);
+
+        const itemDrop = itensRegiao[Math.floor(Math.random() * itensRegiao.length)];
+
+        if (!inventory[`regiao${currentRegion}`]) {
+          inventory[`regiao${currentRegion}`] = [];
+        }
+        
+        const itemJaColetado = inventory[`regiao${currentRegion}`].some((item) => item.name === itemDrop.name);
+        
+        if (!itemJaColetado) {
+          setInventory((prevInventory) => {
+            const newInventory = { ...prevInventory };
+            newInventory[`regiao${currentRegion}`].push(itemDrop);
+            return newInventory;
+          });
+
+          await GameplayService.adicionaItemAoInventario(user.uid, currentRegion, itemDrop);
+        }      
+      }
 
       if (user) {
         await MonsterService.salvaMonstros(user.uid, newMonsters);
@@ -171,6 +215,10 @@ export const GameProvider = ({ children }) => {
         introduction,
         currentRegion,
         inventory,
+        coletaveis,
+        isFirstLogin,
+        setIsFirstLogin,
+        setColetaveis,
         setTheme,
         handleMonsterUpdate,
         setShowIntroduction,

@@ -10,7 +10,7 @@ import { GameContext } from '../../context/GameContext';
 
 const VisualNovelIntro = ({ onClose, introduction }) => {
     const [currentDialogueIndex, setCurrentDialogueIndex] = useState(0);
-    const { currentRegion, setShowIntroduction } = useContext(GameContext)
+    const { currentRegion, setShowIntroduction, isFirstLogin } = useContext(GameContext)
 
     const dialogues = [
         [
@@ -23,7 +23,6 @@ const VisualNovelIntro = ({ onClose, introduction }) => {
         introduction
         
       ];
-      console.log(introduction);
 
     const handleNextDialogue = () => {
       if (currentDialogueIndex < dialogues.length - 1) {
@@ -42,7 +41,7 @@ const VisualNovelIntro = ({ onClose, introduction }) => {
         <div className="story-text">
             {`Região ${currentRegion}`}
             {dialogues[currentDialogueIndex].map((line, index) => (
-            <p key={index}>{line}</p>
+              <p key={index}>{line}</p>
             ))}
         </div>
 

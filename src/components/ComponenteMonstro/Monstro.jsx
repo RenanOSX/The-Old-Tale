@@ -69,8 +69,6 @@ function ComponenteMonstro({ monster, player, index, onMonsterUpdate }) {
     
         fetchImage()
 
-        console.log('Monster index: ', index);
-
     }, [monster, player]);
 
     useEffect(() => {

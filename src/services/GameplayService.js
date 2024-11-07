@@ -1,6 +1,6 @@
 import { db } from './FirebaseConfig';
 
-import { ref, set, get, child } from 'firebase/database';
+import { ref, set, get, child, update } from 'firebase/database';
 
 class GameplayService {
     async changeTheme(theme) {
@@ -49,6 +49,43 @@ class GameplayService {
         }
     }
 
+    async buscaColetaveis(userId) {
+        const dbRef = ref(db);
+        const snapshot = await get(child(dbRef, `users/${userId}/coletaveis`));
+
+        if (snapshot.exists()) {
+            console.log('Coletáveis encontrados:', snapshot.val());
+            return snapshot.val()
+        } else {
+            const coletaveis = { anel: 0, grimorio: 0, marcador: 0 }
+            await set(ref(db, `users/${userId}/coletaveis`), coletaveis);
+            return coletaveis
+        }
+    }
+
+    async setColetaveis(userId, item) {
+        console.log('entrei: ' + item)
+        try {
+            const dbRef = ref(db, `users/${userId}/coletaveis`);
+            const snapshot = await get(dbRef);
+
+            if (snapshot.exists()) {
+                const coletaveis = snapshot.val();
+                coletaveis[item] = 1;
+                console.log('coletavel-firebase: ' + JSON.stringify(coletaveis))
+                await update(dbRef, coletaveis);
+                console.log(`Item ${item} atualizado para 1`);
+            } else {
+                const newColetaveis = { anel: 0, grimorio: 0, marcador: 0 };
+                newColetaveis[item] = 1;
+                await set(dbRef, newColetaveis);
+                console.log(`Coletáveis criados e item ${item} atualizado para 1`);
+            }
+        } catch (error) {
+            console.error('Erro ao atualizar coletáveis:', error);
+        }
+    }
+
     async buscaInventario(userId) {
         const dbRef = ref(db);
         const snapshot = await get(child(dbRef, `users/${userId}/inventory`));
@@ -59,9 +96,9 @@ class GameplayService {
         } else {
             console.log('Inventário não encontrado. Criando novo inventário...');
             const initialInventory = {
-                regiao1: '',
-                regiao2: '',
-                regiao3: ''
+                regiao1: [],
+                regiao2: [],
+                regiao3: []
             };
             await set(ref(db, `users/${userId}/inventory`), initialInventory);
             return initialInventory;
@@ -75,12 +112,22 @@ class GameplayService {
     
             if (snapshot.exists()) {
                 const inventory = snapshot.val();
-                inventory[`regiao${regiao}`] = item;
+
+                if (!inventory[`regiao${regiao}`]) {
+                    inventory[`regiao${regiao}`] = [];
+                }
+
+                inventory[`regiao${regiao}`].push(item);
                 await update(dbRef, inventory);
-                console.log(`Item ${item} adicionado ao inventário na região ${regiao}`);
+                console.log(`Item ${item.name} adicionado ao inventário na região ${regiao}`);
+    
             } else {
-                console.error('Inventário não encontrado.');
-            }
+                const newInventory = {
+                    [`regiao${regiao}`]: [item]
+                };
+                await set(dbRef, newInventory);
+                console.log(`Inventário criado e item ${item.name} adicionado na região ${regiao}`);
+           }
         } catch (error) {
             console.error('Erro ao adicionar item ao inventário:', error);
         }
@@ -102,13 +149,13 @@ class GameplayService {
 
         switch(regiao) {
             case 'regiao1':
-                inputText = `Create a plot for the first region called 'Twilight Library', in Portuguese-BR, taking into account the player's chosen theme: ${theme}. Describe the setting as a vast, mysterious library where towering shelves stretch endlessly into the shadows, and the perpetual twilight casts an eerie, timeless glow. The library’s ancient walls are filled with secrets from a forgotten era, reflecting the theme in subtle yet powerful ways. Reveal hints of the library’s dark or glorious past that tie into the theme, as the character begins their journey of discovery. They navigate the dusty corridors and ancient tomes, unaware of the full scope of the challenges ahead. The difficulty should be light, offering a sense of mystery and foreboding, while preparing the player for more intense trials to come. Only 6 lines of text, with no additional explanations. The text should be in Portuguese-BR`
+                inputText = `Create a brief introduction for the first region called 'Twilight Library', in Portuguese-BR, based on the player's chosen theme: ${theme}. The character awakens in endless corridors of a magical library, where towering shelves fade into the shadows, and ancient books seem to whisper secrets. Twilight seeps through the dusty windows, hinting at a forgotten era. The silent, imposing library holds ancient mysteries tied subtly to the chosen theme, and the character senses that their presence here is both an invitation and a riddle. This marks the beginning of their journey, where the unknown still reigns, but the first clues of their mission start to surface. Only 6 lines of text, with no additional explanations or symbols.`;
                 break;
             case 'regiao2':
-                inputText = `Develop a plot for the second region called 'Archive of Lost Souls', in Portuguese-BR, based on the player's chosen theme: ${theme}. This region is a dark, oppressive archive where towering shelves hold more than just ancient texts—they imprison the souls of those who dared to seek the forbidden knowledge within. The air is thick with dread, and the environment feels increasingly claustrophobic, reflecting the growing danger and the weight of the secrets buried here. Mysteries deepen, and the connection between the archive’s dark history and the theme becomes more pronounced, hinting at the character’s own fate. The difficulty should escalate, as the player faces mounting threats and complex puzzles tied to the theme. Only 6 lines of text, with no additional explanations. The text should be in Portuguese-BR`
+                inputText = `Develop a continuation for the second region called 'Lost Garden', in Portuguese-BR, based on the player's chosen theme: ${theme}. After escaping the mysteries of the library, the character encounters a vast, enigmatic garden hidden around its outskirts. Exotic plants grow amid ancient ruins, and the sound of the wind through the leaves brings memories of ages past. Here, every flower and ancient stone tells part of the library's secrets, and the connection to the theme becomes clearer. Danger lurks as hidden forces emerge, challenging the character’s resolve and deepening the mysteries tied to their path. Only 6 lines of text, with no additional explanations or symbols.`;
                 break;
             case 'regiao3':
-                inputText = `Write a plot for the third region called 'The Great Library of Aether', in Portuguese-BR, centered around the player's chosen theme: ${theme}. This region represents the culmination of the journey, an awe-inspiring, boundless library where books are not mere repositories of stories—they actively shape and alter realities. Describe how this library transcends both space and time, with its secrets dynamically adapting to the chosen theme. The atmosphere should evoke a sense of urgency and finality, as the character approaches the climax of their quest. The environment must feel vast, majestic, and deeply enigmatic, presenting intricate challenges that reflect the theme and push the character to their limits. Only 6 lines of text, with no additional explanations. The text should be in Portuguese-BR`
+                inputText = `Write a plot for the third region called 'Stairway to the World's End', in Portuguese-BR, centered around the player's chosen theme: ${theme}. The character now faces the towering staircase leading beyond the world’s edge, where the library’s mysteries reach their grand climax. Each step resonates with the power of ancient knowledge as the landscape shifts, reflecting the chosen theme with a sense of finality. The journey is nearing its peak, and the stakes have never been higher as reality and myth begin to merge. Only 6 lines of text, with no additional explanations or symbols.`;
                 break;
             default:
                 inputText = '';
