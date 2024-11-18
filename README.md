@@ -1,6 +1,6 @@
-# Praecantatio Idle
+# The Old Tale
 
-**Praecantatio Idle** é um jogo Idle que utiliza inteligência artificial para gerar jogabilidade infinita.
+**The Old Tale** é um jogo clicker/incremental que utiliza inteligência artificial para gerar jogabilidade infinita.
 
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
@@ -21,8 +21,6 @@
 
 [Fazendo Commits](#fazendo-commits)
 
-[Aviso Anti-Burro](#aviso-anti-burro)
-
 [Social](#social)
 
 [License](#license)
@@ -36,7 +34,7 @@ Para clonar o projeto para o seu computador, siga os seguintes passos:
 2. **Clone o Repositório**: Crie uma pasta aonde deseja colocar o projeto, após isso clique no "caminho" e digite ```cmd``` para abrir o terminal ou o prompt de comando que vai executar aquele comando naquela parte, após isso execute o comando abaixo para clonar o repositório:
 
    ```bash
-   git clone https://github.com/RenanOSX/Praecantatio-Idle.git
+   git clone https://github.com/RenanOSX/The-Old-Tale.git
 
 3. **Instalar Dependências**: Utilize o ```npm install``` no terminal do projeto (para abrir o terminal basta clicar no VSCODE em "View" e "Terminal" que vai abrir um terminal novo) para instalar todas as dependências como React.js e relacionados. Vale lembrar que é **necessário ter instalado o Node.js** .
 
@@ -56,11 +54,6 @@ Para clonar o projeto para o seu computador, siga os seguintes passos:
     
     Por fim, você precisa mandar esse commit pro repositório, utilize ```git push origin main``` como só temos 1 branch o nome dela é main mesmo. Para ver se funcionou você pode abrir [Pagina Principal](https://github.com/RenanOSX/Precantatio-Idle) e lá em cima vai ta escrito quem foi o ultimo a fazer commit e quanto tempo faz. Se o seu estiver lá, você fez tudo certo.
     
-    
-## Aviso Anti-Burro
-
-Se não souber fazer alguma coisa, ou alguma informação esteja faltando, basta usar o ChatGPT meu filho, ele vai te ensinar a como colocar esse projeto pra rodar. Pelo amor de Deus, como nois é iniciante no bagulho avisa se for mexer em X ou Y se não tem que ficar mesclando as edição que você neandertal fez no mesmo codigo que outra pessoa ta mexendo. Por isso é bom comitar e avisar no que está trabalhando até para ter um desenvolvimento em equipe.
-
 ## Social
 
 Entre no nosso Discord para contato:
